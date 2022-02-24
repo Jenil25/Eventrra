@@ -1,6 +1,6 @@
+import 'package:eventrra/Authentication/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../drawer.dart';
 
 class VenueHome extends StatefulWidget {
   @override
@@ -8,15 +8,31 @@ class VenueHome extends StatefulWidget {
 }
 
 class _VenueHomeState extends State<VenueHome> {
+  final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     Color color = Color(0xFF1B0250);
     return Scaffold(
-      drawer: NavDrawer(),
+      // drawer: NavDrawer(),
       appBar: AppBar(
-        title: const Text("Venue Home Page"),
+        centerTitle: true,
+        title: const Text("Eventrra"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              auth.signOut();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginPage()));
+            },
+            child: const Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: Container(
         child: Column(
@@ -114,6 +130,8 @@ class _VenueHomeState extends State<VenueHome> {
                             ),
                             onPressed: () {
                               //My Shop - page
+                              // Navigator.push(context,
+                              //             MaterialPageRoute(builder: (context) => LoginPage()));
                             }),
                         const SizedBox(
                           height: 20,

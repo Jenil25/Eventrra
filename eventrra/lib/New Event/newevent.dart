@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
+import 'new.dart';
 import 'selectVenue.dart';
 
 class NewEvent extends StatefulWidget {
@@ -128,6 +129,13 @@ class _NewEventState extends State<NewEvent> {
                 flex: 3,
               ),
             ],
+          ),
+          ElevatedButton(
+            onPressed: () => {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => NEvent()))
+            },
+            child: const Text("New Page"),
           ),
           // Column(
           //   children: [

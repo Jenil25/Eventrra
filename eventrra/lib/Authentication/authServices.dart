@@ -1,9 +1,3 @@
-import 'dart:convert';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 // class AuthServices {
 //
 //   Future<FirebaseApp> _initializeFirebase() async {

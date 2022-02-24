@@ -1,3 +1,4 @@
+import 'package:eventrra/New%20Event/new.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -106,22 +107,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(widget.title)),
-      ),
-      body: SplashScreen(),
-      // body: Center(
-      //   child: Container(
-      //     child: ElevatedButton(
-      //       onPressed: () {
-      //         Navigator.push(context,
-      //             MaterialPageRoute(builder: (context) => LoginPage()));
-      //       },
-      //       child: Text("Auth"),
-      //     ),
-      //   ),
-      // ),
-    );
+    return SplashScreen();
+    //   Scaffold(
+    //   // appBar: AppBar(
+    //   //   title: Center(child: Text(widget.title)),
+    //   // ),
+    //   body: NEvent(),
+    //   // body: Center(
+    //   //   child: Container(
+    //   //     child: ElevatedButton(
+    //   //       onPressed: () {
+    //   //         Navigator.push(context,
+    //   //             MaterialPageRoute(builder: (context) => LoginPage()));
+    //   //       },
+    //   //       child: Text("Auth"),
+    //   //     ),
+    //   //   ),
+    //   // ),
+    // );
   }
 }
