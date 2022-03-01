@@ -8,6 +8,7 @@ void getCities() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getCities.php"));
   cities = jsonDecode(response.body);
+
   // print("Citites:");
   // for (int i = 0; i < cities.length; ++i) {
   //   print(cities[i]["Name"] +
@@ -117,13 +118,28 @@ void getEventTypes() async {
   // print(eventTypes[i]["Event-Type"]);
   // }
 }
-
+late var currentVenueAddress,currentVenueCity,temp1;
 bool venueUser(String email) {
   for (int i = 0; i < venues.length; ++i) {
     if (venues[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
       currentVenue = venues[i];
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
+
+      for(int j = 0;j<addresses.length;j++){
+        if(addresses[j]["AId"]==currentVenue["AId"]){
+          currentVenueAddress = addresses[j];
+          temp1=addresses[j]["CId"];
+          print(temp);
+        }
+      }
+
+      for(int k = 0;k<cities.length;k++) {
+        if (cities[k]["CId"] == temp) {
+          currentVenueCity = cities[k];
+          print(currentVenueCity);
+        }
+      }
       return true;
     }
   }
@@ -136,6 +152,21 @@ bool catererUser(String email) {
       currentCaterer = caterers[i];
       venueID = int.parse(caterers[i]["CaId"]);
       isVenueVerified = caterers[i]["Verified"] == "1";
+      print(currentCaterer);
+
+      for(int j = 0;j<addresses.length;j++){
+        if(addresses[j]["AId"]==currentCaterer["AId"]){
+          currentCatererAddress = addresses[j];
+          temp=addresses[j]["CId"];
+          print(temp);
+        }
+      }
+      for(int k = 0;k<cities.length;k++) {
+        if (cities[k]["CId"] == temp) {
+          currentCatererCity = cities[k];
+          print(currentCatererCity);
+        }
+      }
       return true;
     }
   }
@@ -210,7 +241,7 @@ Future<bool> sendVenueRequest(
   return true;
 }
 
-late var currentCaterer;
+late var currentCaterer,currentCatererAddress,currentCatererCity,temp;
 late int catererID;
 bool isCatererVerified = false;
 Future<bool> sendCaterersRequest(
@@ -252,9 +283,63 @@ Future<bool> sendCaterersRequest(
 
   currentCaterer = jsonDecode(catererResponse.body);
 
-  print("Current Caterer:");
+  print("Current Caterer AId:");
   print(currentCaterer);
-
   print("Caterer Request ID=" + catererID.toString());
+  return true;
+}
+
+Future<bool> editCaterersRequest(
+    String line1,
+    String line2,
+    String landmark,
+    String cateringname,
+    String email,
+    String contact,
+    String ownername) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/editCaterer.php"),
+      body: {
+        "line1": line1,
+        "line2": line2,
+        "landmark": landmark,
+        "name": cateringname,
+        "email": email,
+        "contact": contact,
+        "ownername": ownername,
+        "caid": currentCaterer["CaId"],
+        "aid": currentCatererAddress["AId"],
+      });
+
+  var status = response.body.toString();
+  print("Status after editing" + status);
+  return true;
+}
+Future<bool> editVenueRequest(
+    String line1,
+    String line2,
+    String landmark,
+    String venuename,
+    String email,
+    String contact,
+    String capacity,
+    String ownername) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/editVenue.php"),
+      body: {
+        "line1": line1,
+        "line2": line2,
+        "landmark": landmark,
+        "name": venuename,
+        "email": email,
+        "contact": contact,
+        "ownername": ownername,
+        "capacity" : capacity,
+        "vid": currentVenue["VId"],
+        "aid": currentVenueAddress["AId"],
+      });
+
+  var status = response.body.toString();
+  print("Status after editing venue" + status);
   return true;
 }

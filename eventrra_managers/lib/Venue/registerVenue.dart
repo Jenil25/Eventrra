@@ -286,7 +286,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                               line2: addressLine2.text,
                               landmark: landmark.text,
                               cid: _selectedCity["CId"],
-                              name: venueName,
+                              name: venueName.text,
                               capacity: venueCapacity.text,
                               email: email,
                               contact: contactNo,
