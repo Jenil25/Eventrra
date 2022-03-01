@@ -1,5 +1,7 @@
+import 'package:eventrra_managers/Venue/registerVenue.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'Caterers/registerCaterers.dart';
 import 'data.dart';
 import 'package:eventrra_managers/Authentication/splashScreen.dart';
 
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,
+            // home: RegisterCaterers(
+            //     name: "testing", email: "Testing", contactNo: "0000000000"),
             home: SplashScreen(),
           );
         }

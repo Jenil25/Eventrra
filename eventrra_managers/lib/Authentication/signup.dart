@@ -73,9 +73,6 @@ class _SignUpPageState extends State<SignUpPage> {
             size: 30,
           ),
           labelText: "Name",
-          labelStyle: TextStyle(
-            color: Colors.red,
-          ),
         ),
       ),
     );
@@ -100,9 +97,6 @@ class _SignUpPageState extends State<SignUpPage> {
             size: 30,
           ),
           labelText: "E-mail",
-          labelStyle: TextStyle(
-            color: Colors.red,
-          ),
         ),
       ),
     );
@@ -128,9 +122,6 @@ class _SignUpPageState extends State<SignUpPage> {
             size: 30,
           ),
           labelText: "Password",
-          labelStyle: const TextStyle(
-            color: Colors.red,
-          ),
           suffixIcon: showPassword
               ? IconButton(
                   icon: const Icon(
@@ -178,9 +169,6 @@ class _SignUpPageState extends State<SignUpPage> {
             size: 30,
           ),
           labelText: "Confirm Password",
-          labelStyle: const TextStyle(
-            color: Colors.red,
-          ),
           suffixIcon: showConfirmPassword
               ? IconButton(
                   icon: const Icon(
@@ -222,9 +210,6 @@ class _SignUpPageState extends State<SignUpPage> {
             size: 30,
           ),
           labelText: "Contact Number",
-          labelStyle: TextStyle(
-            color: Colors.red,
-          ),
         ),
       ),
     );
@@ -372,7 +357,6 @@ class _SignUpPageState extends State<SignUpPage> {
               _chooseatype ? "Choose" : "",
               style: const TextStyle(
                 fontSize: 16,
-                color: Colors.red,
               ),
             ),
           ),

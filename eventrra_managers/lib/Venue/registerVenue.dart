@@ -3,6 +3,7 @@ import 'package:eventrra_managers/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/Venue/venueHome.dart';
 import 'package:eventrra_managers/main.dart';
+import 'package:flutter/services.dart';
 
 class RegisterVenue extends StatefulWidget {
   final name, email, contactNo;
@@ -23,44 +24,42 @@ class _RegisterVenueState extends State<RegisterVenue> {
   _RegisterVenueState(this.name, this.email, this.contactNo);
 
   int _activeStepIndex = 0;
-  bool _chooseacity = true;
 
   late Map<dynamic, bool?> eventTypesCheckbox = {};
 
-  TextEditingController addressLine1 = TextEditingController(),
-      addressLine2 = TextEditingController();
-  TextEditingController landmark = TextEditingController();
-  TextEditingController venueName = TextEditingController();
-  TextEditingController venueCapacity = TextEditingController();
+  TextEditingController addressLine1Controller = TextEditingController(),
+      addressLine2Controller = TextEditingController();
+  TextEditingController pincodeController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController landmarkController = TextEditingController();
+  TextEditingController venueNameController = TextEditingController();
+  TextEditingController venueCapacityController = TextEditingController();
 
-  List<DropdownMenuItem> _dropdownCityItems = [];
-  var _selectedCity = null;
-
+  bool ispincodeVerified = false;
+  bool isLoading = false;
+  bool ispincodeCorrect = false;
   @override
   void initState() {
-    _dropdownCityItems = buildDropdownTestItems(cities);
     super.initState();
   }
 
-  List<DropdownMenuItem> buildDropdownTestItems(var _testList) {
-    List<DropdownMenuItem> items = [];
-    for (var i in _testList) {
-      items.add(
-        DropdownMenuItem(
-          value: i,
-          child: Text(i["Name"]),
+  AlertDialog pincodeAlert = AlertDialog(
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: const <Widget>[
+        Icon(
+          Icons.error,
+          color: Colors.red,
         ),
-      );
-    }
-    return items;
-  }
-
-  onChangeDropdownCity(selectedCity) {
-    setState(() {
-      _chooseacity = false;
-      _selectedCity = selectedCity;
-    });
-  }
+        Text(
+          " Error",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        ),
+      ],
+    ),
+    content: const Text("Please Enter a Valid Pincode and Verify"),
+  );
 
   List<Step> stepList() => [
         Step(
@@ -68,12 +67,13 @@ class _RegisterVenueState extends State<RegisterVenue> {
           isActive: _activeStepIndex >= 0,
           title: const Text('Address'),
           content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 8,
               ),
               TextField(
-                controller: addressLine1,
+                controller: addressLine1Controller,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Address Line 1',
@@ -83,7 +83,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 height: 8,
               ),
               TextField(
-                controller: addressLine2,
+                controller: addressLine2Controller,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Address Line 2',
@@ -93,7 +93,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 height: 8,
               ),
               TextField(
-                controller: landmark,
+                controller: landmarkController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Landmark',
@@ -102,50 +102,103 @@ class _RegisterVenueState extends State<RegisterVenue> {
               const SizedBox(
                 height: 8,
               ),
-              Stack(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 52,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        left: 10,
+                  SizedBox(
+                    width: 200,
+                    child: TextField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(6),
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: pincodeController,
+                      onChanged: (String value) {
+                        setState(() {
+                          ispincodeVerified = false;
+                          ispincodeCorrect = false;
+                          cityController.text = "";
+                          stateController.text = "";
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Pincode',
                       ),
-                      child: Text(
-                        _chooseacity ? "Choose a city" : "",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey.shade700,
-                        ),
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1.0,
-                        color: Colors.grey,
-                      ),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
                     ),
                   ),
-                  DropdownBelow(
-                    itemWidth: 200,
-                    itemTextstyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black),
-                    boxTextstyle:
-                        const TextStyle(fontSize: 16, color: Colors.black),
-                    boxPadding: const EdgeInsets.fromLTRB(13, 12, 0, 12),
-                    boxHeight: 45,
-                    boxWidth: 200,
-                    hint: null,
-                    value: _selectedCity,
-                    items: _dropdownCityItems,
-                    onChanged: onChangeDropdownCity,
+                  Container(
+                    color: Colors.blue,
+                    width: 100,
+                    child: TextButton(
+                      onPressed: () {
+                        if (isLoading) return;
+                        verifyPincode(pincodeController.text).then((value) => {
+                              if (value == true)
+                                {
+                                  setState(() {
+                                    isLoading = false;
+                                    ispincodeVerified = true;
+                                    ispincodeCorrect = true;
+                                    cityController.text = cityName;
+                                    stateController.text = stateName;
+                                  })
+                                }
+                              else
+                                {
+                                  setState(() {
+                                    isLoading = false;
+                                    ispincodeVerified = true;
+                                    ispincodeCorrect = false;
+                                    cityController.text = "";
+                                    stateController.text = "";
+                                  })
+                                }
+                            });
+                        setState(() {
+                          isLoading = true;
+                        });
+                      },
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : ispincodeVerified
+                              ? ispincodeCorrect
+                                  ? const Icon(
+                                      Icons.verified,
+                                      color: Colors.white,
+                                    )
+                                  : const Icon(Icons.error, color: Colors.white)
+                              : const Text(
+                                  "VERIFY",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                    ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                enabled: false,
+                controller: cityController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'City',
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                enabled: false,
+                controller: stateController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'State',
+                ),
               ),
             ],
           ),
@@ -160,7 +213,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 height: 8,
               ),
               TextField(
-                controller: venueName,
+                controller: venueNameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Venue Name',
@@ -170,7 +223,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 height: 8,
               ),
               TextField(
-                controller: venueCapacity,
+                controller: venueCapacityController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Venue Capacity',
@@ -220,26 +273,23 @@ class _RegisterVenueState extends State<RegisterVenue> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Address Line1: ${addressLine1.text}'),
-                Text('Address Line2: ${addressLine2.text}'),
-                Text('Landmark: ${landmark.text}'),
-                _selectedCity == null
-                    ? const Text('City: ')
-                    : Text('City: ${_selectedCity["Name"]}'),
-                Text('Venue Name: ${venueName.text}'),
-                Text('Venue Capacity: ${venueCapacity.text}'),
+                Text('Address Line1: ${addressLine1Controller.text}'),
+                Text('Address Line2: ${addressLine2Controller.text}'),
+                Text('Landmark: ${landmarkController.text}'),
+                Text('Pincode: ${pincodeController.text}'),
+                Text('Venue Name: ${venueNameController.text}'),
+                Text('Venue Capacity: ${venueCapacityController.text}'),
               ],
             ),
           ),
         ),
       ];
 
-  String validValues(var line1, var line2, var landmark, var city,
-      var venuename, var capacity) {
+  String validValues(
+      var line1, var line2, var landmark, var venuename, var capacity) {
     if (line1 == "" ||
         line2 == "" ||
         landmark == "" ||
-        city == null ||
         venuename == "" ||
         capacity == "") return "Please Fill in all the details";
 
@@ -270,53 +320,64 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 _activeStepIndex += 1;
               });
             } else {
-              String input = validValues(
-                  addressLine1.text,
-                  addressLine2.text,
-                  landmark.text,
-                  _selectedCity,
-                  venueName.text,
-                  venueCapacity.text);
-              if (input == "valid") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RequestSubmitted(
-                              line1: addressLine1.text,
-                              line2: addressLine2.text,
-                              landmark: landmark.text,
-                              cid: _selectedCity["CId"],
-                              name: venueName,
-                              capacity: venueCapacity.text,
-                              email: email,
-                              contact: contactNo,
-                              ownername: name,
-                              venueEventTypes: eventTypesCheckbox,
-                            )));
-              } else {
-                AlertDialog alert = AlertDialog(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.error,
-                        color: Colors.red,
-                      ),
-                      Text(
-                        " Error",
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  content: Text(input),
-                );
+              if (!ispincodeCorrect) {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return alert;
+                    return pincodeAlert;
                   },
                 );
+              } else {
+                String input = validValues(
+                    addressLine1Controller.text,
+                    addressLine2Controller.text,
+                    landmarkController.text,
+                    venueNameController.text,
+                    venueCapacityController.text);
+                if (input == "valid") {
+                  print('Valid Input');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RequestSubmitted(
+                                line1: addressLine1Controller.text,
+                                line2: addressLine2Controller.text,
+                                landmark: landmarkController.text,
+                                pincode: pincodeController.text,
+                                cityName: cityController.text,
+                                stateName: stateController.text,
+                                name: venueNameController.text,
+                                capacity: venueCapacityController.text,
+                                email: email,
+                                contact: contactNo,
+                                ownername: name,
+                                venueEventTypes: eventTypesCheckbox,
+                              )));
+                } else {
+                  AlertDialog alert = AlertDialog(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                        Text(
+                          " Error",
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    content: Text(input),
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
+                }
               }
             }
           },
@@ -338,7 +399,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
 }
 
 class RequestSubmitted extends StatefulWidget {
-  final line1, line2, landmark, cid;
+  final line1, line2, landmark, pincode, cityName, stateName;
   final name, capacity, email;
   final contact, ownername;
   final venueEventTypes;
@@ -347,7 +408,9 @@ class RequestSubmitted extends StatefulWidget {
       this.line1,
       this.line2,
       this.landmark,
-      this.cid,
+      this.pincode,
+      this.cityName,
+      this.stateName,
       this.name,
       this.capacity,
       this.email,
@@ -356,13 +419,14 @@ class RequestSubmitted extends StatefulWidget {
       this.venueEventTypes})
       : super(key: key);
 
-  // print("");
   @override
   _RequestSubmittedState createState() => _RequestSubmittedState(
       this.line1,
       this.line2,
       this.landmark,
-      this.cid,
+      this.pincode,
+      this.cityName,
+      this.stateName,
       this.name,
       this.capacity,
       this.email,
@@ -372,7 +436,7 @@ class RequestSubmitted extends StatefulWidget {
 }
 
 class _RequestSubmittedState extends State<RequestSubmitted> {
-  String line1, line2, landmark, cid;
+  String line1, line2, landmark, pincode, cityName, stateName;
   String name, capacity, email;
   String contact, ownername;
   var venueEventTypes;
@@ -380,7 +444,9 @@ class _RequestSubmittedState extends State<RequestSubmitted> {
       this.line1,
       this.line2,
       this.landmark,
-      this.cid,
+      this.pincode,
+      this.cityName,
+      this.stateName,
       this.name,
       this.capacity,
       this.email,
@@ -391,8 +457,19 @@ class _RequestSubmittedState extends State<RequestSubmitted> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: sendVenueRequest(line1, line2, landmark, cid, name, capacity,
-          email, contact, ownername, venueEventTypes),
+      future: sendVenueRequest(
+          line1,
+          line2,
+          landmark,
+          pincode,
+          cityName,
+          stateName,
+          name,
+          capacity,
+          email,
+          contact,
+          ownername,
+          venueEventTypes),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("Snapshot errors:");

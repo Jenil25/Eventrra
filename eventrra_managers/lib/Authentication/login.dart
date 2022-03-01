@@ -281,8 +281,8 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        ElevatedButton(
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => SignUpPage()));
           },
@@ -315,7 +315,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           _buildEmail(),
-          //Container(child: Text("hii"),),
           _buildPassword(),
           _buildForgotPswd(),
           const SizedBox(

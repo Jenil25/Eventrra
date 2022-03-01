@@ -54,18 +54,6 @@ void getVenues() async {
 //   }
 }
 
-// void getAddressVenues(int CId) async {
-//   final response = await http
-//       .post(Uri.parse("https://eventrra.000webhostapp.com/getAddressVenues.php"));
-//   cities = jsonDecode(response.body);
-//   for (int i = 0; i < cities.length; ++i) {
-//     print(cities[i]["Name"] +
-//         cities[i]["Location"] +
-//         cities[i]["Pincode"] +
-//         cities[i]["State"]);
-//   }
-// }
-
 var orchestra = [];
 void getOrchestra() async {
   final response = await http
@@ -122,6 +110,8 @@ bool venueUser(String email) {
   for (int i = 0; i < venues.length; ++i) {
     if (venues[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
       currentVenue = venues[i];
+      print("Current Venue:");
+      print(currentVenue);
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
       return true;
@@ -149,7 +139,9 @@ Future<bool> sendVenueRequest(
     String line1,
     String line2,
     String landmark,
-    String cid,
+    String pincode,
+    String cityName,
+    String stateName,
     String name,
     String capacity,
     String email,
@@ -159,7 +151,9 @@ Future<bool> sendVenueRequest(
   print("line1:" + line1);
   print("line2:" + line2);
   print("landmark:" + landmark);
-  print("cid:" + cid);
+  print("pincode:" + pincode);
+  print("cityName:" + cityName);
+  print("stateName:" + stateName);
   print("name:" + name);
   print("capacity:" + capacity);
   print("email:" + email);
@@ -169,13 +163,23 @@ Future<bool> sendVenueRequest(
   for (var key in venueEventTypes.keys) {
     print(key.toString() + ":" + venueEventTypes[key].toString());
   }
+
+  var city = [];
+  final cityresponse = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/uploadNewCity.php"),
+      body: {"pincode": pincode, "name": cityName, "state": stateName});
+
+  if (cityresponse.body == "error") return false;
+
+  city = jsonDecode(cityresponse.body);
+
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/newVenueRequest.php"),
       body: {
         "line1": line1,
         "line2": line2,
         "landmark": landmark,
-        "cid": cid,
+        "cid": city[0]["CId"],
         "name": name,
         "capacity": capacity,
         "email": email,
@@ -217,26 +221,28 @@ Future<bool> sendCaterersRequest(
     String line1,
     String line2,
     String landmark,
-    String cid,
+    String pincode,
+    String cityName,
+    String stateName,
     String name,
     String email,
     String contact,
     String ownername) async {
-  print("line1:" + line1);
-  print("line2:" + line2);
-  print("landmark:" + landmark);
-  print("cid:" + cid);
-  print("name:" + name);
-  print("email:" + email);
-  print("contact:" + contact);
-  print("ownername:" + ownername);
+  final cityresponse = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/uploadNewCity.php"),
+      body: {"pincode": pincode, "name": cityName, "state": stateName});
+
+  if (cityresponse.body == "error") return false;
+  var city = [];
+  city = jsonDecode(cityresponse.body);
+
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/newCaterersRequest.php"),
       body: {
         "line1": line1,
         "line2": line2,
         "landmark": landmark,
-        "cid": cid,
+        "cid": city[0]["CId"],
         "name": name,
         "email": email,
         "contact": contact,
@@ -256,5 +262,26 @@ Future<bool> sendCaterersRequest(
   print(currentCaterer);
 
   print("Caterer Request ID=" + catererID.toString());
+  return true;
+}
+
+var cityName = "", stateName = "";
+Future<bool> verifyPincode(String pincode) async {
+  if (pincode.length < 6) return false;
+  final response = await http
+      .get(Uri.parse("https://api.postalpincode.in/pincode/" + pincode));
+
+  var res = jsonDecode(response.body);
+
+  print("Status:");
+  print(res[0]["Status"]);
+  if (res[0]["Status"] == "Error") return false;
+
+  cityName = res[0]["PostOffice"][0]["Name"];
+  stateName = res[0]["PostOffice"][0]["State"];
+
+  print("City=" + cityName);
+  print("State=" + stateName);
+
   return true;
 }
