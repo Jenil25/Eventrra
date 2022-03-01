@@ -20,6 +20,7 @@ class _VenueHomeState extends State<VenueHome> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     Color color = const Color(0xFF1B0250);
+    // print(currentVenue["Name"]);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

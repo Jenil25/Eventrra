@@ -420,7 +420,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 0,
               ),
               _buildSignUpBtn(),
             ],
