@@ -1,3 +1,4 @@
+import 'package:eventrra/New%20Event/selectCaterer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
@@ -48,8 +49,8 @@ class _SelectVenueState extends State<SelectVenue> {
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
                 itemCount: length,
-                itemBuilder: (BuildContext context, int i) =>
-                    venueCard(selectVenue[i])
+                itemBuilder: (BuildContext context, int i) => venueCard1(
+                    context, selectVenue[i], city, fdate, tdate, eventType)
                 //     Column(
                 //   children: <Widget>[
                 //     Container(
@@ -116,73 +117,143 @@ class _SelectVenueState extends State<SelectVenue> {
   }
 }
 
-Widget venueCard(var venue) {
-  return SizedBox(
-    height: 150,
-    child: Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: Colors.blue.shade200,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Image.asset("assets/images/venue/MyVenue.png")),
-            const SizedBox(
-              width: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    venue["Name"],
-                    maxLines: 1,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
+Widget venueCard1(BuildContext context, var venue, var city, var fdate,
+    var tdate, var eventType) {
+  return ExpansionTile(
+    title: Text(
+      venue["Name"],
+      style: TextStyle(fontSize: 20),
+    ),
+    children: [
+      SizedBox(
+        // height: 300,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: Colors.blue.shade200,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Image.asset("assets/images/venue/MyVenue.png")),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.location_on,
-                        color: Colors.grey.shade600,
-                        size: 20,
+                      Text(
+                        venue["Name"],
+                        maxLines: 1,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(
-                        width: 10,
+                        height: 10,
                       ),
-                      Text(
-                        venue["Landmark"],
-                        style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 20),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.grey.shade600,
+                            size: 20,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            venue["Landmark"],
+                            style: TextStyle(
+                                color: Colors.grey.shade600, fontSize: 20),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Capacity : " + venue["Capacity"],
-                    maxLines: 1,
-                    style: const TextStyle(color: Colors.grey, fontSize: 20),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Capacity : " + venue["Capacity"],
+                  maxLines: 1,
+                  style: const TextStyle(color: Colors.grey, fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  venue["Email"],
+                  maxLines: 1,
+                  style: const TextStyle(color: Colors.grey, fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Contact No. : " + venue["Contact"],
+                  maxLines: 1,
+                  style: const TextStyle(color: Colors.grey, fontSize: 20),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
+      const SizedBox(
+        height: 10,
+      ),
+      TextButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                //final city, fdate, tdate, eventType;
+                MaterialPageRoute(
+                    builder: (context) => SelectCaterer(
+                          city: city,
+                          fdate: fdate,
+                          tdate: tdate,
+                          eventType: eventType,
+                          venue: venue,
+                        )));
+          },
+          child: const Text("Continue"))
+    ],
+  );
+}
+
+Widget venueCard(var venue) {
+  return ExpansionTile(
+    title: Text(
+      "Title",
+      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
     ),
+    children: <Widget>[
+      ExpansionTile(
+        title: Text(
+          'Sub title',
+        ),
+        children: <Widget>[
+          ListTile(
+            title: Text('data'),
+          )
+        ],
+      ),
+      ListTile(
+        title: Text('data'),
+      )
+    ],
   );
 }
 

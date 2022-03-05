@@ -27,45 +27,30 @@ class MyApp extends StatelessWidget {
     getDecoraters();
     getCaterers();
     getEventTypes();
-    return FutureBuilder(
-      // Initialize FlutterFire
-      future: Firebase.initializeApp(),
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return MaterialApp(
-            // title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: Error(title: 'Error From Main'),
-          );
-        }
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: FutureBuilder(
+          // Initialize FlutterFire
+          future: Firebase.initializeApp(),
+          builder: (context, snapshot) {
+            // Check for errors
+            if (snapshot.hasError) {
+              return Error(title: 'Error From Main');
+            }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: MaterialApp(
-              // title: 'Flutter Demo',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: MyHomePage(title: 'Welcome'),
-            ),
-          );
-        }
+            // Once complete, show your application
+            if (snapshot.connectionState == ConnectionState.done) {
+              return MyHomePage(title: 'Welcome');
+            }
 
-        // Otherwise, show something whilst waiting for initialization to complete
-        return MaterialApp(
-          // title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: Error(title: 'Waiting'),
-        );
-      },
-    );
+            // Otherwise, show something whilst waiting for initialization to complete
+            return Error(title: 'Waiting');
+          },
+        ));
   }
 }
 

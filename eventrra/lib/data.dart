@@ -135,3 +135,14 @@ Future<void> getVenueForEvent(var city, var eventType) async {
   print(selectVenue);
   length = selectVenue.length;
 }
+
+var selectCaterer = [];
+Future<void> getCatererForEvent(var cid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getCatererForEvent.php"),
+      body: {
+        "cid": cid,
+      });
+  selectCaterer = jsonDecode(response.body);
+  return;
+}
