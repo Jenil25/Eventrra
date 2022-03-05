@@ -249,7 +249,7 @@ class _RegisterVenueState extends State<RegisterVenue> {
                 children: eventTypesCheckbox.keys
                     .map(
                       (e) => CheckboxListTile(
-                        title: Text(e["Event-Type"]),
+                        title: Text(e["EventType"]),
                         value: eventTypesCheckbox[e],
                         onChanged: (bool? value) {
                           setState(() {

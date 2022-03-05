@@ -115,6 +115,23 @@ void getEventTypes() async {
   eventTypes = jsonDecode(response.body);
   // print("Event-Types:");
   // for (int i = 0; i < eventTypes.length; ++i) {
-  // print(eventTypes[i]["Event-Type"]);
+  // print(eventTypes[i]["EventType"]);
   // }
+}
+
+var selectVenue = [], length;
+Future<void> getVenueForEvent(var city, var eventType) async {
+  print("Inside function in data.dart");
+  print(city);
+  print(eventType);
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVenueForEvent.php"),
+      body: {
+        "cid": city,
+        "etid": eventType,
+      });
+  // print("a");
+  selectVenue = jsonDecode(response.body);
+  print(selectVenue);
+  length = selectVenue.length;
 }

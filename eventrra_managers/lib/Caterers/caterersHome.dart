@@ -10,8 +10,6 @@ class CaterersHome extends StatefulWidget {
 }
 
 class _CaterersHomeState extends State<CaterersHome> {
-
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -71,364 +69,369 @@ class _CaterersHomeState extends State<CaterersHome> {
           ),
           currentCaterer["Verified"] == "1"
               ? Center(
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                          child: Container(
-                            height: 0.24 * height,
-                            width: 0.4 * width,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFf2f2f2),
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xFF8A959E),
-                                  blurRadius: 30.0,
-                                  spreadRadius: 0,
-                                  offset: Offset(0.0, 10.0),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    flex: 8,
-                                    child: Image.asset(
-                                        "assets/images/venue/MyVenue.png")),
-                                const Divider(
-                                  thickness: 2,
-                                  color: Colors.blueAccent,
-                                  indent: 10,
-                                  endIndent: 10,
-                                ),
-                                Expanded(
-                                    flex: 2,
-                                    child: Center(
-                                        child: Text(
-                                          "My Caterer",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            color: color,
-                                          ),
-                                        ))),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const MyCaterer()));
-                          }),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextButton(
-                        child: Container(
-                          height: 0.24 * height,
-                          width: 0.4 * width,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFf2f2f2),
-                            borderRadius: BorderRadius.circular(15.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFF8A959E),
-                                blurRadius: 30.0,
-                                spreadRadius: 0,
-                                offset: Offset(0.0, 10.0),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 7,
-                                  child: Image.asset(
-                                      "assets/images/venue/Request.png")),
-                              const Divider(
-                                thickness: 2,
-                                color: Colors.blueAccent,
-                                indent: 10,
-                                endIndent: 10,
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Center(
-                                  child: Text(
-                                    "Requests",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: color,
-                                    ),
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextButton(
+                                child: Container(
+                                  height: 0.24 * height,
+                                  width: 0.4 * width,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFf2f2f2),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0xFF8A959E),
+                                        blurRadius: 30.0,
+                                        spreadRadius: 0,
+                                        offset: Offset(0.0, 10.0),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
-                        ),
-                        onPressed: () {},
-                      )
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                        child: Container(
-                          height: 0.24 * height,
-                          width: 0.4 * width,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFf2f2f2),
-                            borderRadius: BorderRadius.circular(15.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFF8A959E),
-                                blurRadius: 30.0,
-                                spreadRadius: 0,
-                                offset: Offset(0.0, 10.0),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 7,
-                                  child: Image.asset(
-                                      "assets/images/venue/MyProfile.png")),
-                              const Divider(
-                                thickness: 2,
-                                color: Colors.blueAccent,
-                                indent: 10,
-                                endIndent: 10,
-                              ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Center(
-                                      child: Text(
-                                        "My Profile",
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: color,
-                                        ),
-                                      ))),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextButton(
-                        child: Container(
-                          height: 0.24 * height,
-                          width: 0.4 * width,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFf2f2f2),
-                            borderRadius: BorderRadius.circular(15.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFF8A959E),
-                                blurRadius: 30.0,
-                                spreadRadius: 0,
-                                offset: Offset(0.0, 10.0),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 8,
-                                  child: Image.asset(
-                                      "assets/images/venue/Events.png")),
-                              const Divider(
-                                thickness: 2,
-                                color: Colors.blueAccent,
-                                indent: 10,
-                                endIndent: 10,
-                              ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    child: Center(
-                                        child: Text(
-                                          "Caterers",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            color: color,
-                                          ),
-                                        )),
-                                  )),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
-              : Center(
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("Your request has been submitted!"),
-                  const Text(
-                      "You will receive an email as soon as it gets verified! :)"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          child: Container(
-                            height: 0.24 * height,
-                            width: 0.4 * width,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFf2f2f2),
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xFF8A959E),
-                                  blurRadius: 30.0,
-                                  spreadRadius: 0,
-                                  offset: Offset(0.0, 10.0),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    flex: 8,
-                                    child: Image.asset(
-                                        "assets/images/venue/MyVenue.png")),
-                                const Divider(
-                                  thickness: 2,
-                                  color: Colors.blueAccent,
-                                  indent: 10,
-                                  endIndent: 10,
-                                ),
-                                Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      child: Center(
-                                          child: Text(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          flex: 8,
+                                          child: Image.asset(
+                                              "assets/images/venue/MyVenue.png")),
+                                      const Divider(
+                                        thickness: 2,
+                                        color: Colors.blueAccent,
+                                        indent: 10,
+                                        endIndent: 10,
+                                      ),
+                                      Expanded(
+                                          flex: 2,
+                                          child: Center(
+                                              child: Text(
                                             "My Caterer",
                                             maxLines: 2,
                                             style: TextStyle(
                                               fontSize: 18.0,
                                               color: color,
                                             ),
-                                          )),
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
+                                          ))),
+                                      const SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MyCaterer()));
+                                }),
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const MyCaterer()));
-                          }),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextButton(
-                        child: Container(
-                          height: 0.24 * height,
-                          width: 0.4 * width,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFf2f2f2),
-                            borderRadius: BorderRadius.circular(15.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFF8A959E),
-                                blurRadius: 30.0,
-                                spreadRadius: 0,
-                                offset: Offset(0.0, 10.0),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 7,
-                                  child: Image.asset(
-                                      "assets/images/venue/MyProfile.png")),
-                              const Divider(
-                                thickness: 2,
-                                color: Colors.blueAccent,
-                                indent: 10,
-                                endIndent: 10,
-                              ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    child: Center(
+                            TextButton(
+                              child: Container(
+                                height: 0.24 * height,
+                                width: 0.4 * width,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFf2f2f2),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xFF8A959E),
+                                      blurRadius: 30.0,
+                                      spreadRadius: 0,
+                                      offset: Offset(0.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        flex: 7,
+                                        child: Image.asset(
+                                            "assets/images/venue/Request.png")),
+                                    const Divider(
+                                      thickness: 2,
+                                      color: Colors.blueAccent,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Center(
                                         child: Text(
+                                          "Requests",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: color,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {},
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextButton(
+                              child: Container(
+                                height: 0.24 * height,
+                                width: 0.4 * width,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFf2f2f2),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xFF8A959E),
+                                      blurRadius: 30.0,
+                                      spreadRadius: 0,
+                                      offset: Offset(0.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        flex: 7,
+                                        child: Image.asset(
+                                            "assets/images/venue/MyProfile.png")),
+                                    const Divider(
+                                      thickness: 2,
+                                      color: Colors.blueAccent,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Expanded(
+                                        flex: 2,
+                                        child: Center(
+                                            child: Text(
                                           "My Profile",
                                           maxLines: 2,
                                           style: TextStyle(
                                             fontSize: 18.0,
                                             color: color,
                                           ),
+                                        ))),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {},
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextButton(
+                              child: Container(
+                                height: 0.24 * height,
+                                width: 0.4 * width,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFf2f2f2),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xFF8A959E),
+                                      blurRadius: 30.0,
+                                      spreadRadius: 0,
+                                      offset: Offset(0.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        flex: 8,
+                                        child: Image.asset(
+                                            "assets/images/venue/Events.png")),
+                                    const Divider(
+                                      thickness: 2,
+                                      color: Colors.blueAccent,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          child: Center(
+                                              child: Text(
+                                            "Caterers",
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: color,
+                                            ),
+                                          )),
                                         )),
-                                  )),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
-                        onPressed: () {},
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : Center(
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text("Your request has been submitted!"),
+                        const Text(
+                            "You will receive an email as soon as it gets verified! :)"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // TextButton(
+                            //     child: Container(
+                            //       height: 0.24 * height,
+                            //       width: 0.4 * width,
+                            //       decoration: BoxDecoration(
+                            //         color: const Color(0xFFf2f2f2),
+                            //         borderRadius: BorderRadius.circular(15.0),
+                            //         boxShadow: const [
+                            //           BoxShadow(
+                            //             color: Color(0xFF8A959E),
+                            //             blurRadius: 30.0,
+                            //             spreadRadius: 0,
+                            //             offset: Offset(0.0, 10.0),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       child: Column(
+                            //         mainAxisAlignment: MainAxisAlignment.start,
+                            //         children: [
+                            //           Expanded(
+                            //               flex: 8,
+                            //               child: Image.asset(
+                            //                   "assets/images/venue/MyVenue.png")),
+                            //           const Divider(
+                            //             thickness: 2,
+                            //             color: Colors.blueAccent,
+                            //             indent: 10,
+                            //             endIndent: 10,
+                            //           ),
+                            //           Expanded(
+                            //               flex: 2,
+                            //               child: Container(
+                            //                 child: Center(
+                            //                     child: Text(
+                            //                   "My Caterer",
+                            //                   maxLines: 2,
+                            //                   style: TextStyle(
+                            //                     fontSize: 18.0,
+                            //                     color: color,
+                            //                   ),
+                            //                 )),
+                            //               )),
+                            //           const SizedBox(
+                            //             height: 10,
+                            //           )
+                            //         ],
+                            //       ),
+                            //     ),
+                            //     onPressed: () {
+                            //       Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: (context) =>
+                            //                   const MyCaterer()));
+                            //     }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextButton(
+                              child: Container(
+                                height: 0.24 * height,
+                                width: 0.4 * width,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFf2f2f2),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xFF8A959E),
+                                      blurRadius: 30.0,
+                                      spreadRadius: 0,
+                                      offset: Offset(0.0, 10.0),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        flex: 7,
+                                        child: Image.asset(
+                                            "assets/images/venue/MyProfile.png")),
+                                    const Divider(
+                                      thickness: 2,
+                                      color: Colors.blueAccent,
+                                      indent: 10,
+                                      endIndent: 10,
+                                    ),
+                                    Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          child: Center(
+                                              child: Text(
+                                            "Profile",
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: color,
+                                            ),
+                                          )),
+                                        )),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MyCaterer()));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
         ],
       ),
     );
-
   }
 }

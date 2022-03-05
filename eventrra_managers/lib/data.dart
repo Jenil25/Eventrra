@@ -106,7 +106,8 @@ void getEventTypes() async {
   // print(eventTypes[i]["Event-Type"]);
   // }
 }
-late var currentVenueAddress,currentVenueCity,temp1;
+
+late var currentVenueAddress, currentVenueCity, temp1;
 bool venueUser(String email) {
   for (int i = 0; i < venues.length; ++i) {
     if (venues[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
@@ -116,16 +117,16 @@ bool venueUser(String email) {
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
 
-      for(int j = 0;j<addresses.length;j++){
-        if(addresses[j]["AId"]==currentVenue["AId"]){
+      for (int j = 0; j < addresses.length; j++) {
+        if (addresses[j]["AId"] == currentVenue["AId"]) {
           currentVenueAddress = addresses[j];
-          temp1=addresses[j]["CId"];
-          print(temp);
+          temp1 = addresses[j]["CId"];
+          print(temp1);
         }
       }
 
-      for(int k = 0;k<cities.length;k++) {
-        if (cities[k]["CId"] == temp) {
+      for (int k = 0; k < cities.length; k++) {
+        if (cities[k]["CId"] == temp1) {
           currentVenueCity = cities[k];
           print(currentVenueCity);
         }
@@ -142,16 +143,17 @@ bool catererUser(String email) {
       currentCaterer = caterers[i];
       venueID = int.parse(caterers[i]["CaId"]);
       isVenueVerified = caterers[i]["Verified"] == "1";
+      print("CurrentCaterer:");
       print(currentCaterer);
 
-      for(int j = 0;j<addresses.length;j++){
-        if(addresses[j]["AId"]==currentCaterer["AId"]){
+      for (int j = 0; j < addresses.length; j++) {
+        if (addresses[j]["AId"] == currentCaterer["AId"]) {
           currentCatererAddress = addresses[j];
-          temp=addresses[j]["CId"];
+          temp = addresses[j]["CId"];
           print(temp);
         }
       }
-      for(int k = 0;k<cities.length;k++) {
+      for (int k = 0; k < cities.length; k++) {
         if (cities[k]["CId"] == temp) {
           currentCatererCity = cities[k];
           print(currentCatererCity);
@@ -225,7 +227,8 @@ Future<bool> sendVenueRequest(
       Uri.parse("https://eventrra.000webhostapp.com/getVenue.php"),
       body: {"vid": venueID.toString()});
 
-  currentVenue = jsonDecode(venueResponse.body);
+  var v = jsonDecode(venueResponse.body);
+  currentVenue = v[0];
 
   print("Current Venue:");
   print(currentVenue);
@@ -245,7 +248,7 @@ Future<bool> sendVenueRequest(
   return true;
 }
 
-late var currentCaterer,currentCatererAddress,currentCatererCity,temp;
+late var currentCaterer, currentCatererAddress, currentCatererCity, temp;
 late int catererID;
 bool isCatererVerified = false;
 Future<bool> sendCaterersRequest(
@@ -287,7 +290,8 @@ Future<bool> sendCaterersRequest(
       Uri.parse("https://eventrra.000webhostapp.com/getCaterer.php"),
       body: {"caid": catererID.toString()});
 
-  currentCaterer = jsonDecode(catererResponse.body);
+  var v = jsonDecode(catererResponse.body);
+  currentCaterer = v[0];
 
   print("Current Caterer AId:");
   print(currentCaterer);
@@ -295,14 +299,8 @@ Future<bool> sendCaterersRequest(
   return true;
 }
 
-Future<bool> editCaterersRequest(
-    String line1,
-    String line2,
-    String landmark,
-    String cateringname,
-    String email,
-    String contact,
-    String ownername) async {
+Future<bool> editCaterersRequest(String line1, String line2, String landmark,
+    String cateringname, String contact, String ownername) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/editCaterer.php"),
       body: {
@@ -310,7 +308,6 @@ Future<bool> editCaterersRequest(
         "line2": line2,
         "landmark": landmark,
         "name": cateringname,
-        "email": email,
         "contact": contact,
         "ownername": ownername,
         "caid": currentCaterer["CaId"],
@@ -341,7 +338,7 @@ Future<bool> editVenueRequest(
         "email": email,
         "contact": contact,
         "ownername": ownername,
-        "capacity" : capacity,
+        "capacity": capacity,
         "vid": currentVenue["VId"],
         "aid": currentVenueAddress["AId"],
       });
@@ -370,4 +367,58 @@ Future<bool> verifyPincode(String pincode) async {
   print("State=" + stateName);
 
   return true;
+}
+
+Future<bool> addEventType(String eventType, var vid) async {
+  if (eventType.length < 3) return false;
+  final response = await http.post(
+    Uri.parse("https://eventrra.000webhostapp.com/uploadNewEventType.php"),
+    body: {
+      "eventtype": eventType,
+      "vid": vid,
+    },
+  );
+
+  var res = response.body;
+
+  print("Status:");
+  print(res);
+
+  if (res == "success") return true;
+  return false;
+}
+
+var venueOccupiedDates = [];
+Future<void> getVenueOccupiedDetails(var vid) async {
+  final response = await http.post(
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/getVenueOccupiedDetails.php"),
+      body: {
+        "vid": vid,
+      });
+  venueOccupiedDates = jsonDecode(response.body);
+  print(venueOccupiedDates);
+  return;
+}
+
+Future<bool> addOccupiedVenue(String fromDate, String toDate, var vid) async {
+  print("From:" + fromDate);
+  print("To:" + toDate);
+  if (fromDate.length == 0 || toDate.length == 0) return false;
+  final response = await http.post(
+    Uri.parse("https://eventrra.000webhostapp.com/uploadOccupiedVenue.php"),
+    body: {
+      "fromdate": fromDate,
+      "todate": toDate,
+      "vid": vid,
+    },
+  );
+
+  var res = response.body;
+
+  print("Status:");
+  print(res);
+
+  if (res == "success") return true;
+  return false;
 }
