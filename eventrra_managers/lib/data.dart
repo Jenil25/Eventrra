@@ -347,6 +347,20 @@ Future<bool> editVenueRequest(
   print("Status after editing venue" + status);
   return true;
 }
+var eventtypes=[];
+Future<bool> ViewVenueEventTypes(var vid) async {
+  print(vid);
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVenueEventType.php"),
+      body: {
+        "vid": vid,
+      });
+
+  eventtypes = jsonDecode(response.body);
+  print("Status(show event types)" + eventtypes.toString());
+  // eventtypes=res;
+  return true;
+}
 
 var cityName = "", stateName = "";
 Future<bool> verifyPincode(String pincode) async {

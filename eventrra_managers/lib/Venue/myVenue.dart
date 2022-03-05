@@ -11,43 +11,6 @@ class MyVenue extends StatefulWidget {
   _MyVenueState createState() => _MyVenueState();
 }
 
-// class _MyVenueState extends State<MyVenue> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(currentVenue["Name"]),
-//       ),
-//       body: Column(
-//         children: [
-//           ElevatedButton(
-//             child: const Text("Request New Event Type"),
-//             onPressed: () {},
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class RequestEventType extends StatefulWidget {
-//   const RequestEventType({Key? key}) : super(key: key);
-//
-//   @override
-//   _RequestEventTypeState createState() => _RequestEventTypeState();
-// }
-//
-// class _RequestEventTypeState extends State<RequestEventType> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Request new Venue"),
-//       ),
-//     );
-//   }
-// }
-
 class _MyVenueState extends State<MyVenue> {
   TextEditingController eventTypeController = TextEditingController();
 
@@ -163,6 +126,57 @@ class _MyVenueState extends State<MyVenue> {
                 ),
               ),
             ),
+            SizedBox(
+              height:10,
+            ),
+            Container(
+
+              height: MediaQuery.of(context).size.height/4,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Hosted Event Types",style: TextStyle(fontWeight: FontWeight.bold),),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  FutureBuilder(
+                    future: ViewVenueEventTypes(currentVenue['VId']),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Error(
+                            title:
+                            'Error From getting event types:\n${snapshot.error}');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Expanded(
+                          child: ListView.builder(
+                            // physics: NeverScrollableScrollPhysics(),
+                            // shrinkWrap: true,
+                              itemCount: eventtypes.length,
+                              itemBuilder : (BuildContext context, int i) =>
+                                  Padding(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Container(
+                                      // color: Colors.blue.shade300,
+                                      height: 50,
+                                      child: Text(eventtypes[i]["EventType"]),
+
+                                    ),
+                                  )
+                          ),
+                        );
+                      }
+                      return CircularProgressIndicator();
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -179,7 +193,7 @@ class _MyVenueState extends State<MyVenue> {
                     return Container(
                       decoration: const BoxDecoration(
                         borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(25.0)),
+                        BorderRadius.vertical(top: Radius.circular(25.0)),
                       ),
                       padding: MediaQuery.of(context).viewInsets,
                       child: Padding(
@@ -224,31 +238,31 @@ class _MyVenueState extends State<MyVenue> {
                                         isLoading = true;
                                       });
                                       addEventType(
-                                              eventTypeController.text
-                                                  .toString(),
-                                              currentVenue["VId"])
+                                          eventTypeController.text
+                                              .toString(),
+                                          currentVenue["VId"])
                                           .then((value) => {
-                                                if (value == true)
-                                                  {
-                                                    print("If"),
-                                                    setModalState(() {
-                                                      eventTypeController.text =
-                                                          "";
-                                                      isLoading = false;
-                                                      isClicked = true;
-                                                      isDone = true;
-                                                    })
-                                                  }
-                                                else
-                                                  {
-                                                    print("Else"),
-                                                    setModalState(() {
-                                                      isLoading = false;
-                                                      isClicked = true;
-                                                      isDone = false;
-                                                    })
-                                                  }
-                                              });
+                                        if (value == true)
+                                          {
+                                            print("If"),
+                                            setModalState(() {
+                                              eventTypeController.text =
+                                              "";
+                                              isLoading = false;
+                                              isClicked = true;
+                                              isDone = true;
+                                            })
+                                          }
+                                        else
+                                          {
+                                            print("Else"),
+                                            setModalState(() {
+                                              isLoading = false;
+                                              isClicked = true;
+                                              isDone = false;
+                                            })
+                                          }
+                                      });
                                     },
                                     child: const Text(
                                       "Add",
@@ -282,16 +296,16 @@ class _MyVenueState extends State<MyVenue> {
                                 isLoading == true
                                     ? const CircularProgressIndicator()
                                     : isClicked == true
-                                        ? isDone == true
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: const Text("Added"),
-                                              )
-                                            : const Text("Error")
-                                        : const Text("")
+                                    ? isDone == true
+                                    ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(15),
+                                  ),
+                                  child: const Text("Added"),
+                                )
+                                    : const Text("Error")
+                                    : const Text("")
                               ],
                             )
                           ],
