@@ -37,6 +37,7 @@ class _SelectVenueState extends State<SelectVenue> {
         title: Text("Select Venue"),
       ),
       body: FutureBuilder(
+
         // Initialize FlutterFire
         future: getVenueForEvent(city['CId'], eventType['EtId']),
         builder: (context, snapshot) {
@@ -216,6 +217,7 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
       ),
       TextButton(
           onPressed: () {
+            inputVenue = venue;
             Navigator.push(
                 context,
                 //final city, fdate, tdate, eventType;

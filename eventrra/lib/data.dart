@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+var inputCity,inputFDate,inputTDate,inputEventType,inputVenue,inputCaterer,inputUserName,inputContact,uid;
 
 var userEmail = "";
 
@@ -35,7 +36,13 @@ void getAddresses() async {
   //       addresses[i]["CId"]);
   // }
 }
-
+var users = [];
+void getUsers() async {
+  final response = await http
+      .post(Uri.parse("https://eventrra.000webhostapp.com/getUsers.php"));
+  users = jsonDecode(response.body);
+  print("Users"+users.toString());
+}
 var venues = [];
 void getVenues() async {
   final response = await http
@@ -145,4 +152,38 @@ Future<void> getCatererForEvent(var cid) async {
       });
   selectCaterer = jsonDecode(response.body);
   return;
+}
+
+
+Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var venue,var caterer,var decorator,var orchestra,var username,var usercontact,var uid) async {
+  print("Inside upload event function in data.dart");
+  print("name"+ username+"\n"+
+    "contact"+usercontact+"\n"+
+    "uid" + uid+"\n"+
+    "cid" + city['CId']+"\n"+
+    "etid" + eventtype['EtId']+"\n"+
+    "fdate" + fdate+"\n"+
+    "tdate" + tdate+"\n"+
+    "vid" + venue['VId']+"\n"+
+    "caid" + caterer['CaId']  +"\n");
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/newEventRequest.php"),
+      body: {
+        "name": username,
+        "contact": usercontact,
+        "uid" : uid,
+        "cid" : city['CId'],
+        "etid" : eventtype['EtId'],
+        "fdate" : fdate,
+        "tdate" : tdate,
+        "vid" : venue['VId'],
+        "caid" : caterer!=null ? caterer['CaId'] : "0",
+        "orid" : orchestra!=null ? orchestra['OrId'] : "0",
+        "did" : decorator!=null ? decorator['DId'] : "0",
+      });
+  // print("a");
+    var res=response.body;
+    if(res=="success")
+        return true;
+    return false;
 }

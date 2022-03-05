@@ -195,6 +195,14 @@ class CheckUser extends StatelessWidget {
           // return s;
           print("returned!");
         } else {
+
+          for (int i = 0; i < users.length; ++i) {
+              if(users[i]['Email'].toString().toLowerCase() == user.email.toString().toLowerCase())
+              {
+                uid=users[i]['UId'];
+                break;
+              }
+            }
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => HomePage()));
         }

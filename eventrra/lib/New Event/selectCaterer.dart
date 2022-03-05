@@ -2,6 +2,8 @@ import 'package:eventrra/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/main.dart';
 
+import 'finalPage.dart';
+
 class SelectCaterer extends StatefulWidget {
   final venue;
   final city, fdate, tdate, eventType;
@@ -33,6 +35,66 @@ class _SelectCatererState extends State<SelectCaterer> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController usernamecontroller = TextEditingController();
+    TextEditingController contactcontroller = TextEditingController();
+
+    AlertDialog alert = AlertDialog(
+
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const <Widget>[
+          Text(
+            " Enter Your Details",
+            style:
+            TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      content: Container(
+        height: 200,
+        child: Column(
+          children: [
+            TextFormField(
+                controller: usernamecontroller,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.person,
+                  ),
+                  labelText: "UserName",
+                )
+            ),
+            SizedBox(
+              height:10,
+            ),
+            TextFormField(
+                controller: contactcontroller,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.call,
+                  ),
+                  labelText: "Contact",
+                )
+            ),
+            SizedBox(
+              height:10,
+            ),
+            TextButton(
+                onPressed: (){
+                  inputUserName = usernamecontroller.text;
+                  inputContact = contactcontroller.text;
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FinalPage(
+                      ),),);
+                }, child: Text("Continue")),
+
+          ],
+        ),
+      ),
+    );
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Select Caterer"),
@@ -59,7 +121,7 @@ class _SelectCatererState extends State<SelectCaterer> {
                           city,
                           fdate,
                           tdate,
-                          eventType)),
+                          eventType,alert)),
                 );
               }
 
@@ -72,7 +134,12 @@ class _SelectCatererState extends State<SelectCaterer> {
           ),
           Container(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                inputCaterer = null;
+                showDialog(context: context, builder: (BuildContext context){
+                  return alert;
+                });
+              },
               child: const Text("Continue Without Caterer"),
             ),
           )
@@ -82,11 +149,12 @@ class _SelectCatererState extends State<SelectCaterer> {
   }
 }
 
-Widget catererCard(BuildContext context, var venue, var city, var fdate,
-    var tdate, var eventType) {
+Widget catererCard(BuildContext context, var caterer, var city, var fdate,
+    var tdate, var eventType,AlertDialog alert) {
+
   return ExpansionTile(
     title: Text(
-      venue["Name"],
+      caterer["Name"],
       style: TextStyle(fontSize: 20),
     ),
     children: [
@@ -117,7 +185,7 @@ Widget catererCard(BuildContext context, var venue, var city, var fdate,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        venue["Name"],
+                        caterer["Name"],
                         maxLines: 1,
                         style: const TextStyle(
                             color: Colors.black,
@@ -138,7 +206,7 @@ Widget catererCard(BuildContext context, var venue, var city, var fdate,
                             width: 10,
                           ),
                           Text(
-                            venue["Landmark"],
+                            caterer["Landmark"],
                             style: TextStyle(
                                 color: Colors.grey.shade600, fontSize: 20),
                           ),
@@ -151,7 +219,7 @@ Widget catererCard(BuildContext context, var venue, var city, var fdate,
                   height: 10,
                 ),
                 Text(
-                  venue["Email"],
+                  caterer["Email"],
                   maxLines: 1,
                   style: const TextStyle(color: Colors.grey, fontSize: 20),
                 ),
@@ -159,7 +227,7 @@ Widget catererCard(BuildContext context, var venue, var city, var fdate,
                   height: 20,
                 ),
                 Text(
-                  "Contact No. : " + venue["Contact"],
+                  "Contact No. : " + caterer["Contact"],
                   maxLines: 1,
                   style: const TextStyle(color: Colors.grey, fontSize: 20),
                 ),
@@ -173,17 +241,10 @@ Widget catererCard(BuildContext context, var venue, var city, var fdate,
       ),
       TextButton(
           onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     //final city, fdate, tdate, eventType;
-            //     MaterialPageRoute(
-            //         builder: (context) => SelectCaterer(
-            //           city: city,
-            //           fdate: fdate,
-            //           tdate: tdate,
-            //           eventType: eventType,
-            //           venue: venue,
-            //         )));
+            inputCaterer = caterer;
+            showDialog(context: context, builder: (BuildContext context){
+              return alert;
+            });
           },
           child: const Text("Continue"))
     ],

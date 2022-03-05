@@ -342,6 +342,10 @@ class _NewEventState extends State<NewEvent> {
           ),
           ElevatedButton(
             onPressed: () => {
+              inputCity=selectedCity,
+              inputFDate = currentDate,
+              inputTDate = toDate,
+              inputEventType=selectedEventType,
               Navigator.push(
                   context,
                   MaterialPageRoute(
