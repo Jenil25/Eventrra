@@ -182,8 +182,74 @@ Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var v
         "did" : decorator!=null ? decorator['DId'] : "0",
       });
   // print("a");
-    var res=response.body;
-    if(res=="success")
+
+    var res=int.parse(response.body);
+
+
+    if(res>0) {
+
+      final response1 = await http.post(
+          Uri.parse("https://eventrra.000webhostapp.com/sendMailToUser.php"),
+          body: {
+            "eid": res.toString(),
+            "email" : userEmail,
+            "cityname" : city['Name'],
+          });
+
+        final response2 = await http.post(
+            Uri.parse("https://eventrra.000webhostapp.com/sendMailToVendors.php"),
+            body: {
+              "eid": res.toString(),
+              "email" : venue['Email'],
+              "cityname" : city['Name'],
+            });
+
+        if(caterer!=null) {
+          final response3 = await http.post(
+              Uri.parse(
+                  "https://eventrra.000webhostapp.com/sendMailToVendors.php"),
+              body: {
+                "eid": res.toString(),
+                "email": caterer['Email'],
+                "cityname" : city['Name'],
+              });
+        }
+        if(orchestra!=null) {
+          final response4 = await http.post(
+              Uri.parse(
+                  "https://eventrra.000webhostapp.com/sendMailToVendors.php"),
+              body: {
+                "eid": res.toString(),
+                "email": orchestra['Email'],
+                "cityname" : city['Name'],
+              });
+        }
+        if(decorator !=null) {
+          final response5 = await http.post(
+              Uri.parse(
+                  "https://eventrra.000webhostapp.com/sendMailToVendors.php"),
+              body: {
+                "eid": res.toString(),
+                "email": decorator['Email'],
+                "cityname" : city['Name'],
+              });
+        }
         return true;
-    return false;
+
+
+
+    }else {
+      return false;
+    }
+}
+
+var myEvents = [];
+Future<void> getUserEvents(var uid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getUserEvents.php"),
+      body: {
+        "uid": uid,
+      });
+   myEvents= jsonDecode(response.body);
+  return;
 }
