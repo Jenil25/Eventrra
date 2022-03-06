@@ -13,95 +13,81 @@ class _MyEventState extends State<MyEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(),
-      body :
-      FutureBuilder(
+      appBar: AppBar(),
+      body: Center(
+        child: FutureBuilder(
+          // Initialize FlutterFire
+          future: getUserEvents(uid),
+          builder: (context, snapshot) {
+            // Check for errors
+            if (snapshot.hasError) {
+              print("Snapshot error:");
+              print(snapshot.error);
+              return Error(title: 'Error From Main');
+            }
 
-        // Initialize FlutterFire
-        future: getUserEvents(uid),
-        builder: (context, snapshot) {
-          // Check for errors
-          if (snapshot.hasError) {
-            return Error(title: 'Error From Main');
-          }
+            // Once complete, show your application
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView.builder(
+                  itemCount: myEvents.length,
+                  itemBuilder: (BuildContext context, int i) =>
+                      eventCard(context, myEvents[i]));
+            }
 
-          // Once complete, show your application
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-                itemCount: myEvents.length,
-                itemBuilder: (BuildContext context, int i) => eventCard(
-                    context, selectVenue[i], city, fdate, tdate, eventType)
-              //     Column(
-              //   children: <Widget>[
-              //     Container(
-              //       padding:
-              //           EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: <Widget>[
-              //           Container(
-              //               child: ElevatedButton(
-              //             // padding: EdgeInsets.symmetric(
-              //             //     vertical: 12.0, horizontal: 10.0),
-              //             child: Text("Name : " +
-              //                 selectVenue[i]['Name'] +
-              //                 "\n" +
-              //                 "Address : " +
-              //                 selectVenue[i]['Line1'] +
-              //                 " , " +
-              //                 selectVenue[i]['Line2'] +
-              //                 "\n"
-              //                     "LandMark : " +
-              //                 selectVenue[i]['Landmark'] +
-              //                 "\n" +
-              //                 "Capacity : " +
-              //                 selectVenue[i]['Capacity'] +
-              //                 "\n" +
-              //                 "Email : " +
-              //                 selectVenue[i]['Email'] +
-              //                 "\n" +
-              //                 "OwnerName : " +
-              //                 selectVenue[i]['OwnerName'] +
-              //                 "\n" +
-              //                 "Contact : " +
-              //                 selectVenue[i]['Contact'] +
-              //                 "\n"),
-              //             style: ElevatedButton.styleFrom(
-              //               primary: colour, // Background color
-              //               onPrimary: Colors.black,
-              //               textStyle: TextStyle(fontSize: 18.0),
-              //             ),
-              //
-              //             onPressed: () {
-              //               // Navigator.push(
-              //               //   context,
-              //               //   new MaterialPageRoute(
-              //               //       builder: (context) =>SelectVenue()),
-              //               // );
-              //             },
-              //           )),
-              //           Divider(color: Colors.black),
-              //         ],
-              //       ),
-              //     )
-              //   ],
-              // ),
-            );
-          }
-
-          // Otherwise, show something whilst waiting for initialization to complete
-          return CircularProgressIndicator();
-        },
+            // Otherwise, show something whilst waiting for initialization to complete
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
-
-
     );
   }
 }
 
-
 Widget eventCard(BuildContext context, var event) {
-
+  var venue = null,
+      caterer = null,
+      vaddress = null,
+      caddress = null,
+      city = null,
+      eventtype = null;
+  for (int k = 0; k < cities.length; ++k) {
+    if (cities[k]["CId"] == event["CId"]) {
+      city = cities[k];
+      break;
+    }
+  }
+  for (int k = 0; k < eventTypes.length; ++k) {
+    if (eventTypes[k]["EtId"] == event["EtId"]) {
+      eventtype = eventTypes[k];
+      break;
+    }
+  }
+  for (int i = 0; i < venues.length; ++i) {
+    if (venues[i]["VId"] == event["VId"]) {
+      venue = venues[i];
+      for (int j = 0; j < addresses.length; ++j) {
+        if (addresses[j]["AId"] == venue["AId"]) {
+          vaddress = addresses[j];
+          break;
+        }
+      }
+      break;
+    }
+  }
+  if (event["CaId"] != 0) {
+    for (int i = 0; i < caterers.length; ++i) {
+      if (caterers[i]["CaId"] == event["CaId"]) {
+        caterer = caterers[i];
+        for (int j = 0; j < addresses.length; ++j) {
+          if (addresses[j]["AId"] == caterer["AId"]) {
+            caddress = addresses[j];
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
   return ExpansionTile(
     title: Text(
       event["Name"],
@@ -156,7 +142,7 @@ Widget eventCard(BuildContext context, var event) {
                             width: 10,
                           ),
                           Text(
-                            venue["Landmark"],
+                            vaddress["Landmark"],
                             style: TextStyle(
                                 color: Colors.grey.shade600, fontSize: 20),
                           ),
@@ -199,18 +185,18 @@ Widget eventCard(BuildContext context, var event) {
       ),
       TextButton(
           onPressed: () {
-            inputVenue = venue;
-            Navigator.push(
-                context,
-                //final city, fdate, tdate, eventType;
-                MaterialPageRoute(
-                    builder: (context) => SelectCaterer(
-                      city: city,
-                      fdate: fdate,
-                      tdate: tdate,
-                      eventType: eventType,
-                      venue: venue,
-                    )));
+            // inputVenue = venue;
+            // Navigator.push(
+            //     context,
+            //     //final city, fdate, tdate, eventType;
+            //     MaterialPageRoute(
+            //         builder: (context) => SelectCaterer(
+            //               city: city,
+            //               fdate: fdate,
+            //               tdate: tdate,
+            //               eventType: eventType,
+            //               venue: venue,
+            //             )));
           },
           child: const Text("Continue"))
     ],

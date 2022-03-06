@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventrra/My%20Events/myevent.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'New Event/newevent.dart';
@@ -135,7 +136,15 @@ class _HomePageState extends State<HomePage> {
                     "My Events",
                     style: TextStyle(color: Colors.yellow, fontSize: 40),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      //final city, fdate, tdate, eventType;
+                      MaterialPageRoute(
+                        builder: (context) => MyEvent(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
