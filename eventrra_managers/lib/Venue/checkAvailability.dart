@@ -13,7 +13,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
   TextEditingController toDateController = TextEditingController();
 
   bool isClicked = false, isLoading = false, isDone = false;
-
+  bool disClicked = false, disLoading = false, disDone = false;
   DateTime now = DateTime.now(),
       fromDate = DateTime.now(),
       toDate = DateTime.now(),
@@ -101,50 +101,13 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
           });
         }
       }
-      // if(pickedDate != currentDate){
-      //
-      // }
-      // if (pickedDate.year <= todaysDate.year &&
-      //     pickedDate.month <= todaysDate.month &&
-      //     pickedDate.day <= todaysDate.day) {
-      //   AlertDialog alert = AlertDialog(
-      //     title: Row(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: const <Widget>[
-      //         Icon(
-      //           Icons.error,
-      //           color: Colors.red,
-      //         ),
-      //         Text(
-      //           " Error",
-      //           style:
-      //               TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-      //         ),
-      //       ],
-      //     ),
-      //     content: const Text("Please enter a valid date for new event!"),
-      //   );
-      //   showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return alert;
-      //     },
-      //   );
-      // } else {
-      //   setState(() {
-      //     if(from) {
-      //       fromDate = pickedDate;
-      //     }
-      //     else{
-      //       toDate = pickedDate;
-      //     }
-      //   });
-      // }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController reasoncontroller = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Occupied Dates"),
@@ -179,15 +142,72 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           leading: const Icon(Icons.calendar_today),
-                          title: Text(
-                            venueOccupiedDates[index]["FDate"].toString() +
-                                " - " +
-                                venueOccupiedDates[index]["TDate"].toString(),
-                          ),
-                          trailing: TextButton(
-                            onPressed: () {},
-                            child: const Icon(Icons.delete),
-                          ),
+                          title: Text(venueOccupiedDates[index]["FDate"]
+                                  .toString() +
+                              " - " +
+                              venueOccupiedDates[index]["TDate"].toString() +
+                              " for " +
+                              venueOccupiedDates[index]["Reason"].toString()),
+                          trailing:  StatefulBuilder(builder:
+                              (BuildContext context, StateSetter setModalState1) {
+                            return TextButton(
+                              onPressed: () {
+
+                                deleteOccupiedVenue(venueOccupiedDates[index]['OVId']).then((value) {
+                                  print(value);
+                                  if (value != "success")
+                                  {
+                                    print("If");
+                                    setModalState1(() {
+                                      disLoading = false;
+                                      disClicked = true;
+                                      disDone = true;
+                                    });
+                                  }
+                                  else
+                                  {
+                                    print(value);
+                                    setModalState1(() {
+                                      disLoading = false;
+                                      disClicked = true;
+                                      disDone = false;
+                                    });
+                                    AlertDialog alert = AlertDialog(
+                                      title: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: const <Widget>[
+                                          Icon(
+                                            Icons.done,
+                                            color: Colors.green,
+                                          ),
+                                          Text(
+                                            "Deleted Successfully ",
+                                            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+
+                                    );
+                                    setState(() {
+
+                                    });
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext
+                                        context) {
+                                          return alert;
+                                        }
+                                    );
+
+                                  }
+                                });
+
+                              },
+                              child: disLoading ? CircularProgressIndicator() : Icon(Icons.delete),
+                                               // : isClicked ? isDone ? :
+                                               //             :
+                            );
+                          }),
                         );
                       },
                     ),
@@ -200,13 +220,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
             const SizedBox(
               height: 20,
             ),
-            // Container(
-            //   color: Colors.blue.shade300,
-            //   child: GestureDetector(
-            //     child: const Text("Change Availability"),
-            //     onTap: () {},
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -293,10 +306,33 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                               ],
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 5,
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                cursorColor: Colors.black,
+                                controller: reasoncontroller,
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {},
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.question_answer,
+                                    color: Colors.blue.shade600,
+                                    size: 30,
+                                  ),
+                                  labelText: "Reason",
+                                ),
+                              ),
+                            ),
+                            //     TextFormField(
+                            //       controller: reasoncontroller,
+                            //       keyboardType: TextInputType.text,
+                            //
+                            //       onChanged: (value) {},
+                            //     ),
                             const SizedBox(
-                              height: 10,
+                              height: 30,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -318,11 +354,18 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                       String fDate = formatter.format(fromDate);
                                       String tDate = formatter.format(toDate);
                                       addOccupiedVenue(
-                                              fDate, tDate, currentVenue["VId"])
-                                          .then((value) => {
-                                                if (value == true)
+                                              fDate,
+                                              tDate,
+                                              currentVenue["VId"],
+                                              reasoncontroller.text)
+                                          .then((value) {
+                                            print(value);
+                                                if (value == "success")
                                                   {
-                                                    print("If"),
+                                                    setState(() {
+
+                                                    });
+                                                    print("If");
                                                     setModalState(() {
                                                       fromDateController.text =
                                                           "";
@@ -331,16 +374,39 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                                       isLoading = false;
                                                       isClicked = true;
                                                       isDone = true;
-                                                    })
+                                                    });
                                                   }
                                                 else
                                                   {
-                                                    print("Else"),
+                                                    print(value);
+                                                    AlertDialog alert = AlertDialog(
+                                                      title: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: const <Widget>[
+                                                          Icon(
+                                                            Icons.error,
+                                                            color: Colors.red,
+                                                          ),
+                                                          Text(
+                                                            " Error",
+                                                            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      content: Text(value),
+                                                    );
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return alert;
+                                                      }
+                                                    );
                                                     setModalState(() {
                                                       isLoading = false;
                                                       isClicked = true;
                                                       isDone = false;
-                                                    })
+                                                    });
                                                   }
                                               });
                                     },

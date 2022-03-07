@@ -1,4 +1,7 @@
 import 'package:eventrra_managers/Authentication/login.dart';
+import 'package:eventrra_managers/Venue/events.dart';
+import 'package:eventrra_managers/Venue/loadingCalendar.dart';
+import 'package:eventrra_managers/Venue/requestedEvents.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -194,7 +197,15 @@ class _VenueHomeState extends State<VenueHome> {
                                       ],
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      //final city, fdate, tdate, eventType;
+                                      MaterialPageRoute(
+                                        builder: (context) => RequestedEvents(),
+                                      ),
+                                    );
+                                  },
                                 )
                               ],
                             ),
@@ -313,7 +324,13 @@ class _VenueHomeState extends State<VenueHome> {
                                       ],
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoadingCalendar()));
+                                  },
                                 ),
                               ],
                             ),

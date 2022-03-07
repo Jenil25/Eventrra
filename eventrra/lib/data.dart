@@ -157,15 +157,15 @@ Future<void> getCatererForEvent(var cid) async {
 
 Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var venue,var caterer,var decorator,var orchestra,var username,var usercontact,var uid) async {
   print("Inside upload event function in data.dart");
-  print("name"+ username+"\n"+
-    "contact"+usercontact+"\n"+
-    "uid" + uid+"\n"+
-    "cid" + city['CId']+"\n"+
-    "etid" + eventtype['EtId']+"\n"+
-    "fdate" + fdate+"\n"+
-    "tdate" + tdate+"\n"+
-    "vid" + venue['VId']+"\n"+
-    "caid" + caterer['CaId']  +"\n");
+  // print("name"+ username+"\n"+
+  //   "contact"+usercontact+"\n"+
+  //   "uid" + uid+"\n"+
+  //   "cid" + city['CId']+"\n"+
+  //   "etid" + eventtype['EtId']+"\n"+
+  //   "fdate" + fdate+"\n"+
+  //   "tdate" + tdate+"\n"+
+  //   "vid" + venue['VId']+"\n"+
+  //   "caid" + caterer['CaId']  +"\n");
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/newEventRequest.php"),
       body: {

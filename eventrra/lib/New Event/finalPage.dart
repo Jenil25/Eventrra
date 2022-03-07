@@ -1,3 +1,4 @@
+import 'package:eventrra/My%20Events/myevent.dart';
 import 'package:eventrra/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/main.dart';
@@ -109,6 +110,13 @@ class _FinalPageState extends State<FinalPage> {
                   ],
                 ),
                 isCorrect ? ElevatedButton(onPressed: () {
+                  Navigator.push(
+                    context,
+                    //final city, fdate, tdate, eventType;
+                    MaterialPageRoute(
+                      builder: (context) => MyEvent(),
+                    ),
+                  );
 
                 }, child:  Text("View Details")) : Text( " "),
               ],
