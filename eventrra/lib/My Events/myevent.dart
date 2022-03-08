@@ -36,7 +36,7 @@ class _MyEventState extends State<MyEvent> {
             }
 
             // Otherwise, show something whilst waiting for initialization to complete
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
@@ -45,7 +45,7 @@ class _MyEventState extends State<MyEvent> {
 }
 
 Widget eventCard(BuildContext context, var event) {
-var eventtype= null;
+  var eventtype = null;
   for (int k = 0; k < eventTypes.length; ++k) {
     if (eventTypes[k]["EtId"] == event["EtId"]) {
       eventtype = eventTypes[k];
@@ -166,16 +166,17 @@ var eventtype= null;
   //   ],
   // );
   return Container(
-      child : TextButton( onPressed: (){
+    child: TextButton(
+      onPressed: () {
         Navigator.push(
           context,
           //final city, fdate, tdate, eventType;
           MaterialPageRoute(
-            builder: (context) => SingleEvent(event:event),
+            builder: (context) => SingleEvent(event: event),
           ),
         );
       },
-      child : Text(eventtype['EventType']),
-      ),
+      child: Text(eventtype['EventType']),
+    ),
   );
 }

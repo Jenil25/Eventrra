@@ -1,3 +1,4 @@
+import 'package:eventrra_managers/Venue/uploadImages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
@@ -39,7 +40,7 @@ class _MyVenueState extends State<MyVenue> {
         child: Column(
           children: [
             Container(
-              height: 290,
+              height: 300,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.blue.shade50),
@@ -56,12 +57,15 @@ class _MyVenueState extends State<MyVenue> {
                           borderRadius: BorderRadius.circular(50),
                           color: Colors.deepOrange.shade300),
                       child: Center(
-                        child: Text(
-                          // "J",
-                          currentVenue["OwnerName"][0],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 60,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://eventrra.000webhostapp.com/images/${currentVenue['image']}"),
+                              fit: BoxFit.fill,
+                            ),
+                            // borderRadius: BorderRadius.circular(50),
                           ),
                         ),
                       ),
@@ -69,6 +73,14 @@ class _MyVenueState extends State<MyVenue> {
                     const SizedBox(
                       height: 15,
                     ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UploadImages()));
+                        },
+                        child: Text("Change Profile Image")),
                     Text(
                       currentVenue["OwnerName"],
                       style: TextStyle(
@@ -127,11 +139,10 @@ class _MyVenueState extends State<MyVenue> {
               ),
             ),
             SizedBox(
-              height:10,
+              height: 10,
             ),
             Container(
-
-              height: MediaQuery.of(context).size.height/4,
+              height: MediaQuery.of(context).size.height / 4,
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
                 borderRadius: BorderRadius.circular(10),
@@ -139,7 +150,10 @@ class _MyVenueState extends State<MyVenue> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Hosted Event Types",style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(
+                    "Hosted Event Types",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -149,26 +163,24 @@ class _MyVenueState extends State<MyVenue> {
                       if (snapshot.hasError) {
                         return Error(
                             title:
-                            'Error From getting event types:\n${snapshot.error}');
+                                'Error From getting event types:\n${snapshot.error}');
                       }
 
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Expanded(
                           child: ListView.builder(
-                            // physics: NeverScrollableScrollPhysics(),
-                            // shrinkWrap: true,
+                              // physics: NeverScrollableScrollPhysics(),
+                              // shrinkWrap: true,
                               itemCount: eventtypes.length,
-                              itemBuilder : (BuildContext context, int i) =>
+                              itemBuilder: (BuildContext context, int i) =>
                                   Padding(
                                     padding: const EdgeInsets.all(1.0),
                                     child: Container(
                                       // color: Colors.blue.shade300,
                                       height: 50,
                                       child: Text(eventtypes[i]["EventType"]),
-
                                     ),
-                                  )
-                          ),
+                                  )),
                         );
                       }
                       return CircularProgressIndicator();
@@ -193,7 +205,7 @@ class _MyVenueState extends State<MyVenue> {
                     return Container(
                       decoration: const BoxDecoration(
                         borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25.0)),
+                            BorderRadius.vertical(top: Radius.circular(25.0)),
                       ),
                       padding: MediaQuery.of(context).viewInsets,
                       child: Padding(
@@ -238,31 +250,31 @@ class _MyVenueState extends State<MyVenue> {
                                         isLoading = true;
                                       });
                                       addEventType(
-                                          eventTypeController.text
-                                              .toString(),
-                                          currentVenue["VId"])
+                                              eventTypeController.text
+                                                  .toString(),
+                                              currentVenue["VId"])
                                           .then((value) => {
-                                        if (value == true)
-                                          {
-                                            print("If"),
-                                            setModalState(() {
-                                              eventTypeController.text =
-                                              "";
-                                              isLoading = false;
-                                              isClicked = true;
-                                              isDone = true;
-                                            })
-                                          }
-                                        else
-                                          {
-                                            print("Else"),
-                                            setModalState(() {
-                                              isLoading = false;
-                                              isClicked = true;
-                                              isDone = false;
-                                            })
-                                          }
-                                      });
+                                                if (value == true)
+                                                  {
+                                                    print("If"),
+                                                    setModalState(() {
+                                                      eventTypeController.text =
+                                                          "";
+                                                      isLoading = false;
+                                                      isClicked = true;
+                                                      isDone = true;
+                                                    })
+                                                  }
+                                                else
+                                                  {
+                                                    print("Else"),
+                                                    setModalState(() {
+                                                      isLoading = false;
+                                                      isClicked = true;
+                                                      isDone = false;
+                                                    })
+                                                  }
+                                              });
                                     },
                                     child: const Text(
                                       "Add",
@@ -296,16 +308,16 @@ class _MyVenueState extends State<MyVenue> {
                                 isLoading == true
                                     ? const CircularProgressIndicator()
                                     : isClicked == true
-                                    ? isDone == true
-                                    ? Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(15),
-                                  ),
-                                  child: const Text("Added"),
-                                )
-                                    : const Text("Error")
-                                    : const Text("")
+                                        ? isDone == true
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: const Text("Added"),
+                                              )
+                                            : const Text("Error")
+                                        : const Text("")
                               ],
                             )
                           ],

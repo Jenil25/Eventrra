@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'dart:io';
+
 var userEmail = "";
 var vid;
 var cities = [];
@@ -41,18 +43,18 @@ void getVenues() async {
       .post(Uri.parse("https://eventrra.000webhostapp.com/getVenues.php"));
   venues = jsonDecode(response.body);
   print("Got Venues! length= " + venues.length.toString());
-//   print("Venues:");
-//   for (int i = 0; i < venues.length; ++i) {
-//     print(venues[i]["Name"] +
-//         "," +
-//         venues[i]["Capacity"] +
-//         "," +
-//         venues[i]["Email"] +
-//         "," +
-//         venues[i]["Contact"] +
-//         "," +
-//         venues[i]["OwnerName"]);
-//   }
+  print("Venues:");
+  for (int i = 0; i < venues.length; ++i) {
+    print(venues[i]["Name"] +
+        "," +
+        venues[i]["Capacity"] +
+        "," +
+        venues[i]["Email"] +
+        "," +
+        venues[i]["Contact"] +
+        "," +
+        venues[i]["OwnerName"]);
+  }
 }
 
 var orchestra = [];
@@ -350,7 +352,8 @@ Future<bool> editVenueRequest(
   print("Status after editing venue" + status);
   return true;
 }
-var eventtypes=[];
+
+var eventtypes = [];
 Future<bool> ViewVenueEventTypes(var vid) async {
   print(vid);
   final response = await http.post(
@@ -414,7 +417,7 @@ Future<void> getVenueOccupiedDetails(var vid) async {
         "vid": vid,
       });
   venueOccupiedDates = jsonDecode(response.body);
-  venueOccupiedDates.sort((a,b){
+  venueOccupiedDates.sort((a, b) {
     var adate = DateFormat('dd-MM-yyyy').parse(a['FDate']);
     var bdate = DateFormat('dd-MM-yyyy').parse(b['FDate']);
     return adate.compareTo(bdate);
@@ -423,28 +426,33 @@ Future<void> getVenueOccupiedDetails(var vid) async {
   return;
 }
 
-Future<String> addOccupiedVenue(String fromDate, String toDate, var vid,var reason) async {
+Future<String> addOccupiedVenue(
+    String fromDate, String toDate, var vid, var reason) async {
   print("From:" + fromDate);
   print("To:" + toDate);
   if (fromDate.length == 0 || toDate.length == 0) return "error";
 
-  DateTime fdatetemp =DateFormat("dd-MM-yyyy").parse(fromDate);
-  DateTime tdatetemp =DateFormat("dd-MM-yyyy").parse(toDate);
-  for(int i=0; i<calenderDates.length; i++)
-    {
-      if((fdatetemp.isAfter(calenderDates[i]['FDate']) && fdatetemp.isBefore(calenderDates[i]['TDate']))  || fdatetemp.isAtSameMomentAs(calenderDates[i]['FDate'])|| fdatetemp.isAtSameMomentAs(calenderDates[i]['TDate'])
-      || (tdatetemp.isAfter(calenderDates[i]['FDate']) && tdatetemp.isBefore(calenderDates[i]['TDate']))  || tdatetemp.isAtSameMomentAs(calenderDates[i]['FDate'])|| tdatetemp.isAtSameMomentAs(calenderDates[i]['TDate']))
-        {
-          return "There is already a event scheduled from ${calenderDates[i]['FDate'].day}/${calenderDates[i]['FDate'].month}/${calenderDates[i]['FDate'].year} to ${calenderDates[i]['TDate'].day}/${calenderDates[i]['TDate'].month}/${calenderDates[i]['TDate'].year}";
-        }
+  DateTime fdatetemp = DateFormat("dd-MM-yyyy").parse(fromDate);
+  DateTime tdatetemp = DateFormat("dd-MM-yyyy").parse(toDate);
+  for (int i = 0; i < calenderDates.length; i++) {
+    if ((fdatetemp.isAfter(calenderDates[i]['FDate']) &&
+            fdatetemp.isBefore(calenderDates[i]['TDate'])) ||
+        fdatetemp.isAtSameMomentAs(calenderDates[i]['FDate']) ||
+        fdatetemp.isAtSameMomentAs(calenderDates[i]['TDate']) ||
+        (tdatetemp.isAfter(calenderDates[i]['FDate']) &&
+            tdatetemp.isBefore(calenderDates[i]['TDate'])) ||
+        tdatetemp.isAtSameMomentAs(calenderDates[i]['FDate']) ||
+        tdatetemp.isAtSameMomentAs(calenderDates[i]['TDate'])) {
+      return "There is already a event scheduled from ${calenderDates[i]['FDate'].day}/${calenderDates[i]['FDate'].month}/${calenderDates[i]['FDate'].year} to ${calenderDates[i]['TDate'].day}/${calenderDates[i]['TDate'].month}/${calenderDates[i]['TDate'].year}";
     }
+  }
   final response = await http.post(
     Uri.parse("https://eventrra.000webhostapp.com/uploadOccupiedVenue.php"),
     body: {
       "fromdate": fromDate,
       "todate": toDate,
       "vid": vid,
-      "reason" : reason,
+      "reason": reason,
     },
   );
 
@@ -459,89 +467,110 @@ Future<String> addOccupiedVenue(String fromDate, String toDate, var vid,var reas
 
 var venueRequests = [];
 Future<bool> getVenueRequests(var vid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/getVenueRequests.php"),
-      body :{
-      "vid" :vid }
-  );
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVenueRequests.php"),
+      body: {"vid": vid});
   venueRequests = jsonDecode(response.body);
   return true;
 }
 
-
-Future<bool> AcceptRequest(var eid,var venuename,var eventtype,var fdate,var tdate,var uid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/venueRequestAccepted.php"),
-      body :{
-        "eid" :eid,
-        "uid" : uid,
-        "venuename" : venuename,
-        "eventtype" : eventtype,
-        "fdate" : fdate,
-        "tdate" : tdate,
-      }
-  );
-  if(response.body=="error")
-    return false;
+Future<bool> AcceptRequest(var eid, var venuename, var eventtype, var fdate,
+    var tdate, var uid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/venueRequestAccepted.php"),
+      body: {
+        "eid": eid,
+        "uid": uid,
+        "venuename": venuename,
+        "eventtype": eventtype,
+        "fdate": fdate,
+        "tdate": tdate,
+      });
+  if (response.body == "error") return false;
   return true;
 }
 
-Future<bool> DeclineRequest(var eid,var venuename,var eventtype,var fdate,var tdate,var uid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/venueRequestDeclined.php"),
-      body :{
-        "eid" :eid,
-        "uid" : uid,
-        "venuename" : venuename,
-        "eventtype" : eventtype,
-        "fdate" : fdate,
-        "tdate" : tdate,
-      }
-  );
-  if(response.body=="error")
-    return false;
+Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate,
+    var tdate, var uid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/venueRequestDeclined.php"),
+      body: {
+        "eid": eid,
+        "uid": uid,
+        "venuename": venuename,
+        "eventtype": eventtype,
+        "fdate": fdate,
+        "tdate": tdate,
+      });
+  if (response.body == "error") return false;
   return true;
 }
 
-var occupiedDates = [],calenderDates=[];
+var occupiedDates = [], calenderDates = [];
 Future<bool> getEventDates(var vid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/getVCalenderEvents.php"),
-      body :{
-        "vid" :vid }
-  );
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVCalenderEvents.php"),
+      body: {"vid": vid});
   // DateFormat formatter = DateFormat('dd-MM-yyyy');
   calenderDates = jsonDecode(response.body);
-  for(int i=0; i<calenderDates.length; i++)
-    {
-      calenderDates[i]['FDate'] =DateFormat("dd-MM-yyyy").parse(calenderDates[i]['FDate']);
-      calenderDates[i]['TDate'] =DateFormat("dd-MM-yyyy").parse(calenderDates[i]['TDate']);
-    }
-  final response1 = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/getVOccupied.php"),
-      body :{
-        "vid" :vid }
-  );
+  for (int i = 0; i < calenderDates.length; i++) {
+    calenderDates[i]['FDate'] =
+        DateFormat("dd-MM-yyyy").parse(calenderDates[i]['FDate']);
+    calenderDates[i]['TDate'] =
+        DateFormat("dd-MM-yyyy").parse(calenderDates[i]['TDate']);
+  }
+  final response1 = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVOccupied.php"),
+      body: {"vid": vid});
   occupiedDates = jsonDecode(response1.body);
-  for(int i=0; i<occupiedDates.length; i++)
-  {
-    occupiedDates[i]['FDate'] =DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['FDate']);
-    occupiedDates[i]['TDate'] =DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['TDate']);
+  for (int i = 0; i < occupiedDates.length; i++) {
+    occupiedDates[i]['FDate'] =
+        DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['FDate']);
+    occupiedDates[i]['TDate'] =
+        DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['TDate']);
     print(occupiedDates[i]['FDate']);
   }
 
   return true;
 }
 
-
 Future<String> deleteOccupiedVenue(var ovid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/deleteOccupiedVenue.php"),
-      body :{
-        "ovid" :ovid }
-  );
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/deleteOccupiedVenue.php"),
+      body: {"ovid": ovid});
   print(response.body);
-  if(response.body=="success")
-    return "success";
+  if (response.body == "success") return "success";
   return "error";
+}
+
+Future<void> uploadImageFile(File file, String name) async {
+  print("Inside:");
+  var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/uploadVenueProfileImage.php"));
+  // "https://eventrra.000webhostapp.com/images/"));
+  var pic = await http.MultipartFile.fromPath("file_field", file.path);
+  request.files.add(pic);
+  request.fields['text_field'] = file.path;
+  var response = await request.send();
+  var responseData = await response.stream.toBytes();
+  var responseString = String.fromCharCodes(responseData);
+  print("from upload image file function data.dart :  ");
+  print(responseString.toString());
+  return;
+}
+
+Future<void> uploadImageFileTRY(File file, String name) async {
+  print("IN TRYFile:");
+  print(file.toString());
+  print("Sending:");
+  final response = await http.post(
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/uploadVenueProfileImageTRY.php"),
+      body: {"file": base64Encode(file.readAsBytesSync())});
+  // body: {"file": file.toString()});
+  print("Response:");
+  print(response.body);
+  return;
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
+import 'package:flutter/widgets.dart';
 import 'new.dart';
 import 'selectVenue.dart';
 
@@ -140,230 +141,332 @@ class _NewEventState extends State<NewEvent> {
       appBar: AppBar(
         title: const Text("New Event"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(
-            flex: 3,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(
-                flex: 3,
-              ),
-              const Text("Select City: "),
-              const Spacer(
-                flex: 1,
-              ),
-              DropdownButton(
-                hint: const Text('Please choose a city'),
-                value: selectedCity,
-                onChanged: (newValue) {
-                  setState(() {
-                    newValue as Map;
-                    selectedCity = newValue;
-                    // cityChanged = true;
-                    getCityAddresses(int.parse(newValue["CId"]));
-                  });
-                },
-                items: cities.map((city) {
-                  return DropdownMenuItem(
-                    child: Text(city["Name"]),
-                    value: city,
-                  );
-                }).toList(),
-              ),
-              const Spacer(
-                flex: 3,
-              ),
-            ],
-          ),
-          // Column(
-          //   children: [
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height / 1.2,
-          //       child: ListView.builder(
-          //         shrinkWrap: true,
-          //         itemCount: cityVenues.length,
-          //         itemBuilder: (BuildContext context, int index) {
-          //           return Card(
-          //             margin: EdgeInsets.all(10.0),
-          //             shape: RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.circular(10.0),
-          //             ),
-          //             color: Colors.blue.shade100,
-          //             child: Container(
-          //               margin: EdgeInsets.all(5.0),
-          //               padding: EdgeInsets.only(left: 20.0),
-          //               child: Row(
-          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                 children: <Widget>[
-          //                   ElevatedButton(
-          //                     onPressed: () {
-          //                       // setState(() {
-          //                       //   Navigator.push(
-          //                       //       context,
-          //                       //       MaterialPageRoute(
-          //                       //           builder: (context) => OrderDetails(
-          //                       //                 order: orders[index],
-          //                       //               )));
-          //                       // });
-          //                     },
-          //                     child: Container(
-          //                       alignment: Alignment.centerLeft,
-          //                       child: Column(
-          //                         children: <Widget>[
-          //                           Text("${cityVenues[index]["Name"]}"),
-          //                           Container(
-          //                             child: Text(
-          //                               "${cityVenues[index]["AId"]}",
-          //                               style: TextStyle(
-          //                                 color: Colors.blue.shade900,
-          //                               ),
-          //                             ),
-          //                           )
-          //                         ],
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           );
-          //         },
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          const Spacer(
-            flex: 1,
-          ),
-          // SizedBox(
-          //   height: 20.0,
-          // ),
-          Row(
-            children: [
-              const Spacer(
-                flex: 3,
-              ),
-              const Text("Select From Date: "),
-              const Spacer(
-                flex: 1,
-              ),
-              ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: Text(
-                  'Select date',
-                  style: TextStyle(fontSize: fontSize - 3),
-                ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Text(
-                currentDate.day.toString() +
-                    "-" +
-                    currentDate.month.toString() +
-                    "-" +
-                    currentDate.year.toString(),
-                style: TextStyle(fontSize: fontSize),
-              ),
-              const Spacer(
-                flex: 3,
-              ),
-            ],
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-
-          Row(
-            children: [
-              const Spacer(
-                flex: 3,
-              ),
-              const Text("Select To Date: "),
-              const Spacer(
-                flex: 1,
-              ),
-              ElevatedButton(
-                onPressed: () => _toDate(context),
-                child: Text(
-                  'Select date',
-                  style: TextStyle(fontSize: fontSize - 3),
-                ),
-              ),
-              Text(
-                toDate.day.toString() +
-                    "-" +
-                    toDate.month.toString() +
-                    "-" +
-                    toDate.year.toString(),
-                style: TextStyle(fontSize: fontSize),
-              ),
-            ],
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Row(
-            children: [
-              const Spacer(
-                flex: 3,
-              ),
-              const Text("Select Event-Type: "),
-              const Spacer(
-                flex: 1,
-              ),
-              DropdownButton(
-                hint: const Text('Please choose event type'),
-                value: selectedEventType,
-                onChanged: (newValue) {
-                  setState(() {
-                    newValue as Map;
-                    selectedEventType = newValue;
-                  });
-                },
-                items: eventTypes.map((type) {
-                  return DropdownMenuItem(
-                    child: Text(type["EventType"]),
-                    value: type,
-                  );
-                }).toList(),
-              ),
-              const Spacer(
-                flex: 3,
-              ),
-            ],
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          ElevatedButton(
-            onPressed: () => {
-              inputCity=selectedCity,
-              inputFDate = currentDate,
-              inputTDate = toDate,
-              inputEventType=selectedEventType,
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SelectVenue(
-                          city: selectedCity,
-                          fdate: currentDate,
-                          tdate: toDate,
-                          eventType: selectedEventType)))
-            },
-            child: Text(
-              'Continue',
-              style: TextStyle(fontSize: fontSize - 3),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(
+              flex: 3,
             ),
-          ),
-          const Spacer(
-            flex: 3,
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(
+                  flex: 3,
+                ),
+                const Text("Select City: "),
+                const Spacer(
+                  flex: 1,
+                ),
+                DropdownButton(
+                  hint: const Text('Please choose a city'),
+                  value: selectedCity,
+                  onChanged: (newValue) {
+                    setState(() {
+                      newValue as Map;
+                      selectedCity = newValue;
+                      // cityChanged = true;
+                      getCityAddresses(int.parse(newValue["CId"]));
+                    });
+                  },
+                  items: cities.map((city) {
+                    return DropdownMenuItem(
+                      child: Text(city["Name"]),
+                      value: city,
+                    );
+                  }).toList(),
+                ),
+                const Spacer(
+                  flex: 3,
+                ),
+              ],
+            ),
+            // Column(
+            //   children: [
+            //     SizedBox(
+            //       height: MediaQuery.of(context).size.height / 1.2,
+            //       child: ListView.builder(
+            //         shrinkWrap: true,
+            //         itemCount: cityVenues.length,
+            //         itemBuilder: (BuildContext context, int index) {
+            //           return Card(
+            //             margin: EdgeInsets.all(10.0),
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10.0),
+            //             ),
+            //             color: Colors.blue.shade100,
+            //             child: Container(
+            //               margin: EdgeInsets.all(5.0),
+            //               padding: EdgeInsets.only(left: 20.0),
+            //               child: Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: <Widget>[
+            //                   ElevatedButton(
+            //                     onPressed: () {
+            //                       // setState(() {
+            //                       //   Navigator.push(
+            //                       //       context,
+            //                       //       MaterialPageRoute(
+            //                       //           builder: (context) => OrderDetails(
+            //                       //                 order: orders[index],
+            //                       //               )));
+            //                       // });
+            //                     },
+            //                     child: Container(
+            //                       alignment: Alignment.centerLeft,
+            //                       child: Column(
+            //                         children: <Widget>[
+            //                           Text("${cityVenues[index]["Name"]}"),
+            //                           Container(
+            //                             child: Text(
+            //                               "${cityVenues[index]["AId"]}",
+            //                               style: TextStyle(
+            //                                 color: Colors.blue.shade900,
+            //                               ),
+            //                             ),
+            //                           )
+            //                         ],
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            const Spacer(
+              flex: 1,
+            ),
+            // SizedBox(
+            //   height: 20.0,
+            // ),
+            // Row(
+            //   children: [
+            //     const Spacer(
+            //       flex: 3,
+            //     ),
+            //     const Text("Select From Date: "),
+            //     const Spacer(
+            //       flex: 1,
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () => _selectDate(context),
+            //       child: Text(
+            //         'Select date',
+            //         style: TextStyle(fontSize: fontSize - 3),
+            //       ),
+            //     ),
+            //     const Spacer(
+            //       flex: 1,
+            //     ),
+            //     Text(
+            //       currentDate.day.toString() +
+            //           "-" +
+            //           currentDate.month.toString() +
+            //           "-" +
+            //           currentDate.year.toString(),
+            //       style: TextStyle(fontSize: fontSize),
+            //     ),
+            //     const Spacer(
+            //       flex: 3,
+            //     ),
+            //   ],
+            // ),
+            const Spacer(
+              flex: 1,
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  child: const Text("FROM DATE"),
+                  width: MediaQuery.of(context).size.width * 0.85,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        currentDate.day.toString() +
+                            "-" +
+                            currentDate.month.toString() +
+                            "-" +
+                            currentDate.year.toString(),
+                        style: TextStyle(fontSize: fontSize),
+                      ),
+                      const Spacer(
+                        flex: 1,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextButton(
+                          onPressed: () => _selectDate(context),
+                          child: const Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.white,
+                          ),
+                          // child: Text(
+                          //   'Select date',
+                          //   style: TextStyle(fontSize: fontSize - 3),
+                          // ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Column(
+              children: [
+                SizedBox(
+                  child: const Text("TO DATE"),
+                  width: MediaQuery.of(context).size.width * 0.85,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        toDate.day.toString() +
+                            "-" +
+                            toDate.month.toString() +
+                            "-" +
+                            toDate.year.toString(),
+                        style: TextStyle(fontSize: fontSize),
+                      ),
+                      const Spacer(
+                        flex: 1,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextButton(
+                          onPressed: () => _toDate(context),
+                          child: const Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.white,
+                          ),
+                          // child: Text(
+                          //   'Select date',
+                          //   style: TextStyle(fontSize: fontSize - 3),
+                          // ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const Spacer(
+              flex: 1,
+            ),
+            Row(
+              children: [
+                const Spacer(
+                  flex: 3,
+                ),
+                const Text("Select Event-Type: "),
+                const Spacer(
+                  flex: 1,
+                ),
+                DropdownButton(
+                  hint: const Text('Please choose event type'),
+                  value: selectedEventType,
+                  onChanged: (newValue) {
+                    setState(() {
+                      newValue as Map;
+                      selectedEventType = newValue;
+                    });
+                  },
+                  items: eventTypes.map((type) {
+                    return DropdownMenuItem(
+                      child: Text(type["EventType"]),
+                      value: type,
+                    );
+                  }).toList(),
+                ),
+                const Spacer(
+                  flex: 3,
+                ),
+              ],
+            ),
+            const Spacer(
+              flex: 1,
+            ),
+            ElevatedButton(
+              onPressed: () => {
+                inputCity = selectedCity,
+                inputFDate = currentDate,
+                inputTDate = toDate,
+                inputEventType = selectedEventType,
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SelectVenue(
+                            city: selectedCity,
+                            fdate: currentDate,
+                            tdate: toDate,
+                            eventType: selectedEventType)))
+              },
+              child: Text(
+                'Continue',
+                style: TextStyle(fontSize: fontSize - 3),
+              ),
+            ),
+            const Spacer(
+              flex: 3,
+            ),
+          ],
+        ),
       ),
     );
   }

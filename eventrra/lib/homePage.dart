@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 49,
+              height: 40,
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,93 +117,188 @@ class _HomePageState extends State<HomePage> {
             //
             //   ],
             // ),
-            Container(
-              margin: EdgeInsets.all(15),
-              // width: width / 2.5,
-              height: height / 7,
-              decoration: const BoxDecoration(
-                  color: Colors.purple,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              // color: Colors.purple,
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // fixedSize: ,
-                    primary: Colors.purple,
-                    shadowColor: Colors.purple,
+            _makeButton(
+              s1: "MY",
+              s2: "EVENTS",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  //final city, fdate, tdate, eventType;
+                  MaterialPageRoute(
+                    builder: (context) => MyEvent(),
                   ),
-                  child: const Text(
-                    "My Events",
-                    style: TextStyle(color: Colors.yellow, fontSize: 40),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      //final city, fdate, tdate, eventType;
-                      MaterialPageRoute(
-                        builder: (context) => MyEvent(),
-                      ),
-                    );
-                  },
-                ),
+                );
+              },
+              clr: [Colors.red.shade300, Colors.red.shade600],
+              image: Image.network(
+                "https://www.kindpng.com/picc/m/246-2465825_event-management-gurgaon-illustration-png-calendar-vector-transparent.pnghttps://www.kindpng.com/picc/m/246-2465825_event-management-gurgaon-illustration-png-calendar-vector-transparent.png",
+                fit: BoxFit.fitWidth,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            _makeButton(
+                s1: "NEW",
+                s2: "EVENT",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    //final city, fdate, tdate, eventType;
+                    MaterialPageRoute(
+                      builder: (context) => NewEvent(),
+                    ),
+                  );
+                },
+                clr: [Colors.blue.shade300, Colors.blue.shade600],
+                image: Image.network(
+                  "https://img.freepik.com/free-vector/businessman-planning-events-deadlines-agenda_74855-6274.jpg?size=626&ext=jpg",
+                  fit: BoxFit.fitWidth,
+                )),
+            // Container(
+            //   margin: EdgeInsets.all(15),
+            //   // width: width / 2.5,
+            //   height: height / 7,
+            //   decoration: const BoxDecoration(
+            //       color: Colors.purple,
+            //       borderRadius: BorderRadius.all(Radius.circular(20))),
+            //   // color: Colors.purple,
+            //   child: Center(
+            //     child: ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         // fixedSize: ,
+            //         primary: Colors.purple,
+            //         shadowColor: Colors.purple,
+            //       ),
+            //       child: const Text(
+            //         "My Events",
+            //         style: TextStyle(color: Colors.yellow, fontSize: 40),
+            //       ),
+            //       onPressed: () {
+            //         Navigator.push(
+            //           context,
+            //           //final city, fdate, tdate, eventType;
+            //           MaterialPageRoute(
+            //             builder: (context) => MyEvent(),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
+            // // const SizedBox(
+            // //   height: 19,
+            // // ),
+            // Container(
+            //   margin: EdgeInsets.all(15),
+            //   // width: width / 2.5,
+            //   height: height / 7,
+            //   decoration: const BoxDecoration(
+            //       color: Colors.purple,
+            //       borderRadius: BorderRadius.all(Radius.circular(20))),
+            //   // color: Colors.purple,
+            //   child: Center(
+            //     child: ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         // fixedSize: ,
+            //         primary: Colors.purple,
+            //         shadowColor: Colors.purple,
+            //       ),
+            //       onPressed: () {
+            //         Navigator.push(context,
+            //             MaterialPageRoute(builder: (context) => NewEvent()));
+            //       },
+            //       child: Text(
+            //         "New Event",
+            //         style: TextStyle(color: Colors.yellow, fontSize: 40),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // const SizedBox(
             //   height: 19,
             // ),
-            Container(
-              margin: EdgeInsets.all(15),
-              // width: width / 2.5,
-              height: height / 7,
-              decoration: const BoxDecoration(
-                  color: Colors.purple,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              // color: Colors.purple,
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // fixedSize: ,
-                    primary: Colors.purple,
-                    shadowColor: Colors.purple,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NewEvent()));
-                  },
-                  child: Text(
-                    "New Event",
-                    style: TextStyle(color: Colors.yellow, fontSize: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _makeButton({
+    required Image image,
+    required Function()? onPressed,
+    required List<Color> clr,
+    required String s1,
+    required String s2,
+  }) {
+    Size size = MediaQuery.of(context).size;
+    return TextButton(
+      onPressed: onPressed,
+      child: Container(
+        width: size.width * 0.9,
+        height: 120,
+        decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF8A959E),
+              blurRadius: 30.0,
+              spreadRadius: 0,
+              offset: Offset(0.0, 10.0),
+            ),
+          ],
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: clr,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5.0),
+                  child: Container(
+                    color: Colors.purple,
+                    height: 120,
+                    width: 180,
+                    child: image,
                   ),
                 ),
               ),
             ),
-            // const SizedBox(
-            //   height: 19,
-            // ),
-            Container(
-              // padding: EdgeInsets.all(5),
-              margin: EdgeInsets.all(15),
-              // width: width / 2.5,
-              height: height / 7,
-              decoration: const BoxDecoration(
-                  color: Colors.purple,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              // color: Colors.purple,
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // fixedSize: ,
-                    primary: Colors.purple,
-                    shadowColor: Colors.purple,
+            Positioned(
+              left: 20,
+              bottom: 20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    s1,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  onPressed: () {},
-                  child: Text(
-                    "Pending Events",
-                    style: TextStyle(color: Colors.yellow, fontSize: 40),
+                  SizedBox(
+                    height: 5,
                   ),
-                ),
+                  Text(
+                    s2,
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

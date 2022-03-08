@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
     getDecoraters();
     getCaterers();
     getEventTypes();
+    print("From Main");
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
