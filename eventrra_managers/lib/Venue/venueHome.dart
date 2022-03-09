@@ -5,7 +5,6 @@ import 'package:eventrra_managers/Venue/requestedEvents.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'checkAvailability.dart';
 import 'myVenue.dart';
 

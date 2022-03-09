@@ -1,17 +1,16 @@
 import 'dart:io';
-import 'package:path/path.dart' as path1;
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadImages extends StatefulWidget {
-  const UploadImages({Key? key}) : super(key: key);
+class AddPhotos extends StatefulWidget {
+  const AddPhotos({Key? key}) : super(key: key);
 
   @override
-  State<UploadImages> createState() => _UploadImagesState();
+  State<AddPhotos> createState() => _AddPhotosState();
 }
 
-class _UploadImagesState extends State<UploadImages> {
+class _AddPhotosState extends State<AddPhotos> {
   File? imageFile = null;
   _getFromGallery() async {
     XFile? pickedFile = await ImagePicker().pickImage(
@@ -21,15 +20,13 @@ class _UploadImagesState extends State<UploadImages> {
     );
     if (pickedFile != null) {
       setState(() {
-
         print("_getFromGallery");
         imageFile = File(pickedFile.path);
         String filepath = imageFile!.path.split('/').last;
         print("Here");
-        uploadImageFile(imageFile!, filepath);
+        addVenuePhotos(imageFile!, currentVenue['VId'], vphotos.length.toString());
         print(imageFile!.path.split('/').last);
         Navigator.pop(context);
-
       });
     }
     print("_getFromGallery End");
@@ -48,7 +45,7 @@ class _UploadImagesState extends State<UploadImages> {
         imageFile = File(pickedFile.path);
         String filepath = imageFile!.path.split('/').last;
         print("Here");
-        uploadImageFile(imageFile!, filepath);
+        addVenuePhotos(imageFile!, currentVenue['VId'], vphotos.length.toString());
         print(imageFile!.path.split('/').last);
         Navigator.pop(context);
       });
@@ -60,7 +57,7 @@ class _UploadImagesState extends State<UploadImages> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Upload Images"),
+          title: Text("Add Photos "),
         ),
         body: Container(
             child: imageFile == null
@@ -83,7 +80,6 @@ class _UploadImagesState extends State<UploadImages> {
                           // color: Colors.lightGreenAccent,
                           onPressed: () {
                             _getFromCamera(context);
-
                           },
                           child: Text("PICK FROM CAMERA"),
                         )

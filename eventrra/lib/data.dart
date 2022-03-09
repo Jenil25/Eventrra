@@ -19,7 +19,16 @@ void getCities() async {
   //       cities[i]["State"]);
   // }
 }
-
+var vphotos = [];
+Future<bool> getVPhotos(var vid) async {
+  final response = await http
+      .post(Uri.parse("https://eventrra.000webhostapp.com/getVenueGalleryImages.php"),
+      body : {
+        "vid" : vid,
+      });
+  vphotos = jsonDecode(response.body);
+  return true;
+}
 var addresses = [];
 void getAddresses() async {
   final response = await http

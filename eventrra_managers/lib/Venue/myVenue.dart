@@ -1,9 +1,13 @@
+import 'package:eventrra_managers/Venue/expandable_fab.dart';
 import 'package:eventrra_managers/Venue/uploadImages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
+import 'Vgallery.dart';
+import 'addPhotos.dart';
 import 'editVenue.dart';
 import 'package:eventrra_managers/main.dart';
+
 
 class MyVenue extends StatefulWidget {
   const MyVenue({Key? key}) : super(key: key);
@@ -19,21 +23,10 @@ class _MyVenueState extends State<MyVenue> {
 
   @override
   Widget build(BuildContext context) {
+    // DefaultCacheManager().removeFile("https://eventrra.000webhostapp.com/images/venue/${currentVenue['image']}");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Profile"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const EditVenue()));
-            },
-            child: const Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -58,14 +51,15 @@ class _MyVenueState extends State<MyVenue> {
                           color: Colors.deepOrange.shade300),
                       child: Center(
                         child: Container(
+
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               image: NetworkImage(
-                                  "https://eventrra.000webhostapp.com/images/${currentVenue['image']}"),
+                                  "https://eventrra.000webhostapp.com/images/venue/${currentVenue['image']}"),
                               fit: BoxFit.fill,
                             ),
-                            // borderRadius: BorderRadius.circular(50),
+
                           ),
                         ),
                       ),
@@ -192,144 +186,161 @@ class _MyVenueState extends State<MyVenue> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) {
-                return Container(
-                  color: Colors.transparent,
-                  child: StatefulBuilder(builder:
-                      (BuildContext context, StateSetter setModalState) {
+      floatingActionButton: ExpandableFab(
+        distance : 112.0,
+        children: [
+          ActionButton( icon: Icon(Icons.add),
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
                     return Container(
-                      decoration: const BoxDecoration(
-                        borderRadius:
+                      color: Colors.transparent,
+                      child: StatefulBuilder(builder:
+                          (BuildContext context, StateSetter setModalState) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            borderRadius:
                             BorderRadius.vertical(top: Radius.circular(25.0)),
-                      ),
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Add New Event Type",
-                              style: TextStyle(
-                                color: Colors.blue.shade500,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: TextField(
-                                controller: eventTypeController,
-                                keyboardType: TextInputType.text,
-                                onChanged: (value) {},
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          ),
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Container(
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.shade300,
-                                    borderRadius: BorderRadius.circular(10),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Add New Event Type",
+                                  style: TextStyle(
+                                    color: Colors.blue.shade500,
+                                    fontSize: 18,
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      if (isLoading) return;
-                                      setModalState(() {
-                                        isLoading = true;
-                                      });
-                                      addEventType(
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: TextField(
+                                    controller: eventTypeController,
+                                    keyboardType: TextInputType.text,
+                                    onChanged: (value) {},
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade300,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          if (isLoading) return;
+                                          setModalState(() {
+                                            isLoading = true;
+                                          });
+                                          addEventType(
                                               eventTypeController.text
                                                   .toString(),
                                               currentVenue["VId"])
-                                          .then((value) => {
-                                                if (value == true)
-                                                  {
-                                                    print("If"),
-                                                    setModalState(() {
-                                                      eventTypeController.text =
-                                                          "";
-                                                      isLoading = false;
-                                                      isClicked = true;
-                                                      isDone = true;
-                                                    })
-                                                  }
-                                                else
-                                                  {
-                                                    print("Else"),
-                                                    setModalState(() {
-                                                      isLoading = false;
-                                                      isClicked = true;
-                                                      isDone = false;
-                                                    })
-                                                  }
-                                              });
-                                    },
-                                    child: const Text(
-                                      "Add",
-                                      style: TextStyle(color: Colors.white),
+                                              .then((value) => {
+                                            if (value == true)
+                                              {
+                                                print("If"),
+                                                setModalState(() {
+                                                  eventTypeController.text =
+                                                  "";
+                                                  isLoading = false;
+                                                  isClicked = true;
+                                                  isDone = true;
+                                                })
+                                              }
+                                            else
+                                              {
+                                                print("Else"),
+                                                setModalState(() {
+                                                  isLoading = false;
+                                                  isClicked = true;
+                                                  isDone = false;
+                                                })
+                                              }
+                                          });
+                                        },
+                                        child: const Text(
+                                          "Add",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  width: 100,
-                                  // color: Colors.blue.shade300,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.shade300,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      "Cancel",
-                                      style: TextStyle(color: Colors.white),
+                                    const SizedBox(
+                                      width: 10,
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                isLoading == true
-                                    ? const CircularProgressIndicator()
-                                    : isClicked == true
+                                    Container(
+                                      width: 100,
+                                      // color: Colors.blue.shade300,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade300,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "Cancel",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    isLoading == true
+                                        ? const CircularProgressIndicator()
+                                        : isClicked == true
                                         ? isDone == true
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: const Text("Added"),
-                                              )
-                                            : const Text("Error")
+                                        ? Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(15),
+                                      ),
+                                      child: const Text("Added"),
+                                    )
+                                        : const Text("Error")
                                         : const Text("")
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
-                      ),
+                            ),
+                          ),
+                        );
+                      }),
                     );
-                  }),
+                  },
                 );
               },
-            );
-          },
-          label: const Text("Add New Event Type")),
+          ),
+          ActionButton(
+              onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Vgallery()));
+              },
+              icon: const Icon(Icons.insert_photo)),
+          ActionButton(
+              onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const EditVenue()));
+              },
+              icon: const Icon(Icons.edit))
+        ],
+      )
     );
   }
 
@@ -355,230 +366,4 @@ class _MyVenueState extends State<MyVenue> {
   }
 }
 
-// import 'package:flutter/material.dart';
-// import 'package:eventrra_managers/data.dart';
-// import 'editVenue.dart';
-//
-// class MyVenue extends StatefulWidget {
-//   const MyVenue({Key? key}) : super(key: key);
-//
-//   @override
-//   _MyVenueState createState() => _MyVenueState();
-// }
-//
-// // class _MyVenueState extends State<MyVenue> {
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: Text(currentVenue["Name"]),
-// //       ),
-// //       body: Column(
-// //         children: [
-// //           ElevatedButton(
-// //             child: const Text("Request New Event Type"),
-// //             onPressed: () {},
-// //           )
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
-//
-// // class RequestEventType extends StatefulWidget {
-// //   const RequestEventType({Key? key}) : super(key: key);
-// //
-// //   @override
-// //   _RequestEventTypeState createState() => _RequestEventTypeState();
-// // }
-// //
-// // class _RequestEventTypeState extends State<RequestEventType> {
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text("Request new Venue"),
-// //       ),
-// //     );
-// //   }
-// // }
-//
-// class _MyVenueState extends State<MyVenue> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final height = MediaQuery.of(context).size.height;
-//     final width = MediaQuery.of(context).size.width;
-//     Color color = const Color(0xFF1B0250);
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(" "),
-//       ),
-//       body: Column(
-//         children: [
-//           Container(
-//               height: 0.6 * height,
-//               width: 0.70 * width,
-//               margin: EdgeInsets.only(top: 120, left: 55),
-//               decoration: BoxDecoration(
-//                 color: const Color(0xFFf2f2f2),
-//                 borderRadius: BorderRadius.circular(15.0),
-//                 boxShadow: const [
-//                   BoxShadow(
-//                     color: Color(0xFF8A959E),
-//                     blurRadius: 30.0,
-//                     spreadRadius: 0,
-//                     offset: Offset(0.0, 10.0),
-//                   ),
-//                 ],
-//               ),
-//               child: Column(
-//                 children: [
-//                   SizedBox(height: 50),
-//                   Text(
-//                     "Name : " + currentVenue["Name"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "OwnerName : " + currentVenue["OwnerName"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "Email : " + currentVenue["Email"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "Contact : " + currentVenue["Contact"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "Capacity : " + currentVenue["Capacity"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "Address : " +
-//                         currentVenueAddress["Line1"] +
-//                         " , " +
-//                         currentVenueAddress["Line2"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "Landmark : " + currentVenueAddress["Landmark"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "City : " + currentVenueCity["Name"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "State : " + currentVenueCity["State"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                   const Divider(
-//                     thickness: 2,
-//                     color: Colors.blueAccent,
-//                     indent: 10,
-//                     endIndent: 10,
-//                   ),
-//                   Text(
-//                     "PinCode : " + currentVenueCity["Pincode"],
-//                     style: TextStyle(
-//                       fontSize: 18.0,
-//                       color: color,
-//                     ),
-//                   ),
-//                 ],
-//               )),
-//           Container(
-//             child: Column(children: [
-//               ElevatedButton(
-//                 onPressed: () {
-//                   Navigator.push(context,
-//                       MaterialPageRoute(builder: (context) => EditVenue()));
-//                 },
-//                 child: const Text(
-//                   "Edit",
-//                   style: TextStyle(color: Color(0xFF1B0250), fontSize: 17),
-//                 ),
-//               ),
-//             ]),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+

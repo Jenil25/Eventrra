@@ -52,7 +52,7 @@ class _RequestedEventsState extends State<RequestedEvents> {
                       //     ),
                       //   ),
                       // )
-                requestCard(context, venueRequests[i]),
+                requestCard(context, venueRequests[i],setState),
               );
             }
 
@@ -64,7 +64,7 @@ class _RequestedEventsState extends State<RequestedEvents> {
   }
 }
 
-Widget requestCard(BuildContext context, var request)
+Widget requestCard(BuildContext context, var request,StateSetter setState)
 {
   var eventtype=null;
   for(int k = 0; k < eventTypes.length; ++k) {
@@ -86,10 +86,12 @@ Widget requestCard(BuildContext context, var request)
       ],
     ),
     content: TextButton(onPressed: (){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>
-                  RequestedEvents()));
+      Navigator.pop(context);
+      setState((){});
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) =>
+      //             RequestedEvents()));
     },child : Text("OK") ),
   );
   AlertDialog alert1 = AlertDialog  (
@@ -104,10 +106,12 @@ Widget requestCard(BuildContext context, var request)
       ],
     ),
     content: TextButton(onPressed: (){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>
-              RequestedEvents()));
+      Navigator.pop(context);
+      setState((){});
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) =>
+      //         RequestedEvents()));
     },child : Text("OK") ),
   );
   return ExpansionTile(
@@ -193,16 +197,19 @@ Widget requestCard(BuildContext context, var request)
         children: [
 
           TextButton(onPressed: (){
-            AcceptRequest(request['EId'],currentVenue['Name'],eventtype['EventType'],request['FDate'],request['TDate'],request['UId']).then((value) =>
+            AcceptRequest(request['EId'],currentVenue['Name'],eventtype['EventType'],request['FDate'],request['TDate'],request['UId']).then((value)
             {
+
                 showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                return alert;
-                },
-                ),
-            }
+                  return alert;
+
+                });
+
+              }
             );
+
           }, child: Text("Accept")),
           SizedBox(
             width: 10,

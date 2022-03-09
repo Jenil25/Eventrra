@@ -1,4 +1,5 @@
 import 'package:eventrra/New%20Event/selectCaterer.dart';
+import 'package:eventrra/New%20Event/viewVImages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
@@ -52,74 +53,19 @@ class _SelectVenueState extends State<SelectVenue> {
                 itemCount: length,
                 itemBuilder: (BuildContext context, int i) => venueCard1(
                     context, selectVenue[i], city, fdate, tdate, eventType)
-                //     Column(
-                //   children: <Widget>[
-                //     Container(
-                //       padding:
-                //           EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                //       child: Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: <Widget>[
-                //           Container(
-                //               child: ElevatedButton(
-                //             // padding: EdgeInsets.symmetric(
-                //             //     vertical: 12.0, horizontal: 10.0),
-                //             child: Text("Name : " +
-                //                 selectVenue[i]['Name'] +
-                //                 "\n" +
-                //                 "Address : " +
-                //                 selectVenue[i]['Line1'] +
-                //                 " , " +
-                //                 selectVenue[i]['Line2'] +
-                //                 "\n"
-                //                     "LandMark : " +
-                //                 selectVenue[i]['Landmark'] +
-                //                 "\n" +
-                //                 "Capacity : " +
-                //                 selectVenue[i]['Capacity'] +
-                //                 "\n" +
-                //                 "Email : " +
-                //                 selectVenue[i]['Email'] +
-                //                 "\n" +
-                //                 "OwnerName : " +
-                //                 selectVenue[i]['OwnerName'] +
-                //                 "\n" +
-                //                 "Contact : " +
-                //                 selectVenue[i]['Contact'] +
-                //                 "\n"),
-                //             style: ElevatedButton.styleFrom(
-                //               primary: colour, // Background color
-                //               onPrimary: Colors.black,
-                //               textStyle: TextStyle(fontSize: 18.0),
-                //             ),
-                //
-                //             onPressed: () {
-                //               // Navigator.push(
-                //               //   context,
-                //               //   new MaterialPageRoute(
-                //               //       builder: (context) =>SelectVenue()),
-                //               // );
-                //             },
-                //           )),
-                //           Divider(color: Colors.black),
-                //         ],
-                //       ),
-                //     )
-                //   ],
-                // ),
                 );
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
   }
 }
 
-Widget venueCard1(BuildContext context, var venue, var city, var fdate,
-    var tdate, var eventType) {
+Widget venueCard1(BuildContext context, var venue, var city, var fdate, var tdate, var eventType)
+{
   return ExpansionTile(
     title: Text(
       venue["Name"],
@@ -141,10 +87,18 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
                       decoration: BoxDecoration(
                           color: Colors.blue.shade200,
                           borderRadius: BorderRadius.circular(15)),
-                      child: Image.asset("assets/images/venue/MyVenue.png")),
+                      child: venue['image']== "" ? Image.asset("assets/images/venue/MyVenue.png") : Image.network("https://eventrra.000webhostapp.com/images/venue/${venue['image']}")),
                 ),
                 const SizedBox(
                   height: 20,
+                ),
+                Center(
+                  child: TextButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewVImages(venue: venue)));
+                  }, child: Text("View more Images")),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

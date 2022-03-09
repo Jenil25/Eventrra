@@ -82,6 +82,7 @@ class CheckUser extends StatelessWidget {
         if (user.emailVerified) {
           userEmail = user.email.toString();
           if (venueUser(userEmail)) {
+
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const VenueHome()));
           } else if (catererUser(userEmail)) {

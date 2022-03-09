@@ -19,6 +19,16 @@ void getCities() async {
   //       cities[i]["State"]);
   // }
 }
+var vphotos = [];
+Future<bool> getVPhotos(var vid) async {
+  final response = await http
+      .post(Uri.parse("https://eventrra.000webhostapp.com/getVenueGalleryImages.php"),
+  body : {
+        "vid" : vid,
+  });
+  vphotos = jsonDecode(response.body);
+  return true;
+}
 
 var addresses = [];
 void getAddresses() async {
@@ -119,6 +129,7 @@ bool venueUser(String email) {
       print(currentVenue);
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
+
 
       for (int j = 0; j < addresses.length; j++) {
         if (addresses[j]["AId"] == currentVenue["AId"]) {
@@ -544,31 +555,25 @@ Future<String> deleteOccupiedVenue(var ovid) async {
 }
 
 Future<void> uploadImageFile(File file, String name) async {
-  print("Inside:");
-  var request = http.MultipartRequest(
-      "POST",
+  final response = await http.post(
       Uri.parse(
-          "https://eventrra.000webhostapp.com/uploadVenueProfileImage.php"));
-  // "https://eventrra.000webhostapp.com/images/"));
-  var pic = await http.MultipartFile.fromPath("file_field", file.path);
-  request.files.add(pic);
-  request.fields['text_field'] = file.path;
-  var response = await request.send();
-  var responseData = await response.stream.toBytes();
-  var responseString = String.fromCharCodes(responseData);
-  print("from upload image file function data.dart :  ");
-  print(responseString.toString());
+          "https://eventrra.000webhostapp.com/images/venue/uploadVenueProfileImage.php"),
+      body: {"file": base64Encode(file.readAsBytesSync()),
+              "vid" : currentVenue['VId']});
+  // body: {"file": file.toString()});
+  print("Response:");
+  print(response.body);
   return;
 }
 
-Future<void> uploadImageFileTRY(File file, String name) async {
-  print("IN TRYFile:");
-  print(file.toString());
-  print("Sending:");
+Future<void> addVenuePhotos(File file,var vid,var num ) async {
   final response = await http.post(
       Uri.parse(
-          "https://eventrra.000webhostapp.com/uploadVenueProfileImageTRY.php"),
-      body: {"file": base64Encode(file.readAsBytesSync())});
+          "https://eventrra.000webhostapp.com/images/venue/gallery/uploadVenueImages.php"),
+      body: {"file": base64Encode(file.readAsBytesSync()),
+        "vid" : vid,
+        "num" : num,
+      });
   // body: {"file": file.toString()});
   print("Response:");
   print(response.body);

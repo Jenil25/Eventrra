@@ -34,7 +34,7 @@ class _EditVenueState extends State<EditVenue> {
     Color color = const Color(0xFF1B0250);
     return Scaffold(
       appBar: AppBar(
-        title: Text(" "),
+        title: Text("Edit Profile "),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
