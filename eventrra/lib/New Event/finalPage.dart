@@ -65,7 +65,7 @@ class _FinalPageState extends State<FinalPage> {
                                 null,
                                 inputUserName,
                                 inputContact,
-                                uid).then(
+                                uid,eid).then(
                                   (value) =>
                               {
                                 if (value)

@@ -215,7 +215,7 @@ Widget requestCard(BuildContext context, var request,StateSetter setState)
             width: 10,
           ),
           TextButton(onPressed: (){
-            DeclineRequest(request['EId'],currentVenue['Name'],eventtype['EventType'],request['FDate'],request['TDate'],request['UId']).then((value) =>
+            DeclineRequest(request['EId'],currentVenue['Name'],eventtype['EventType'],request['FDate'],request['TDate'],request['UId'],request['CaId'],request['OrId'],request['DId']).then((value) =>
             {
               showDialog(
                 context: context,

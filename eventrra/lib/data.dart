@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-var inputCity,inputFDate,inputTDate,inputEventType,inputVenue,inputCaterer,inputUserName,inputContact,uid;
+var inputCity,inputFDate,inputTDate,inputEventType,inputVenue,inputCaterer,inputUserName,inputContact,uid,eid="-1";
 
 var userEmail = "";
 
@@ -164,7 +164,7 @@ Future<void> getCatererForEvent(var cid) async {
 }
 
 
-Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var venue,var caterer,var decorator,var orchestra,var username,var usercontact,var uid) async {
+Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var venue,var caterer,var decorator,var orchestra,var username,var usercontact,var uid,var eid) async {
   print("Inside upload event function in data.dart");
   // print("name"+ username+"\n"+
   //   "contact"+usercontact+"\n"+
@@ -181,6 +181,7 @@ Future<bool> uploadEventRequest(var city,var fdate,var tdate,var eventtype,var v
         "name": username,
         "contact": usercontact,
         "uid" : uid,
+        "eid" : eid,
         "cid" : city['CId'],
         "etid" : eventtype['EtId'],
         "fdate" : fdate,

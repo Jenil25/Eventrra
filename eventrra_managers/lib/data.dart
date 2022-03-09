@@ -501,8 +501,7 @@ Future<bool> AcceptRequest(var eid, var venuename, var eventtype, var fdate,
   return true;
 }
 
-Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate,
-    var tdate, var uid) async {
+Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate, var tdate, var uid,var caid,var orid,var did) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/venueRequestDeclined.php"),
       body: {
@@ -512,6 +511,9 @@ Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate,
         "eventtype": eventtype,
         "fdate": fdate,
         "tdate": tdate,
+        "caid" : caid,
+        "did" : did,
+        "orid" : orid,
       });
   if (response.body == "error") return false;
   return true;

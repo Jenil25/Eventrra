@@ -1,4 +1,5 @@
 import 'package:eventrra/My%20Events/singleEvent.dart';
+import 'package:eventrra/New%20Event/newevent.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
 import 'package:eventrra/main.dart';
@@ -165,18 +166,29 @@ Widget eventCard(BuildContext context, var event) {
   //         child: const Text("Continue"))
   //   ],
   // );
-  return Container(
-    child: TextButton(
-      onPressed: () {
+  return Column(
+    children: [
+      Container(
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              //final city, fdate, tdate, eventType;
+              MaterialPageRoute(
+                builder: (context) => SingleEvent(event: event),
+              ),
+            );
+          },
+          child: Text(eventtype['EventType']),
+        ),
+      ),
+      event['VerifiedV'] == "-1" ? TextButton(onPressed: (){
+        eid = event['EId'];
         Navigator.push(
-          context,
-          //final city, fdate, tdate, eventType;
-          MaterialPageRoute(
-            builder: (context) => SingleEvent(event: event),
-          ),
-        );
-      },
-      child: Text(eventtype['EventType']),
-    ),
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewEvent()));
+      }, child: Text("Reschedule")): Text(" "),
+    ],
   );
 }
