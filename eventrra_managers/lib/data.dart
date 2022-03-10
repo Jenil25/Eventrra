@@ -541,6 +541,7 @@ Future<bool> getEventDates(var vid) async {
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['FDate']);
     occupiedDates[i]['TDate'] =
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['TDate']);
+    
     print(occupiedDates[i]['FDate']);
   }
 
