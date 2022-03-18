@@ -1,6 +1,6 @@
-import 'package:eventrra_managers/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/main.dart';
+import 'package:eventrra_managers/data.dart';
 import 'package:intl/intl.dart';
 
 class CheckAvailability extends StatefulWidget {
@@ -117,7 +117,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
           children: [
             const Center(
               child: Text(
-                "Your Venue is occupied on following dates:",
+                "Your Catering Service is occupied on following dates:",
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -127,7 +127,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
               height: 20,
             ),
             FutureBuilder(
-              future: getVenueOccupiedDetails(currentVenue["VId"]),
+              future: getCatererOccupiedDetails(currentCaterer["CaId"]),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Error(title: 'Error From Main');
@@ -137,23 +137,23 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: ListView.builder(
-                      itemCount: venueOccupiedDates.length,
+                      itemCount: catererOccupiedDates.length,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           leading: const Icon(Icons.calendar_today),
-                          title: Text(venueOccupiedDates[index]["FDate"]
+                          title: Text(catererOccupiedDates[index]["FDate"]
                                   .toString() +
                               " - " +
-                              venueOccupiedDates[index]["TDate"].toString() +
+                              catererOccupiedDates[index]["TDate"].toString() +
                               " for " +
-                              venueOccupiedDates[index]["Reason"].toString()),
+                              catererOccupiedDates[index]["Reason"].toString()),
                           trailing: StatefulBuilder(builder:
                               (BuildContext context,
                                   StateSetter setModalState1) {
                             return TextButton(
                               onPressed: () {
-                                deleteOccupiedVenue(
-                                        venueOccupiedDates[index]['OVId'])
+                                deleteOccupiedCaterer(
+                                        catererOccupiedDates[index]['OCaId'])
                                     .then((value) {
                                   print(value);
                                   if (value != "success") {
@@ -244,7 +244,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                               height: 10,
                             ),
                             Text(
-                              "Select dates when the Venue will be occupied:",
+                              "Select dates when the caterering service will be occupied:",
                               style: TextStyle(
                                 color: Colors.blue.shade500,
                                 fontSize: 18,
@@ -349,10 +349,10 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                           DateFormat('dd-MM-yyyy');
                                       String fDate = formatter.format(fromDate);
                                       String tDate = formatter.format(toDate);
-                                      addOccupiedVenue(
+                                      addOccupiedCaterer(
                                               fDate,
                                               tDate,
-                                              currentVenue["VId"],
+                                              currentCaterer["CaId"],
                                               reasoncontroller.text)
                                           .then((value) {
                                         print(value);

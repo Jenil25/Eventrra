@@ -1,60 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:eventrra_managers/data.dart';
 import 'package:eventrra_managers/main.dart';
+import 'package:eventrra_managers/data.dart';
 
 class RequestedEvents extends StatefulWidget {
   const RequestedEvents({Key? key}) : super(key: key);
 
   @override
-  State<RequestedEvents> createState() => _RequestedEventsState();
+  _RequestedEventsState createState() => _RequestedEventsState();
 }
 
 class _RequestedEventsState extends State<RequestedEvents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Requests"),
+      ),
       body: Center(
         child: FutureBuilder(
-          future: getVenueRequests(currentVenue['VId']),
+          future: getCatererRequests(currentCaterer['CaId']),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const Error(title: 'Error From Main');
+              return const Error(title: 'Error From Caterer Requested Events');
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
               return ListView.builder(
-                itemCount: venueRequests.length,
+                itemCount: catererRequests.length,
                 itemBuilder: (BuildContext context, int i) =>
-                    // Padding(
-                    //   padding: const EdgeInsets.all(1.0),
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.blue.shade200,
-                    //       borderRadius : BorderRadius.vertical(top: Radius.circular(15.0)),
-                    //     ),
-                    //     child: Row(
-                    //       children: [
-                    //         Container(
-                    //           // color: Colors.blue.shade300,
-                    //
-                    //           child: Text(venueRequests[i]["Name"]),
-                    //
-                    //         ),
-                    //         SizedBox(
-                    //           width: 10,
-                    //         ),
-                    //         TextButton(onPressed: (){}, child: Text("Accept")),
-                    //         TextButton(onPressed: (){}, child: Text("Decline")),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // )
-                    requestCard(context, venueRequests[i], setState),
+                    requestCard(context, catererRequests[i], setState),
               );
             }
 
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
@@ -71,7 +49,7 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
     }
   }
 
-  AlertDialog alert = AlertDialog(
+  AlertDialog requestAcceptedAlert = AlertDialog(
     title: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: const <Widget>[
@@ -85,14 +63,11 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
         onPressed: () {
           Navigator.pop(context);
           setState(() {});
-          // Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(builder: (context) =>
-          //             RequestedEvents()));
         },
         child: Text("OK")),
   );
-  AlertDialog alert1 = AlertDialog(
+
+  AlertDialog requestDeclinedAlert = AlertDialog(
     title: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: const <Widget>[
@@ -106,13 +81,10 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
         onPressed: () {
           Navigator.pop(context);
           setState(() {});
-          // Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(builder: (context) =>
-          //         RequestedEvents()));
         },
         child: Text("OK")),
   );
+
   return ExpansionTile(
     title: Text(
       eventtype["EventType"],
@@ -134,7 +106,8 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
                       decoration: BoxDecoration(
                           color: Colors.blue.shade200,
                           borderRadius: BorderRadius.circular(15)),
-                      child: Image.asset("assets/images/venue/MyVenue.png")),
+                      child:
+                          Image.asset("assets/images/caterer/MyCaterer.png")),
                 ),
                 const SizedBox(
                   height: 20,
@@ -193,9 +166,9 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
         children: [
           TextButton(
               onPressed: () {
-                AcceptRequest(
+                AcceptCatererRequest(
                         request['EId'],
-                        currentVenue['Name'],
+                        currentCaterer['Name'],
                         eventtype['EventType'],
                         request['FDate'],
                         request['TDate'],
@@ -204,7 +177,7 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return alert;
+                        return requestAcceptedAlert;
                       });
                 });
               },
@@ -214,21 +187,18 @@ Widget requestCard(BuildContext context, var request, StateSetter setState) {
           ),
           TextButton(
               onPressed: () {
-                DeclineRequest(
+                DeclineCatererRequest(
                         request['EId'],
-                        currentVenue['Name'],
+                        request['UId'],
+                        currentCaterer['Name'],
                         eventtype['EventType'],
                         request['FDate'],
-                        request['TDate'],
-                        request['UId'],
-                        request['CaId'],
-                        request['OrId'],
-                        request['DId'])
+                        request['TDate'])
                     .then((value) => {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return alert1;
+                              return requestDeclinedAlert;
                             },
                           ),
                         });

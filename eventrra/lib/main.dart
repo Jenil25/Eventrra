@@ -28,6 +28,10 @@ class MyApp extends StatelessWidget {
     getDecoraters();
     getCaterers();
     getEventTypes();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         // title: 'Flutter Demo',

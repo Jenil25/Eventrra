@@ -5,13 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'authServices.dart';
 import 'package:eventrra/homePage.dart';
 import 'resetPassword.dart';
 import 'package:eventrra/data.dart';
-import 'package:eventrra/Venue/venueHomePage.dart';
 
 import 'verificationScreen.dart';
 
@@ -185,15 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                       email: email, password: password);
                   if (currentUser != null) {
                     if (currentUser.user!.emailVerified) {
-                      if (venueUser(email.toString())) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VenueHome()));
-                      } else {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => HomePage()));
-                      }
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => HomePage()));
                     } else {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const VerifyScreen()));

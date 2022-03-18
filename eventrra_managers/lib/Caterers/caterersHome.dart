@@ -1,15 +1,22 @@
 import 'package:eventrra_managers/Authentication/login.dart';
+import 'package:eventrra_managers/Caterers/checkAvailability.dart';
+import 'package:eventrra_managers/Caterers/loadingCalendar.dart';
+import 'package:eventrra_managers/Caterers/requestedEvents.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'myCaterer.dart';
 
 class CaterersHome extends StatefulWidget {
+  const CaterersHome({Key? key}) : super(key: key);
+
   @override
   _CaterersHomeState createState() => _CaterersHomeState();
 }
 
 class _CaterersHomeState extends State<CaterersHome> {
+  final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -17,13 +24,14 @@ class _CaterersHomeState extends State<CaterersHome> {
     Color color = const Color(0xFF1B0250);
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Eventrra"),
         actions: [
           TextButton(
             onPressed: () {
-              FirebaseAuth.instance.signOut();
+              auth.signOut();
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
             },
             child: const Icon(
               Icons.exit_to_app,
@@ -32,7 +40,6 @@ class _CaterersHomeState extends State<CaterersHome> {
           ),
         ],
       ),
-      // Implement From here. Use venueHome.dart
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +55,7 @@ class _CaterersHomeState extends State<CaterersHome> {
               children: [
                 const Spacer(),
                 Text(
-                  "Welcome \n${currentCaterer["Name"]}",
+                  "Welcome \n${currentCaterer["OwnerName"]}",
                   style: const TextStyle(fontSize: 20.0, color: Colors.white),
                 ),
                 const Spacer(),
@@ -56,7 +63,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                   height: 0.26 * height,
                   width: 0.23 * height,
                   child: Image.asset(
-                    "assets/images/venue/WelcomeImage.png",
+                    "assets/images/caterer/WelcomeImage.png",
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -65,7 +72,7 @@ class _CaterersHomeState extends State<CaterersHome> {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 30,
           ),
           currentCaterer["Verified"] == "1"
               ? Center(
@@ -100,7 +107,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                       Expanded(
                                           flex: 8,
                                           child: Image.asset(
-                                              "assets/images/venue/MyVenue.png")),
+                                              "assets/images/caterer/MyCaterer.png")),
                                       const Divider(
                                         thickness: 2,
                                         color: Colors.blueAccent,
@@ -156,7 +163,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     Expanded(
                                         flex: 7,
                                         child: Image.asset(
-                                            "assets/images/venue/Request.png")),
+                                            "assets/images/caterer/Request.png")),
                                     const Divider(
                                       thickness: 2,
                                       color: Colors.blueAccent,
@@ -182,7 +189,15 @@ class _CaterersHomeState extends State<CaterersHome> {
                                   ],
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  //final city, fdate, tdate, eventType;
+                                  MaterialPageRoute(
+                                    builder: (context) => RequestedEvents(),
+                                  ),
+                                );
+                              },
                             )
                           ],
                         ),
@@ -211,8 +226,12 @@ class _CaterersHomeState extends State<CaterersHome> {
                                   children: [
                                     Expanded(
                                         flex: 7,
-                                        child: Image.asset(
-                                            "assets/images/venue/MyProfile.png")),
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: 100,
+                                          child: Image.asset(
+                                              "assets/images/caterer/OccupiedIcon.png"),
+                                        )),
                                     const Divider(
                                       thickness: 2,
                                       color: Colors.blueAccent,
@@ -223,7 +242,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                         flex: 2,
                                         child: Center(
                                             child: Text(
-                                          "My Profile",
+                                          "Check Availability",
                                           maxLines: 2,
                                           style: TextStyle(
                                             fontSize: 18.0,
@@ -236,7 +255,13 @@ class _CaterersHomeState extends State<CaterersHome> {
                                   ],
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CheckAvailability()));
+                              },
                             ),
                             const SizedBox(
                               height: 20,
@@ -263,7 +288,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     Expanded(
                                         flex: 8,
                                         child: Image.asset(
-                                            "assets/images/venue/Events.png")),
+                                            "assets/images/caterer/Events.png")),
                                     const Divider(
                                       thickness: 2,
                                       color: Colors.blueAccent,
@@ -275,7 +300,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                         child: Container(
                                           child: Center(
                                               child: Text(
-                                            "Caterers",
+                                            "Events",
                                             maxLines: 2,
                                             style: TextStyle(
                                               fontSize: 18.0,
@@ -289,7 +314,13 @@ class _CaterersHomeState extends State<CaterersHome> {
                                   ],
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoadingCalendar()));
+                              },
                             ),
                           ],
                         ),
@@ -310,64 +341,6 @@ class _CaterersHomeState extends State<CaterersHome> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // TextButton(
-                            //     child: Container(
-                            //       height: 0.24 * height,
-                            //       width: 0.4 * width,
-                            //       decoration: BoxDecoration(
-                            //         color: const Color(0xFFf2f2f2),
-                            //         borderRadius: BorderRadius.circular(15.0),
-                            //         boxShadow: const [
-                            //           BoxShadow(
-                            //             color: Color(0xFF8A959E),
-                            //             blurRadius: 30.0,
-                            //             spreadRadius: 0,
-                            //             offset: Offset(0.0, 10.0),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       child: Column(
-                            //         mainAxisAlignment: MainAxisAlignment.start,
-                            //         children: [
-                            //           Expanded(
-                            //               flex: 8,
-                            //               child: Image.asset(
-                            //                   "assets/images/venue/MyVenue.png")),
-                            //           const Divider(
-                            //             thickness: 2,
-                            //             color: Colors.blueAccent,
-                            //             indent: 10,
-                            //             endIndent: 10,
-                            //           ),
-                            //           Expanded(
-                            //               flex: 2,
-                            //               child: Container(
-                            //                 child: Center(
-                            //                     child: Text(
-                            //                   "My Caterer",
-                            //                   maxLines: 2,
-                            //                   style: TextStyle(
-                            //                     fontSize: 18.0,
-                            //                     color: color,
-                            //                   ),
-                            //                 )),
-                            //               )),
-                            //           const SizedBox(
-                            //             height: 10,
-                            //           )
-                            //         ],
-                            //       ),
-                            //     ),
-                            //     onPressed: () {
-                            //       Navigator.push(
-                            //           context,
-                            //           MaterialPageRoute(
-                            //               builder: (context) =>
-                            //                   const MyCaterer()));
-                            //     }),
-                            const SizedBox(
-                              height: 20,
-                            ),
                             TextButton(
                               child: Container(
                                 height: 0.24 * height,
@@ -390,7 +363,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     Expanded(
                                         flex: 7,
                                         child: Image.asset(
-                                            "assets/images/venue/MyProfile.png")),
+                                            "assets/images/caterer/MyCaterer.png")),
                                     const Divider(
                                       thickness: 2,
                                       color: Colors.blueAccent,
@@ -402,7 +375,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                         child: Container(
                                           child: Center(
                                               child: Text(
-                                            "Profile",
+                                            "My Caterer",
                                             maxLines: 2,
                                             style: TextStyle(
                                               fontSize: 18.0,

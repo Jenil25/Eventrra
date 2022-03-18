@@ -73,17 +73,6 @@ class _SplashScreenState extends State<SplashScreen> {
 class CheckUser extends StatelessWidget {
   const CheckUser({Key? key}) : super(key: key);
 
-  bool checkVenueUser(var email) {
-    for (var i in venues) {
-      if (email.toString().toLowerCase().trim() ==
-          i["Email"].toString().toLowerCase().trim()) {
-        // shop_user = i;
-        return true;
-      }
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {

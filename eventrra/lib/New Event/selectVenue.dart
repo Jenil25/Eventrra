@@ -34,11 +34,11 @@ class _SelectVenueState extends State<SelectVenue> {
     final width = MediaQuery.of(context).size.width;
     Color colour = const Color(0xffB7CEEC);
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         title: Text("Select Venue"),
       ),
       body: FutureBuilder(
-
         // Initialize FlutterFire
         future: getVenueForEvent(city['CId'], eventType['EtId']),
         builder: (context, snapshot) {
@@ -51,9 +51,8 @@ class _SelectVenueState extends State<SelectVenue> {
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
                 itemCount: length,
-                itemBuilder: (BuildContext context, int i) => venueCard1(
-                    context, selectVenue[i], city, fdate, tdate, eventType)
-                );
+                itemBuilder: (BuildContext context, int i) => venueCard(
+                    selectVenue[i], city, fdate, tdate, eventType, context));
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
@@ -64,8 +63,8 @@ class _SelectVenueState extends State<SelectVenue> {
   }
 }
 
-Widget venueCard1(BuildContext context, var venue, var city, var fdate, var tdate, var eventType)
-{
+Widget venueCard1(BuildContext context, var venue, var city, var fdate,
+    var tdate, var eventType) {
   return ExpansionTile(
     title: Text(
       venue["Name"],
@@ -87,18 +86,24 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate, var tdat
                       decoration: BoxDecoration(
                           color: Colors.blue.shade200,
                           borderRadius: BorderRadius.circular(15)),
-                      child: venue['image']== "" ? Image.asset("assets/images/venue/MyVenue.png") : Image.network("https://eventrra.000webhostapp.com/images/venue/${venue['image']}")),
+                      child: venue['image'] == ""
+                          ? Image.asset("assets/images/venue/MyVenue.png")
+                          : Image.network(
+                              "https://eventrra.000webhostapp.com/images/venue/${venue['image']}")),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 Center(
-                  child: TextButton(onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewVImages(venue: venue)));
-                  }, child: Text("View more Images")),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ViewVImages(venue: venue)));
+                      },
+                      child: Text("View more Images")),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -189,27 +194,199 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate, var tdat
   );
 }
 
-Widget venueCard(var venue) {
-  return ExpansionTile(
-    title: Text(
-      "Title",
-      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-    ),
-    children: <Widget>[
-      ExpansionTile(
-        title: Text(
-          'Sub title',
-        ),
-        children: <Widget>[
-          ListTile(
-            title: Text('data'),
-          )
-        ],
+Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
+    BuildContext ctx) {
+  return TextButton(
+    onPressed: () {},
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      ListTile(
-        title: Text('data'),
-      )
-    ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    color: Colors.grey,
+                    child: venue["image"] != ""
+                        ? Image.network(
+                            "https://eventrra.000webhostapp.com/images/venue/${venue["image"]}",
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            "assets/images/noimageavailableicon.jpg",
+                          ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      venue["Name"].toString().toUpperCase(),
+                      maxLines: 1,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          venue["Landmark"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.people,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          venue["Capacity"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.mail,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          venue["Email"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          venue["Contact"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        ctx,
+                        MaterialPageRoute(
+                            builder: (context) => ViewVImages(venue: venue)));
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "VIEW MORE IMAGES",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    inputVenue = venue;
+                    Navigator.push(
+                        ctx,
+                        //final city, fdate, tdate, eventType;
+                        MaterialPageRoute(
+                            builder: (context) => SelectCaterer(
+                                  city: city,
+                                  fdate: fdate,
+                                  tdate: tdate,
+                                  eventType: eventType,
+                                  venue: venue,
+                                )));
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 130,
+                    color: Colors.blue,
+                    child: Center(
+                      child: Text(
+                        "BOOK VENUE",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
 

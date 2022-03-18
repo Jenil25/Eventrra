@@ -443,19 +443,51 @@ class _NewEventState extends State<NewEvent> {
               flex: 1,
             ),
             ElevatedButton(
-              onPressed: () => {
-                inputCity = selectedCity,
-                inputFDate = currentDate,
-                inputTDate = toDate,
-                inputEventType = selectedEventType,
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SelectVenue(
-                            city: selectedCity,
-                            fdate: currentDate,
-                            tdate: toDate,
-                            eventType: selectedEventType)))
+              onPressed: () {
+                inputCity = selectedCity;
+                inputFDate = currentDate;
+                inputTDate = toDate;
+                inputEventType = selectedEventType;
+                if ((toDate.year == todaysDate.year &&
+                        toDate.month == todaysDate.month &&
+                        toDate.day == todaysDate.day) ||
+                    (currentDate.year == todaysDate.year &&
+                        currentDate.month == todaysDate.month &&
+                        currentDate.day == todaysDate.day)) {
+                  AlertDialog alert = AlertDialog(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                        Text(
+                          " Error",
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    content:
+                        const Text("Please enter a valid date for new event!"),
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectVenue(
+                              city: selectedCity,
+                              fdate: currentDate,
+                              tdate: toDate,
+                              eventType: selectedEventType)));
+                }
               },
               child: Text(
                 'Continue',

@@ -39,14 +39,12 @@ class _SelectCatererState extends State<SelectCaterer> {
     TextEditingController contactcontroller = TextEditingController();
 
     AlertDialog alert = AlertDialog(
-
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: const <Widget>[
           Text(
             " Enter Your Details",
-            style:
-            TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -60,11 +58,10 @@ class _SelectCatererState extends State<SelectCaterer> {
                   prefixIcon: Icon(
                     Icons.person,
                   ),
-                  labelText: "UserName",
-                )
-            ),
+                  labelText: "Name",
+                )),
             SizedBox(
-              height:10,
+              height: 10,
             ),
             TextFormField(
                 controller: contactcontroller,
@@ -73,27 +70,26 @@ class _SelectCatererState extends State<SelectCaterer> {
                     Icons.call,
                   ),
                   labelText: "Contact",
-                )
-            ),
+                )),
             SizedBox(
-              height:10,
+              height: 10,
             ),
             TextButton(
-                onPressed: (){
+                onPressed: () {
                   inputUserName = usernamecontroller.text;
                   inputContact = contactcontroller.text;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FinalPage(
-                      ),),);
-                }, child: Text("Continue")),
-
+                      builder: (context) => FinalPage(),
+                    ),
+                  );
+                },
+                child: Text("Continue")),
           ],
         ),
       ),
     );
-
 
     return Scaffold(
       appBar: AppBar(
@@ -121,7 +117,8 @@ class _SelectCatererState extends State<SelectCaterer> {
                           city,
                           fdate,
                           tdate,
-                          eventType,alert)),
+                          eventType,
+                          alert)),
                 );
               }
 
@@ -136,9 +133,11 @@ class _SelectCatererState extends State<SelectCaterer> {
             child: ElevatedButton(
               onPressed: () {
                 inputCaterer = null;
-                showDialog(context: context, builder: (BuildContext context){
-                  return alert;
-                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    });
               },
               child: const Text("Continue Without Caterer"),
             ),
@@ -150,8 +149,7 @@ class _SelectCatererState extends State<SelectCaterer> {
 }
 
 Widget catererCard(BuildContext context, var caterer, var city, var fdate,
-    var tdate, var eventType,AlertDialog alert) {
-
+    var tdate, var eventType, AlertDialog alert) {
   return ExpansionTile(
     title: Text(
       caterer["Name"],
@@ -242,9 +240,11 @@ Widget catererCard(BuildContext context, var caterer, var city, var fdate,
       TextButton(
           onPressed: () {
             inputCaterer = caterer;
-            showDialog(context: context, builder: (BuildContext context){
-              return alert;
-            });
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                });
           },
           child: const Text("Continue"))
     ],

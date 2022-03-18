@@ -2,6 +2,7 @@ import 'package:eventrra_managers/Venue/myVenue.dart';
 import 'package:eventrra_managers/Venue/registerVenue.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'Caterers/registerCaterers.dart';
 import 'data.dart';
 import 'package:eventrra_managers/Authentication/splashScreen.dart';
@@ -23,7 +24,12 @@ class MyApp extends StatelessWidget {
     getCaterers();
     getEventTypes();
     print("From Main");
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

@@ -199,7 +199,7 @@ class test {
       return key.day * 1000000 + key.month * 10000 + key.year;
     }
 
-    _kEventSource1 = Map.fromIterable(occupiedDates,
+    _kEventSource1 = Map.fromIterable(occupiedCatererDates,
         key: (item) => DateTime.utc(
             item['FDate'].year, item['FDate'].month, item['FDate'].day),
         value: (item) => List.generate(
@@ -207,7 +207,7 @@ class test {
             (index) => Event(
                 'Busy from date ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} due to ${item['Reason']} .')));
 
-    _kEventSource2 = Map.fromIterable(calenderDates,
+    _kEventSource2 = Map.fromIterable(calenderCatererDates,
         key: (item) => DateTime.utc(
             item['FDate'].year, item['FDate'].month, item['FDate'].day),
         value: (item) => List.generate(

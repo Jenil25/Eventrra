@@ -19,13 +19,14 @@ void getCities() async {
   //       cities[i]["State"]);
   // }
 }
+
 var vphotos = [];
 Future<bool> getVPhotos(var vid) async {
-  final response = await http
-      .post(Uri.parse("https://eventrra.000webhostapp.com/getVenueGalleryImages.php"),
-  body : {
-        "vid" : vid,
-  });
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getVenueGalleryImages.php"),
+      body: {
+        "vid": vid,
+      });
   vphotos = jsonDecode(response.body);
   return true;
 }
@@ -119,17 +120,19 @@ void getEventTypes() async {
   // }
 }
 
-late var currentVenueAddress, currentVenueCity, temp1;
+late var currentVenue, currentVenueAddress, currentVenueCity, temp1;
+late int venueID;
+bool isVenueVerified = false;
 bool venueUser(String email) {
   for (int i = 0; i < venues.length; ++i) {
-    if (venues[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
+    if (venues[i]["Email"].toString().toLowerCase().trim() ==
+        email.toLowerCase().trim()) {
       currentVenue = venues[i];
       getEventDates(currentVenue['VId']);
       print("Current Venue:");
       print(currentVenue);
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
-
 
       for (int j = 0; j < addresses.length; j++) {
         if (addresses[j]["AId"] == currentVenue["AId"]) {
@@ -153,26 +156,28 @@ bool venueUser(String email) {
   return false;
 }
 
+late var currentCaterer, currentCatererAddress, currentCatererCity, temp;
+late int catererID;
+bool isCatererVerified = false;
 bool catererUser(String email) {
   for (int i = 0; i < caterers.length; ++i) {
-    if (caterers[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
+    if (caterers[i]["Email"].toString().toLowerCase().trim() ==
+        email.toLowerCase().trim()) {
       currentCaterer = caterers[i];
-      venueID = int.parse(caterers[i]["CaId"]);
-      isVenueVerified = caterers[i]["Verified"] == "1";
-      print("CurrentCaterer:");
-      print(currentCaterer);
+      catererID = int.parse(caterers[i]["CaId"]);
+      isCatererVerified = caterers[i]["Verified"] == "1";
 
       for (int j = 0; j < addresses.length; j++) {
         if (addresses[j]["AId"] == currentCaterer["AId"]) {
           currentCatererAddress = addresses[j];
           temp = addresses[j]["CId"];
-          print(temp);
+          break;
         }
       }
       for (int k = 0; k < cities.length; k++) {
         if (cities[k]["CId"] == temp) {
           currentCatererCity = cities[k];
-          print(currentCatererCity);
+          break;
         }
       }
       return true;
@@ -181,9 +186,6 @@ bool catererUser(String email) {
   return false;
 }
 
-late var currentVenue;
-late int venueID;
-bool isVenueVerified = false;
 Future<bool> sendVenueRequest(
     String line1,
     String line2,
@@ -264,9 +266,6 @@ Future<bool> sendVenueRequest(
   return true;
 }
 
-late var currentCaterer, currentCatererAddress, currentCatererCity, temp;
-late int catererID;
-bool isCatererVerified = false;
 Future<bool> sendCaterersRequest(
     String line1,
     String line2,
@@ -308,10 +307,6 @@ Future<bool> sendCaterersRequest(
 
   var v = jsonDecode(catererResponse.body);
   currentCaterer = v[0];
-
-  print("Current Caterer AId:");
-  print(currentCaterer);
-  print("Caterer Request ID=" + catererID.toString());
   return true;
 }
 
@@ -331,7 +326,6 @@ Future<bool> editCaterersRequest(String line1, String line2, String landmark,
       });
 
   var status = response.body.toString();
-  print("Status after editing" + status);
   return true;
 }
 
@@ -360,7 +354,6 @@ Future<bool> editVenueRequest(
       });
 
   var status = response.body.toString();
-  print("Status after editing venue" + status);
   return true;
 }
 
@@ -419,6 +412,8 @@ Future<bool> addEventType(String eventType, var vid) async {
   return false;
 }
 
+////////
+
 var venueOccupiedDates = [];
 Future<void> getVenueOccupiedDetails(var vid) async {
   final response = await http.post(
@@ -433,7 +428,24 @@ Future<void> getVenueOccupiedDetails(var vid) async {
     var bdate = DateFormat('dd-MM-yyyy').parse(b['FDate']);
     return adate.compareTo(bdate);
   });
-  print(venueOccupiedDates);
+  return;
+}
+
+var catererOccupiedDates = [];
+Future<void> getCatererOccupiedDetails(var caid) async {
+  final response = await http.post(
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/getCatererOccupiedDetails.php"),
+      body: {
+        "caid": caid,
+      });
+  catererOccupiedDates = jsonDecode(response.body);
+  catererOccupiedDates.sort((a, b) {
+    var adate = DateFormat('dd-MM-yyyy').parse(a['FDate']);
+    var bdate = DateFormat('dd-MM-yyyy').parse(b['FDate']);
+    return adate.compareTo(bdate);
+  });
+
   return;
 }
 
@@ -476,12 +488,58 @@ Future<String> addOccupiedVenue(
   return "error";
 }
 
+Future<String> addOccupiedCaterer(
+    String fromDate, String toDate, var caid, var reason) async {
+  if (fromDate.length == 0 || toDate.length == 0 || reason.length == 0)
+    return "Please fill in all the details";
+
+  DateTime fdatetemp = DateFormat("dd-MM-yyyy").parse(fromDate);
+  DateTime tdatetemp = DateFormat("dd-MM-yyyy").parse(toDate);
+
+  for (int i = 0; i < calenderCatererDates.length; i++) {
+    if ((fdatetemp.isAfter(calenderCatererDates[i]['FDate']) &&
+            fdatetemp.isBefore(calenderCatererDates[i]['TDate'])) ||
+        fdatetemp.isAtSameMomentAs(calenderCatererDates[i]['FDate']) ||
+        fdatetemp.isAtSameMomentAs(calenderCatererDates[i]['TDate']) ||
+        (tdatetemp.isAfter(calenderCatererDates[i]['FDate']) &&
+            tdatetemp.isBefore(calenderCatererDates[i]['TDate'])) ||
+        tdatetemp.isAtSameMomentAs(calenderCatererDates[i]['FDate']) ||
+        tdatetemp.isAtSameMomentAs(calenderCatererDates[i]['TDate'])) {
+      return "There is already a event scheduled from ${calenderCatererDates[i]['FDate'].day}/${calenderCatererDates[i]['FDate'].month}/${calenderCatererDates[i]['FDate'].year} to ${calenderCatererDates[i]['TDate'].day}/${calenderCatererDates[i]['TDate'].month}/${calenderCatererDates[i]['TDate'].year}";
+    }
+  }
+
+  final response = await http.post(
+    Uri.parse("https://eventrra.000webhostapp.com/uploadOccupiedCaterer.php"),
+    body: {
+      "fromdate": fromDate,
+      "todate": toDate,
+      "caid": caid,
+      "reason": reason,
+    },
+  );
+
+  var res = response.body;
+
+  if (res == "success") return "success";
+  return "error";
+}
+
 var venueRequests = [];
 Future<bool> getVenueRequests(var vid) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/getVenueRequests.php"),
       body: {"vid": vid});
   venueRequests = jsonDecode(response.body);
+  return true;
+}
+
+var catererRequests = [];
+Future<bool> getCatererRequests(var caid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getCatererRequests.php"),
+      body: {"caid": caid});
+  catererRequests = jsonDecode(response.body);
   return true;
 }
 
@@ -501,7 +559,25 @@ Future<bool> AcceptRequest(var eid, var venuename, var eventtype, var fdate,
   return true;
 }
 
-Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate, var tdate, var uid,var caid,var orid,var did) async {
+Future<bool> AcceptCatererRequest(var eid, var caterername, var eventtype,
+    var fdate, var tdate, var uid) async {
+  final response = await http.post(
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/catererRequestAccepted.php"),
+      body: {
+        "eid": eid,
+        "uid": uid,
+        "caterername": caterername,
+        "eventtype": eventtype,
+        "fdate": fdate,
+        "tdate": tdate,
+      });
+  if (response.body == "error") return false;
+  return true;
+}
+
+Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate,
+    var tdate, var uid, var caid, var orid, var did) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/venueRequestDeclined.php"),
       body: {
@@ -511,9 +587,26 @@ Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate, va
         "eventtype": eventtype,
         "fdate": fdate,
         "tdate": tdate,
-        "caid" : caid,
-        "did" : did,
-        "orid" : orid,
+        "caid": caid,
+        "did": did,
+        "orid": orid,
+      });
+  if (response.body == "error") return false;
+  return true;
+}
+
+Future<bool> DeclineCatererRequest(var eid, var uid, var caterername,
+    var eventtype, var fdate, var tdate) async {
+  final response = await http.post(
+      Uri.parse(
+          "https://eventrra.000webhostapp.com/catererRequestDeclined.php"),
+      body: {
+        "eid": eid,
+        "uid": uid,
+        "caterername": caterername,
+        "eventtype": eventtype,
+        "fdate": fdate,
+        "tdate": tdate
       });
   if (response.body == "error") return false;
   return true;
@@ -541,8 +634,38 @@ Future<bool> getEventDates(var vid) async {
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['FDate']);
     occupiedDates[i]['TDate'] =
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['TDate']);
-    
+
     print(occupiedDates[i]['FDate']);
+  }
+
+  return true;
+}
+
+var occupiedCatererDates = [], calenderCatererDates = [];
+Future<bool> getCatererEventDates(var caid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getCCalenderEvents.php"),
+      body: {"caid": caid});
+
+  calenderCatererDates = jsonDecode(response.body);
+
+  for (int i = 0; i < calenderCatererDates.length; i++) {
+    calenderCatererDates[i]['FDate'] =
+        DateFormat("dd-MM-yyyy").parse(calenderCatererDates[i]['FDate']);
+    calenderCatererDates[i]['TDate'] =
+        DateFormat("dd-MM-yyyy").parse(calenderCatererDates[i]['TDate']);
+  }
+  final response1 = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/getCOccupied.php"),
+      body: {"caid": caid});
+
+  occupiedCatererDates = jsonDecode(response1.body);
+
+  for (int i = 0; i < occupiedCatererDates.length; i++) {
+    occupiedCatererDates[i]['FDate'] =
+        DateFormat("dd-MM-yyyy").parse(occupiedCatererDates[i]['FDate']);
+    occupiedCatererDates[i]['TDate'] =
+        DateFormat("dd-MM-yyyy").parse(occupiedCatererDates[i]['TDate']);
   }
 
   return true;
@@ -557,25 +680,37 @@ Future<String> deleteOccupiedVenue(var ovid) async {
   return "error";
 }
 
+Future<String> deleteOccupiedCaterer(var ocaid) async {
+  final response = await http.post(
+      Uri.parse("https://eventrra.000webhostapp.com/deleteOccupiedCaterer.php"),
+      body: {"ocaid": ocaid});
+  print(response.body);
+  if (response.body == "success") return "success";
+  return "error";
+}
+
 Future<void> uploadImageFile(File file, String name) async {
   final response = await http.post(
       Uri.parse(
           "https://eventrra.000webhostapp.com/images/venue/uploadVenueProfileImage.php"),
-      body: {"file": base64Encode(file.readAsBytesSync()),
-              "vid" : currentVenue['VId']});
+      body: {
+        "file": base64Encode(file.readAsBytesSync()),
+        "vid": currentVenue['VId']
+      });
   // body: {"file": file.toString()});
   print("Response:");
   print(response.body);
   return;
 }
 
-Future<void> addVenuePhotos(File file,var vid,var num ) async {
+Future<void> addVenuePhotos(File file, var vid, var num) async {
   final response = await http.post(
       Uri.parse(
           "https://eventrra.000webhostapp.com/images/venue/gallery/uploadVenueImages.php"),
-      body: {"file": base64Encode(file.readAsBytesSync()),
-        "vid" : vid,
-        "num" : num,
+      body: {
+        "file": base64Encode(file.readAsBytesSync()),
+        "vid": vid,
+        "num": num,
       });
   // body: {"file": file.toString()});
   print("Response:");

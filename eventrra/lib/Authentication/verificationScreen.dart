@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:eventrra/Authentication/signup.dart';
 import 'package:eventrra/homePage.dart';
 import 'package:eventrra/data.dart';
-import 'package:eventrra/Venue/venueHomePage.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({Key? key}) : super(key: key);
@@ -115,14 +114,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      if (venueUser(user.email.toString())) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => VenueHome()));
-      } else {
-        sendUserData('${user.email}', name);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-      }
+      sendUserData('${user.email}', name);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     }
   }
 }
