@@ -35,7 +35,7 @@ class _SelectCatererState extends State<SelectCaterer> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernamecontroller = TextEditingController();
+    TextEditingController namecontroller = TextEditingController();
     TextEditingController contactcontroller = TextEditingController();
 
     AlertDialog alert = AlertDialog(
@@ -53,7 +53,7 @@ class _SelectCatererState extends State<SelectCaterer> {
         child: Column(
           children: [
             TextFormField(
-                controller: usernamecontroller,
+                controller: namecontroller,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.person,
@@ -76,7 +76,7 @@ class _SelectCatererState extends State<SelectCaterer> {
             ),
             TextButton(
                 onPressed: () {
-                  inputUserName = usernamecontroller.text;
+                  inputUserName = namecontroller.text;
                   inputContact = contactcontroller.text;
                   Navigator.pushReplacement(
                     context,
@@ -111,14 +111,9 @@ class _SelectCatererState extends State<SelectCaterer> {
                 return Expanded(
                   child: ListView.builder(
                       itemCount: selectCaterer.length,
-                      itemBuilder: (BuildContext context, int i) => catererCard(
-                          context,
-                          selectCaterer[i],
-                          city,
-                          fdate,
-                          tdate,
-                          eventType,
-                          alert)),
+                      itemBuilder: (BuildContext context, int i) =>
+                          catererCard1(selectCaterer[i], city, fdate, tdate,
+                              eventType, context, alert)),
                 );
               }
 
@@ -171,7 +166,8 @@ Widget catererCard(BuildContext context, var caterer, var city, var fdate,
                       decoration: BoxDecoration(
                           color: Colors.blue.shade200,
                           borderRadius: BorderRadius.circular(15)),
-                      child: Image.asset("assets/images/venue/MyVenue.png")),
+                      child:
+                          Image.asset("assets/images/caterer/MyCaterer.png")),
                 ),
                 const SizedBox(
                   height: 20,
@@ -248,5 +244,149 @@ Widget catererCard(BuildContext context, var caterer, var city, var fdate,
           },
           child: const Text("Continue"))
     ],
+  );
+}
+
+Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
+    BuildContext ctx, AlertDialog alert) {
+  return TextButton(
+    onPressed: () {},
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    color: Colors.grey,
+                    child: Image.asset(
+                      "assets/images/caterer/MyCaterer.png",
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      caterer["Name"].toString().toUpperCase(),
+                      maxLines: 1,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          caterer["Landmark"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.mail,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          caterer["Email"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          caterer["Contact"],
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    inputCaterer = caterer;
+                    inputCaterer = caterer;
+                    showDialog(
+                        context: ctx,
+                        builder: (BuildContext context) {
+                          return alert;
+                        });
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 130,
+                    color: Colors.blue,
+                    child: Center(
+                      child: Text(
+                        "BOOK CATERER",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }

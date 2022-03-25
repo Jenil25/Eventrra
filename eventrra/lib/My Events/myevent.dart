@@ -16,6 +16,7 @@ class _MyEventState extends State<MyEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(),
       body: Center(
         child: FutureBuilder(
@@ -101,7 +102,7 @@ Widget eventCard(BuildContext context, var event) {
                     : const BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0)),
-                color: Colors.blue.shade50),
+                color: Colors.white),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(

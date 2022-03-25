@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:eventrra/My%20Events/myevent.dart';
+import 'package:eventrra/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'Authentication/login.dart';
 import 'New Event/newevent.dart';
 import 'drawer.dart';
 
@@ -66,9 +69,26 @@ class _HomePageState extends State<HomePage> {
     );
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final auth = FirebaseAuth.instance;
     return Scaffold(
-      drawer: NavDrawer(),
+      // drawer: NavDrawer(),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => Profile()));
+              },
+              icon: const Icon(Icons.person)),
+          IconButton(
+              onPressed: () {
+                auth.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+              icon: const Icon(Icons.logout)),
+        ],
         title: Text("Eventrra"),
         // automaticallyImplyLeading: false,
         backgroundColor: Colors.purple,
@@ -130,31 +150,33 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               clr: [Colors.red.shade300, Colors.red.shade600],
-              image: Image.network(
-                "https://www.kindpng.com/picc/m/246-2465825_event-management-gurgaon-illustration-png-calendar-vector-transparent.pnghttps://www.kindpng.com/picc/m/246-2465825_event-management-gurgaon-illustration-png-calendar-vector-transparent.png",
+              image: Image.asset(
+                "assets/images/MyEvents.png",
                 fit: BoxFit.fitWidth,
               ),
+              // image: Image.asset("assets"),
             ),
             const SizedBox(
               height: 20,
             ),
             _makeButton(
-                s1: "NEW",
-                s2: "EVENT",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    //final city, fdate, tdate, eventType;
-                    MaterialPageRoute(
-                      builder: (context) => NewEvent(),
-                    ),
-                  );
-                },
-                clr: [Colors.blue.shade300, Colors.blue.shade600],
-                image: Image.network(
-                  "https://img.freepik.com/free-vector/businessman-planning-events-deadlines-agenda_74855-6274.jpg?size=626&ext=jpg",
-                  fit: BoxFit.fitWidth,
-                )),
+              s1: "NEW",
+              s2: "EVENT",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  //final city, fdate, tdate, eventType;
+                  MaterialPageRoute(
+                    builder: (context) => NewEvent(),
+                  ),
+                );
+              },
+              clr: [Colors.blue.shade300, Colors.blue.shade600],
+              image: Image.asset(
+                "assets/images/nevEvent.png",
+                fit: BoxFit.fitHeight,
+              ),
+            ),
             // Container(
             //   margin: EdgeInsets.all(15),
             //   // width: width / 2.5,

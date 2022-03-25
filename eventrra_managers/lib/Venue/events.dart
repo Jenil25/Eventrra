@@ -20,7 +20,7 @@ class _EventsState extends State<Events> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
-
+  var colour;
   @override
   void initState() {
     super.initState();
@@ -103,39 +103,59 @@ class _EventsState extends State<Events> {
               rangeEndDay: _rangeEnd,
               calendarFormat: _calendarFormat,
               rangeSelectionMode: _rangeSelectionMode,
-              eventLoader: _getEventsForDay,
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarStyle: CalendarStyle(
                 // Use `CalendarStyle` to customize the UI
                 outsideDaysVisible: false,
               ),
-              // calendarBuilders : CalendarBuilders(
-              //   selectedBuilder: (context,date,events) => Container(
-              //     margin : const EdgeInsets.all(5.0),
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //       color: Colors.red,
-              //       borderRadius: BorderRadius.circular(12.0),
-              //     ),
-              //     child : Text(date.day.toString(),
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //       ),),
-              //   ),
-              //   todayBuilder: (context,date,events) => Container(
-              //     margin : const EdgeInsets.all(5.0),
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //       color: Colors.purple,
-              //       borderRadius: BorderRadius.circular(100.0),
-              //     ),
-              //     child : Text(date.day.toString(),
-              //     style: TextStyle(
-              //       color: Colors.white,
-              //     ),),
-              //
-              //   ),
-              // ),
+              calendarBuilders: CalendarBuilders(
+                defaultBuilder: (context, date, events) {
+                  var c = _getEventsForDay(date);
+                  if (c.length != 0) {
+                    // final event = events as Event;
+                    if (date.day < DateTime.now().day)
+                      colour = Colors.green[500];
+                    else
+                      colour = Colors.red[400];
+
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Text('${date.day}'),
+                          Container(
+                            height: 8,
+                            width: 8,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: colour,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Text('${date.day}'),
+                          Container(
+                            height: 8,
+                            width: 8,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
               onDaySelected: _onDaySelected,
               onRangeSelected: _onRangeSelected,
               onFormatChanged: (format) {
@@ -181,6 +201,7 @@ class _EventsState extends State<Events> {
   }
 }
 
+/// Example event class.
 class Event {
   final String title;
 
@@ -189,6 +210,44 @@ class Event {
   @override
   String toString() => title;
 }
+
+/// Example events.
+///
+/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
+///
+//
+// final kToday = DateTime.now();
+// final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+// final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+//
+//
+// final kEvents = LinkedHashMap<DateTime, List<Event>>(
+//   equals: isSameDay,
+//   hashCode: getHashCode,
+// )..addAll(_kEventSource1)..addAll(_kEventSource2);
+//
+// final _kEventSource1 = Map.fromIterable(occupiedDates,
+//     key: (item) => DateTime.utc(item['FDate'].year, item['FDate'].month, item['FDate'].day),
+//     value: (item) => List.generate(1, (index) =>Event('Busy from date ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} due to ${item['Reason']} .'))
+// );
+//
+// final _kEventSource2 = Map.fromIterable(calenderDates,
+//     key: (item) => DateTime.utc(item['FDate'].year, item['FDate'].month, item['FDate'].day),
+//     value: (item) => List.generate(1, (index) =>Event('${item['EventType']} Event scheduled by ${item['Name']} from ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} .'))
+// );
+//
+// int getHashCode(DateTime key) {
+//   return key.day * 1000000 + key.month * 10000 + key.year;
+// }
+//
+// /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
+// List<DateTime> daysInRange(DateTime first, DateTime last) {
+//   final dayCount = last.difference(first).inDays + 1;
+//   return List.generate(
+//     dayCount,
+//         (index) => DateTime.utc(first.year, first.month, first.day + index),
+//   );
+// }
 
 var kEvents;
 var _kEventSource1, _kEventSource2;
@@ -212,8 +271,11 @@ class test {
             item['FDate'].year, item['FDate'].month, item['FDate'].day),
         value: (item) => List.generate(
             1,
-            (index) => Event(
-                '${item['EventType']} Event scheduled by ${item['Name']} from ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} .')));
+            (index) => item['FDate'].isAfter(DateTime.now())
+                ? Event(
+                    '${item['EventType']} Event scheduled by ${item['Name']} from ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} .')
+                : Event(
+                    '${item['EventType']} Event completed by ${item['Name']} from ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} .')));
 
     kEvents = LinkedHashMap<DateTime, List<Event>>(
       equals: isSameDay,

@@ -283,6 +283,7 @@ class _SingleEventState extends State<SingleEvent> {
                                         isCorrect = true;
                                         Navigator.pop(context);
                                         Navigator.pop(context);
+                                        Navigator.pop(context);
                                       }),
                                     },
                                   );

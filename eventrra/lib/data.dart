@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -221,14 +220,6 @@ Future<bool> uploadEventRequest(
   var res = int.parse(response.body);
 
   if (res > 0) {
-    final response1 = await http.post(
-        Uri.parse("https://eventrra.000webhostapp.com/sendMailToUser.php"),
-        body: {
-          "eid": res.toString(),
-          "email": userEmail,
-          "cityname": city['Name'],
-        });
-
     final response2 = await http.post(
         Uri.parse("https://eventrra.000webhostapp.com/sendMailToVendors.php"),
         body: {

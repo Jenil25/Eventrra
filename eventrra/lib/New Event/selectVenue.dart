@@ -33,6 +33,11 @@ class _SelectVenueState extends State<SelectVenue> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     Color colour = const Color(0xffB7CEEC);
+    print("Values Received:");
+    print(city);
+    print(fdate);
+    print(tdate);
+    print(eventType);
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
@@ -223,7 +228,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                             fit: BoxFit.cover,
                           )
                         : Image.asset(
-                            "assets/images/noimageavailableicon.jpg",
+                            "assets/images/venue/MyVenue.png",
                           ),
                   ),
                 ),

@@ -1,3 +1,7 @@
+import 'dart:collection';
+
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
 import 'package:flutter/widgets.dart';
@@ -129,6 +133,8 @@ class _NewEventState extends State<NewEvent> {
     }
   }
 
+  var selectedValue = eventTypes[0], selectedValueCity = cities[0];
+
   @override
   Widget build(BuildContext context) {
     print("Selected city : " + selectedCity['Name']);
@@ -144,42 +150,112 @@ class _NewEventState extends State<NewEvent> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(
-              flex: 3,
-            ),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(
-                  flex: 3,
+                SizedBox(
+                  child: const Text("SELECT CITY"),
+                  width: MediaQuery.of(context).size.width * 0.85,
                 ),
-                const Text("Select City: "),
-                const Spacer(
-                  flex: 1,
+                const SizedBox(
+                  height: 10,
                 ),
-                DropdownButton(
-                  hint: const Text('Please choose a city'),
-                  value: selectedCity,
-                  onChanged: (newValue) {
-                    setState(() {
-                      newValue as Map;
-                      selectedCity = newValue;
-                      // cityChanged = true;
-                      getCityAddresses(int.parse(newValue["CId"]));
-                    });
-                  },
-                  items: cities.map((city) {
-                    return DropdownMenuItem(
-                      child: Text(city["Name"]),
-                      value: city,
-                    );
-                  }).toList(),
+                // DropdownButton(
+                //   hint: const Text('Please choose a city'),
+                //   value: selectedCity,
+                //   onChanged: (newValue) {
+                //     setState(() {
+                //       newValue as Map;
+                //       selectedCity = newValue;
+                //       // cityChanged = true;
+                //       getCityAddresses(int.parse(newValue["CId"]));
+                //     });
+                //   },
+                //   items: cities.map((city) {
+                //     return DropdownMenuItem(
+                //       child: Text(city["Name"]),
+                //       value: city,
+                //     );
+                //   }).toList(),
+                // ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Select City',
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    items: cities
+                        .map((item) =>
+                            DropdownMenuItem<LinkedHashMap<String, dynamic>>(
+                              value: item,
+                              child: Text(
+                                item["Name"].toString(),
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedValueCity,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValueCity = value;
+                        selectedCity = value;
+                        getCityAddresses(int.parse(selectedCity["CId"]));
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios_outlined,
+                    ),
+                    iconSize: 14,
+                    iconEnabledColor: Colors.black,
+                    iconDisabledColor: Colors.grey,
+                    buttonHeight: 70,
+                    buttonWidth: MediaQuery.of(context).size.width * 0.85,
+                    buttonPadding: const EdgeInsets.only(left: 30, right: 14),
+                    buttonDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
+                      color: Colors.white,
+                    ),
+                    buttonElevation: 0,
+                    itemHeight: 50,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownWidth: MediaQuery.of(context).size.width * 0.85,
+                    dropdownPadding: null,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                    ),
+                    dropdownElevation: 0,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                    // offset: const Offset(-20, 0),
+                  ),
                 ),
-                const Spacer(
-                  flex: 3,
-                ),
+                // const Spacer(
+                //   flex: 3,
+                // ),
               ],
             ),
             // Column(
@@ -239,9 +315,6 @@ class _NewEventState extends State<NewEvent> {
             //     ),
             //   ],
             // ),
-            const Spacer(
-              flex: 1,
-            ),
             // SizedBox(
             //   height: 20.0,
             // ),
@@ -409,34 +482,219 @@ class _NewEventState extends State<NewEvent> {
             const Spacer(
               flex: 1,
             ),
-            Row(
+            // Row(
+            //   children: [
+            //     const Spacer(
+            //       flex: 3,
+            //     ),
+            //     const Text("Select Event-Type: "),
+            //     const Spacer(
+            //       flex: 1,
+            //     ),
+            //     // DropdownButton(
+            //     //   hint: const Text('Please choose event type'),
+            //     //   value: selectedEventType,
+            //     //   onChanged: (newValue) {
+            //     //     setState(() {
+            //     //       newValue as Map;
+            //     //       selectedEventType = newValue;
+            //     //     });
+            //     //   },
+            //     //   items: eventTypes.map((type) {
+            //     //     return DropdownMenuItem(
+            //     //       child: Text(type["EventType"]),
+            //     //       value: type,
+            //     //     );
+            //     //   }).toList(),
+            //     // ),
+            //     DropdownButtonHideUnderline(
+            //       child: DropdownButton2(
+            //         isExpanded: true,
+            //         hint: Row(
+            //           children: const [
+            //             Icon(
+            //               Icons.list,
+            //               size: 16,
+            //               color: Colors.yellow,
+            //             ),
+            //             SizedBox(
+            //               width: 4,
+            //             ),
+            //             Expanded(
+            //               child: Text(
+            //                 'Select EventType',
+            //                 style: TextStyle(
+            //                   fontSize: 14,
+            //                   fontWeight: FontWeight.bold,
+            //                   color: Colors.yellow,
+            //                 ),
+            //                 overflow: TextOverflow.ellipsis,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         items: eventTypes
+            //             .map((item) =>
+            //                 DropdownMenuItem<LinkedHashMap<String, dynamic>>(
+            //                   value: item,
+            //                   child: Text(
+            //                     item["EventType"],
+            //                     style: const TextStyle(
+            //                       fontSize: 14,
+            //                       fontWeight: FontWeight.bold,
+            //                       color: Colors.white,
+            //                     ),
+            //                     overflow: TextOverflow.ellipsis,
+            //                   ),
+            //                 ))
+            //             .toList(),
+            //         value: selectedValue,
+            //         onChanged: (value) {
+            //           setState(() {
+            //             selectedValue = value;
+            //             selectedEventType = value;
+            //           });
+            //         },
+            //         icon: const Icon(
+            //           Icons.arrow_forward_ios_outlined,
+            //         ),
+            //         iconSize: 14,
+            //         iconEnabledColor: Colors.yellow,
+            //         iconDisabledColor: Colors.grey,
+            //         buttonHeight: 50,
+            //         buttonWidth: 160,
+            //         buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+            //         buttonDecoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(14),
+            //           border: Border.all(
+            //             color: Colors.black26,
+            //           ),
+            //           color: Colors.redAccent,
+            //         ),
+            //         buttonElevation: 2,
+            //         itemHeight: 40,
+            //         itemPadding: const EdgeInsets.only(left: 14, right: 14),
+            //         dropdownMaxHeight: 200,
+            //         dropdownWidth: 200,
+            //         dropdownPadding: null,
+            //         dropdownDecoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(14),
+            //           color: Colors.redAccent,
+            //         ),
+            //         dropdownElevation: 8,
+            //         scrollbarRadius: const Radius.circular(40),
+            //         scrollbarThickness: 6,
+            //         scrollbarAlwaysShow: true,
+            //         offset: const Offset(-20, 0),
+            //       ),
+            //     ),
+            //     const Spacer(
+            //       flex: 3,
+            //     ),
+            //   ],
+            // ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(
-                  flex: 3,
+                SizedBox(
+                  child: const Text("SELECT EVENTTYPE"),
+                  width: MediaQuery.of(context).size.width * 0.85,
                 ),
-                const Text("Select Event-Type: "),
-                const Spacer(
-                  flex: 1,
+                const SizedBox(
+                  height: 10,
                 ),
-                DropdownButton(
-                  hint: const Text('Please choose event type'),
-                  value: selectedEventType,
-                  onChanged: (newValue) {
-                    setState(() {
-                      newValue as Map;
-                      selectedEventType = newValue;
-                    });
-                  },
-                  items: eventTypes.map((type) {
-                    return DropdownMenuItem(
-                      child: Text(type["EventType"]),
-                      value: type,
-                    );
-                  }).toList(),
+                // DropdownButton(
+                //   hint: const Text('Please choose a city'),
+                //   value: selectedCity,
+                //   onChanged: (newValue) {
+                //     setState(() {
+                //       newValue as Map;
+                //       selectedCity = newValue;
+                //       // cityChanged = true;
+                //       getCityAddresses(int.parse(newValue["CId"]));
+                //     });
+                //   },
+                //   items: cities.map((city) {
+                //     return DropdownMenuItem(
+                //       child: Text(city["Name"]),
+                //       value: city,
+                //     );
+                //   }).toList(),
+                // ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Select EventType',
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    items: eventTypes
+                        .map((item) =>
+                            DropdownMenuItem<LinkedHashMap<String, dynamic>>(
+                              value: item,
+                              child: Text(
+                                item["EventType"].toString(),
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedValue,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValue = value;
+                        selectedEventType = value;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.arrow_forward_ios_outlined,
+                    ),
+                    iconSize: 14,
+                    iconEnabledColor: Colors.black,
+                    iconDisabledColor: Colors.grey,
+                    buttonHeight: 70,
+                    buttonWidth: MediaQuery.of(context).size.width * 0.85,
+                    buttonPadding: const EdgeInsets.only(left: 30, right: 14),
+                    buttonDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
+                      color: Colors.white,
+                    ),
+                    buttonElevation: 0,
+                    itemHeight: 50,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownWidth: MediaQuery.of(context).size.width * 0.85,
+                    dropdownPadding: null,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                    ),
+                    dropdownElevation: 0,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                    // offset: const Offset(-20, 0),
+                  ),
                 ),
-                const Spacer(
-                  flex: 3,
-                ),
+                // const Spacer(
+                //   flex: 3,
+                // ),
               ],
             ),
             const Spacer(

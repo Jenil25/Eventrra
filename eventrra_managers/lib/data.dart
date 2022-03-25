@@ -357,7 +357,7 @@ Future<bool> editVenueRequest(
   return true;
 }
 
-var eventtypes = [];
+var venueeventtypes = [];
 Future<bool> ViewVenueEventTypes(var vid) async {
   print(vid);
   final response = await http.post(
@@ -366,8 +366,8 @@ Future<bool> ViewVenueEventTypes(var vid) async {
         "vid": vid,
       });
 
-  eventtypes = jsonDecode(response.body);
-  print("Status(show event types)" + eventtypes.toString());
+  venueeventtypes = jsonDecode(response.body);
+  print("Status(show event types)" + venueeventtypes.toString());
   // eventtypes=res;
   return true;
 }
@@ -576,14 +576,24 @@ Future<bool> AcceptCatererRequest(var eid, var caterername, var eventtype,
   return true;
 }
 
-Future<bool> DeclineRequest(var eid, var venuename, var eventtype, var fdate,
-    var tdate, var uid, var caid, var orid, var did) async {
+Future<bool> DeclineRequest(
+    var eid,
+    var venuename,
+    var venuedeclinereason,
+    var eventtype,
+    var fdate,
+    var tdate,
+    var uid,
+    var caid,
+    var orid,
+    var did) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/venueRequestDeclined.php"),
       body: {
         "eid": eid,
         "uid": uid,
         "venuename": venuename,
+        "venuedeclinereason": venuedeclinereason,
         "eventtype": eventtype,
         "fdate": fdate,
         "tdate": tdate,
@@ -716,4 +726,18 @@ Future<void> addVenuePhotos(File file, var vid, var num) async {
   print("Response:");
   print(response.body);
   return;
+}
+
+Future<void> testFunction() async {
+  final response = await http
+      .post(Uri.parse("https://eventrra.000webhostapp.com/getCities.php"));
+  print("Inside TestFunction");
+  return;
+  // print("Citites:");
+  // for (int i = 0; i < cities.length; ++i) {
+  //   print(cities[i]["Name"] +
+  //       cities[i]["Location"] +
+  //       cities[i]["Pincode"] +
+  //       cities[i]["State"]);
+  // }
 }
