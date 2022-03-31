@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state, prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:eventrra_managers/main.dart';
@@ -20,18 +22,14 @@ class _EditProfileState extends State<EditProfile> {
     ..text = currentCaterer['Name'];
   TextEditingController ownername = TextEditingController()
     ..text = currentCaterer['OwnerName'];
-  // TextEditingController email = TextEditingController()..text=currentCaterer['Email'];
   TextEditingController contact = TextEditingController()
     ..text = currentCaterer['Contact'];
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    Color color = const Color(0xFF1B0250);
     return Scaffold(
       appBar: AppBar(
-        title: Text(" "),
+        title: const Text("Edit Profile"),
       ),
       body: Column(
         children: [
@@ -42,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
             controller: cateringName,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'cateringName',
+              labelText: 'Catering Name',
             ),
           ),
           const SizedBox(
@@ -52,7 +50,7 @@ class _EditProfileState extends State<EditProfile> {
             controller: ownername,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'ownername',
+              labelText: 'Owner Name',
             ),
           ),
           const SizedBox(
@@ -101,16 +99,18 @@ class _EditProfileState extends State<EditProfile> {
           ElevatedButton(
             onPressed: () {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CaterersEdit(
-                            line1: addressLine1.text,
-                            line2: addressLine2.text,
-                            landmark: landmark.text,
-                            cateringname: cateringName.text,
-                            contact: contact.text,
-                            ownername: ownername.text,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CaterersEdit(
+                    line1: addressLine1.text,
+                    line2: addressLine2.text,
+                    landmark: landmark.text,
+                    cateringname: cateringName.text,
+                    contact: contact.text,
+                    ownername: ownername.text,
+                  ),
+                ),
+              );
             },
             child: const Text(
               "Edit",
@@ -138,8 +138,8 @@ class CaterersEdit extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CaterersEditState createState() => _CaterersEditState(this.line1, this.line2,
-      this.landmark, this.cateringname, this.contact, this.ownername);
+  _CaterersEditState createState() => _CaterersEditState(
+      line1, line2, landmark, cateringname, contact, ownername);
 }
 
 class _CaterersEditState extends State<CaterersEdit> {
@@ -172,7 +172,7 @@ class _CaterersEditState extends State<CaterersEdit> {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          return EditProfile();
+          return const EditProfile();
         }
 
         return Scaffold(

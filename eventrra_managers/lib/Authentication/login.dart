@@ -117,8 +117,8 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => ResetPassPage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const ResetPassPage()));
           },
           child: const Text(
             "Forgot Password?",
@@ -156,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                   });
                   final currentUser = await auth.signInWithEmailAndPassword(
                       email: email, password: password);
+                  // ignore: unnecessary_null_comparison
                   if (currentUser != null) {
                     if (currentUser.user!.emailVerified) {
                       if (venueUser(email.toString())) {
@@ -165,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const VenueHome()));
                       } else if (catererUser(email.toString())) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => CaterersHome()));
+                            builder: (context) => const CaterersHome()));
                       } else {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const LoginPage()));
@@ -283,8 +284,8 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignUpPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SignUpPage()));
           },
           child: const Text(
             "Don't have an account? Register",

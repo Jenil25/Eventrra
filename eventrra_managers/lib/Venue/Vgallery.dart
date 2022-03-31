@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_init_to_null
+
 import 'package:eventrra_managers/Venue/expandable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
@@ -24,21 +26,15 @@ class _VgalleryState extends State<Vgallery> {
       );
       if (pickedFile != null) {
         setState(() {
-          print("_getFromGallery");
           imageFile = File(pickedFile.path);
-          String filepath = imageFile!.path.split('/').last;
-          print("Here");
           addVenuePhotos(
               imageFile!, currentVenue['VId'], vphotos.length.toString());
-          print(imageFile!.path.split('/').last);
           Navigator.pop(context);
         });
       }
-      print("_getFromGallery End");
     }
 
     _getFromCamera(BuildContext context) async {
-      print("_getFromCamera Start");
       XFile? pickedFile = await ImagePicker().pickImage(
         source: ImageSource.camera,
         maxWidth: 640,
@@ -46,22 +42,17 @@ class _VgalleryState extends State<Vgallery> {
       );
       if (pickedFile != null) {
         setState(() {
-          print("_getFromCamera");
           imageFile = File(pickedFile.path);
-          String filepath = imageFile!.path.split('/').last;
-          print("Here");
           addVenuePhotos(
               imageFile!, currentVenue['VId'], vphotos.length.toString());
-          print(imageFile!.path.split('/').last);
           Navigator.pop(context);
         });
       }
-      print("_getFromCamera End");
     }
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Venue Gallery"),
+          title: const Text("Venue Gallery"),
         ),
         body: FutureBuilder(
           future: getVPhotos(currentVenue['VId']),
@@ -71,35 +62,32 @@ class _VgalleryState extends State<Vgallery> {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
-              print(vphotos);
               return ListView.builder(
-                  // physics: NeverScrollableScrollPhysics(),
-                  // shrinkWrap: true,
-                  itemCount: vphotos.length,
-                  itemBuilder: (BuildContext context, int i) => Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          height: 250,
-                          decoration: BoxDecoration(
-                            // shape: BoxShape.squar,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://eventrra.000webhostapp.com/images/venue/gallery/${vphotos[i]['image']}"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ));
+                itemCount: vphotos.length,
+                itemBuilder: (BuildContext context, int i) => Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    height: 250,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            "https://eventrra.000webhostapp.com/gallery/venue/gallery/${vphotos[i]['image']}"),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+              );
             }
 
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
         floatingActionButton: ExpandableFab(
           distance: 80.0,
           children: [
             ActionButton(
-              icon: Icon(Icons.insert_photo),
+              icon: const Icon(Icons.insert_photo),
               onPressed: () {
                 _getFromGallery();
               },

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print, non_constant_identifier_names, prefer_is_empty
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -10,14 +12,6 @@ void getCities() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getCities.php"));
   cities = jsonDecode(response.body);
-
-  // print("Citites:");
-  // for (int i = 0; i < cities.length; ++i) {
-  //   print(cities[i]["Name"] +
-  //       cities[i]["Location"] +
-  //       cities[i]["Pincode"] +
-  //       cities[i]["State"]);
-  // }
 }
 
 var vphotos = [];
@@ -36,16 +30,6 @@ void getAddresses() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getAddresses.php"));
   addresses = jsonDecode(response.body);
-  // print("Addresses:");
-  // for (int i = 0; i < addresses.length; ++i) {
-  //   print(addresses[i]["Line1"] +
-  //       "," +
-  //       addresses[i]["Line2"] +
-  //       "," +
-  //       addresses[i]["Landmark"] +
-  //       "," +
-  //       addresses[i]["CId"]);
-  // }
 }
 
 var venues = [];
@@ -53,19 +37,6 @@ void getVenues() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getVenues.php"));
   venues = jsonDecode(response.body);
-  print("Got Venues! length= " + venues.length.toString());
-  print("Venues:");
-  for (int i = 0; i < venues.length; ++i) {
-    print(venues[i]["Name"] +
-        "," +
-        venues[i]["Capacity"] +
-        "," +
-        venues[i]["Email"] +
-        "," +
-        venues[i]["Contact"] +
-        "," +
-        venues[i]["OwnerName"]);
-  }
 }
 
 var orchestra = [];
@@ -73,16 +44,6 @@ void getOrchestra() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getOrchestra.php"));
   orchestra = jsonDecode(response.body);
-  // print("Orchestra:");
-  // for (int i = 0; i < orchestra.length; ++i) {
-  //   print(orchestra[i]["Name"] +
-  //       "," +
-  //       orchestra[i]["Email"] +
-  //       "," +
-  //       orchestra[i]["Contact"] +
-  //       "," +
-  //       orchestra[i]["OwnerName"]);
-  // }
 }
 
 var decoraters = [];
@@ -90,16 +51,6 @@ void getDecoraters() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getDecoraters.php"));
   decoraters = jsonDecode(response.body);
-  // print("Decoraters:");
-  // for (int i = 0; i < decoraters.length; ++i) {
-  //   print(decoraters[i]["Name"] +
-  //       "," +
-  //       decoraters[i]["Email"] +
-  //       "," +
-  //       decoraters[i]["Contact"] +
-  //       "," +
-  //       decoraters[i]["OwnerName"]);
-  // }
 }
 
 var caterers = [];
@@ -114,10 +65,6 @@ void getEventTypes() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getEventTypes.php"));
   eventTypes = jsonDecode(response.body);
-  // print("Event-Types:");
-  // for (int i = 0; i < eventTypes.length; ++i) {
-  // print(eventTypes[i]["Event-Type"]);
-  // }
 }
 
 late var currentVenue, currentVenueAddress, currentVenueCity, temp1;
@@ -129,8 +76,6 @@ bool venueUser(String email) {
         email.toLowerCase().trim()) {
       currentVenue = venues[i];
       getEventDates(currentVenue['VId']);
-      print("Current Venue:");
-      print(currentVenue);
       venueID = int.parse(venues[i]["VId"]);
       isVenueVerified = venues[i]["Verified"] == "1";
 
@@ -138,7 +83,6 @@ bool venueUser(String email) {
         if (addresses[j]["AId"] == currentVenue["AId"]) {
           currentVenueAddress = addresses[j];
           temp1 = addresses[j]["CId"];
-          print(temp1);
           break;
         }
       }
@@ -146,7 +90,6 @@ bool venueUser(String email) {
       for (int k = 0; k < cities.length; k++) {
         if (cities[k]["CId"] == temp1) {
           currentVenueCity = cities[k];
-          print(currentVenueCity);
           break;
         }
       }
@@ -199,22 +142,6 @@ Future<bool> sendVenueRequest(
     String contact,
     String ownername,
     Map<dynamic, bool?> venueEventTypes) async {
-  print("line1:" + line1);
-  print("line2:" + line2);
-  print("landmark:" + landmark);
-  print("pincode:" + pincode);
-  print("cityName:" + cityName);
-  print("stateName:" + stateName);
-  print("name:" + name);
-  print("capacity:" + capacity);
-  print("email:" + email);
-  print("contact:" + contact);
-  print("ownername:" + ownername);
-  print("venueEventTypes:");
-  for (var key in venueEventTypes.keys) {
-    print(key.toString() + ":" + venueEventTypes[key].toString());
-  }
-
   var city = [];
   final cityresponse = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/uploadNewCity.php"),
@@ -247,10 +174,6 @@ Future<bool> sendVenueRequest(
 
   var v = jsonDecode(venueResponse.body);
   currentVenue = v[0];
-
-  print("Current Venue:");
-  print(currentVenue);
-
   for (var key in venueEventTypes.keys) {
     if (venueEventTypes[key] == true) {
       final response2 = await http.post(
@@ -262,7 +185,6 @@ Future<bool> sendVenueRequest(
       }
     }
   }
-  print("Venue Request ID=" + venueID.toString());
   return true;
 }
 
@@ -359,7 +281,6 @@ Future<bool> editVenueRequest(
 
 var venueeventtypes = [];
 Future<bool> ViewVenueEventTypes(var vid) async {
-  print(vid);
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/getVenueEventType.php"),
       body: {
@@ -367,8 +288,6 @@ Future<bool> ViewVenueEventTypes(var vid) async {
       });
 
   venueeventtypes = jsonDecode(response.body);
-  print("Status(show event types)" + venueeventtypes.toString());
-  // eventtypes=res;
   return true;
 }
 
@@ -379,16 +298,10 @@ Future<bool> verifyPincode(String pincode) async {
       .get(Uri.parse("https://api.postalpincode.in/pincode/" + pincode));
 
   var res = jsonDecode(response.body);
-
-  print("Status:");
-  print(res[0]["Status"]);
   if (res[0]["Status"] == "Error") return false;
 
   cityName = res[0]["PostOffice"][0]["Name"];
   stateName = res[0]["PostOffice"][0]["State"];
-
-  print("City=" + cityName);
-  print("State=" + stateName);
 
   return true;
 }
@@ -404,15 +317,9 @@ Future<bool> addEventType(String eventType, var vid) async {
   );
 
   var res = response.body;
-
-  print("Status:");
-  print(res);
-
   if (res == "success") return true;
   return false;
 }
-
-////////
 
 var venueOccupiedDates = [];
 Future<void> getVenueOccupiedDetails(var vid) async {
@@ -451,8 +358,6 @@ Future<void> getCatererOccupiedDetails(var caid) async {
 
 Future<String> addOccupiedVenue(
     String fromDate, String toDate, var vid, var reason) async {
-  print("From:" + fromDate);
-  print("To:" + toDate);
   if (fromDate.length == 0 || toDate.length == 0) return "error";
 
   DateTime fdatetemp = DateFormat("dd-MM-yyyy").parse(fromDate);
@@ -480,18 +385,15 @@ Future<String> addOccupiedVenue(
   );
 
   var res = response.body;
-
-  print("Status:");
-  print(res);
-
   if (res == "success") return "success";
   return "error";
 }
 
 Future<String> addOccupiedCaterer(
     String fromDate, String toDate, var caid, var reason) async {
-  if (fromDate.length == 0 || toDate.length == 0 || reason.length == 0)
+  if (fromDate.length == 0 || toDate.length == 0 || reason.length == 0) {
     return "Please fill in all the details";
+  }
 
   DateTime fdatetemp = DateFormat("dd-MM-yyyy").parse(fromDate);
   DateTime tdatetemp = DateFormat("dd-MM-yyyy").parse(toDate);
@@ -627,7 +529,6 @@ Future<bool> getEventDates(var vid) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/getVCalenderEvents.php"),
       body: {"vid": vid});
-  // DateFormat formatter = DateFormat('dd-MM-yyyy');
   calenderDates = jsonDecode(response.body);
   for (int i = 0; i < calenderDates.length; i++) {
     calenderDates[i]['FDate'] =
@@ -644,8 +545,6 @@ Future<bool> getEventDates(var vid) async {
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['FDate']);
     occupiedDates[i]['TDate'] =
         DateFormat("dd-MM-yyyy").parse(occupiedDates[i]['TDate']);
-
-    print(occupiedDates[i]['FDate']);
   }
 
   return true;
@@ -685,7 +584,6 @@ Future<String> deleteOccupiedVenue(var ovid) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/deleteOccupiedVenue.php"),
       body: {"ovid": ovid});
-  print(response.body);
   if (response.body == "success") return "success";
   return "error";
 }
@@ -694,7 +592,6 @@ Future<String> deleteOccupiedCaterer(var ocaid) async {
   final response = await http.post(
       Uri.parse("https://eventrra.000webhostapp.com/deleteOccupiedCaterer.php"),
       body: {"ocaid": ocaid});
-  print(response.body);
   if (response.body == "success") return "success";
   return "error";
 }
@@ -702,42 +599,28 @@ Future<String> deleteOccupiedCaterer(var ocaid) async {
 Future<void> uploadImageFile(File file, String name) async {
   final response = await http.post(
       Uri.parse(
-          "https://eventrra.000webhostapp.com/images/venue/uploadVenueProfileImage.php"),
+          "https://eventrra.000webhostapp.com/gallery/venue/uploadVenueProfileImage.php"),
       body: {
         "file": base64Encode(file.readAsBytesSync()),
         "vid": currentVenue['VId']
       });
-  // body: {"file": file.toString()});
-  print("Response:");
-  print(response.body);
   return;
 }
 
 Future<void> addVenuePhotos(File file, var vid, var num) async {
   final response = await http.post(
       Uri.parse(
-          "https://eventrra.000webhostapp.com/images/venue/gallery/uploadVenueImages.php"),
+          "https://eventrra.000webhostapp.com/gallery/venue/gallery/uploadVenueImages.php"),
       body: {
         "file": base64Encode(file.readAsBytesSync()),
         "vid": vid,
         "num": num,
       });
-  // body: {"file": file.toString()});
-  print("Response:");
-  print(response.body);
   return;
 }
 
 Future<void> testFunction() async {
   final response = await http
       .post(Uri.parse("https://eventrra.000webhostapp.com/getCities.php"));
-  print("Inside TestFunction");
   return;
-  // print("Citites:");
-  // for (int i = 0; i < cities.length; ++i) {
-  //   print(cities[i]["Name"] +
-  //       cities[i]["Location"] +
-  //       cities[i]["Pincode"] +
-  //       cities[i]["State"]);
-  // }
 }

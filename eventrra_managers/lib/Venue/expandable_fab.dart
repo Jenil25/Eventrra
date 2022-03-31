@@ -140,7 +140,7 @@ class _ExpandableFabState extends State<ExpandableFab>
 
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
-  _ExpandingActionButton({
+  const _ExpandingActionButton({
     Key? key,
     required this.directionInDegrees,
     required this.maxDistance,
@@ -194,7 +194,7 @@ class ActionButton extends StatelessWidget {
     return Material(
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
-      color: theme.accentColor,
+      color: theme.colorScheme.secondary,
       elevation: 4.0,
       child: IconTheme.merge(
         data: theme.accentIconTheme,

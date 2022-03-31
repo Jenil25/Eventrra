@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_for_elements_to_map_fromiterable, prefer_typing_uninitialized_variables, camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:collection';
-import 'package:eventrra_managers/main.dart';
 
 class Events extends StatefulWidget {
   const Events({Key? key}) : super(key: key);
@@ -36,13 +37,11 @@ class _EventsState extends State<Events> {
   }
 
   List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
     return kEvents[day] ?? [];
   }
 
   List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
-    test obj1 = new test();
+    test obj1 = test();
     final days = obj1.daysInRange(start, end);
 
     return [
@@ -55,7 +54,7 @@ class _EventsState extends State<Events> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
@@ -90,7 +89,7 @@ class _EventsState extends State<Events> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Calendar"),
+          title: const Text("Calendar"),
         ),
         body: Column(
           children: [
@@ -105,37 +104,9 @@ class _EventsState extends State<Events> {
               rangeSelectionMode: _rangeSelectionMode,
               eventLoader: _getEventsForDay,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: CalendarStyle(
-                // Use `CalendarStyle` to customize the UI
+              calendarStyle: const CalendarStyle(
                 outsideDaysVisible: false,
               ),
-              // calendarBuilders : CalendarBuilders(
-              //   selectedBuilder: (context,date,events) => Container(
-              //     margin : const EdgeInsets.all(5.0),
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //       color: Colors.red,
-              //       borderRadius: BorderRadius.circular(12.0),
-              //     ),
-              //     child : Text(date.day.toString(),
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //       ),),
-              //   ),
-              //   todayBuilder: (context,date,events) => Container(
-              //     margin : const EdgeInsets.all(5.0),
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //       color: Colors.purple,
-              //       borderRadius: BorderRadius.circular(100.0),
-              //     ),
-              //     child : Text(date.day.toString(),
-              //     style: TextStyle(
-              //       color: Colors.white,
-              //     ),),
-              //
-              //   ),
-              // ),
               onDaySelected: _onDaySelected,
               onRangeSelected: _onRangeSelected,
               onFormatChanged: (format) {
@@ -167,7 +138,7 @@ class _EventsState extends State<Events> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
-                          onTap: () => print('${value[index]}'),
+                          onTap: () => {},
                           title: Text('${value[index]}'),
                         ),
                       );
@@ -221,8 +192,6 @@ class test {
     )
       ..addAll(_kEventSource1)
       ..addAll(_kEventSource2);
-
-    /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
   }
 
   List<DateTime> daysInRange(DateTime first, DateTime last) {

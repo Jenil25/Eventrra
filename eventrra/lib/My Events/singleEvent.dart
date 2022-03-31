@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_init_to_null
+
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
 import 'package:timelines/timelines.dart';
@@ -8,7 +10,8 @@ class SingleEvent extends StatefulWidget {
   const SingleEvent({Key? key, required this.event}) : super(key: key);
 
   @override
-  State<SingleEvent> createState() => _SingleEventState(this.event);
+  // ignore: no_logic_in_create_state
+  State<SingleEvent> createState() => _SingleEventState(event);
 }
 
 class _SingleEventState extends State<SingleEvent> {
@@ -115,8 +118,6 @@ class _SingleEventState extends State<SingleEvent> {
     DateTime tDate = DateFormat("dd-MM-yyyy").parse(event['TDate']);
     DateTime fDate = DateFormat("dd-MM-yyyy").parse(event['FDate']);
     int daysLeft = (fDate.difference(current).inHours / 24).round();
-    print("DaysLeft:");
-    print(daysLeft);
     if (current.isAfter(tDate) && event["VerifiedV"] != "-1") {
       status[5] = "1";
       msg[5] = "Event Completed";
@@ -130,111 +131,8 @@ class _SingleEventState extends State<SingleEvent> {
         isDeletable = false;
       }
     }
-
-    // return Scaffold(
-    //   appBar: AppBar(),
-    //   body: Column(
-    //     children: [
-    //       Text("City : " + city['Name']),
-    //       Text("From Date : " + event['FDate']),
-    //       Text("To Date : " + event['TDate']),
-    //       Text("User Details "),
-    //       Text("Username : " + event['Name']),
-    //       Text("Contact : " + event['Contact']),
-    //       Text("Venue Details "),
-    //       Text("Venue Name : " + venue['Name']),
-    //       Text("Venue Owner : " + venue['OwnerName']),
-    //       Text("Venue Email : " + venue['Email']),
-    //       Text("Venue Capacity : " + venue['Capacity']),
-    //       Text("Venue Contact : " + venue['Contact']),
-    //       Text("Venue Address : " +
-    //           vaddress['Line1'] +
-    //           " , " +
-    //           vaddress['Line2'] +
-    //           " , " +
-    //           vaddress['Landmark']),
-    //       caterer != null
-    //           ? Column(
-    //               children: [
-    //                 Text("Caterer Details "),
-    //                 Text("Caterer Name : " + caterer['Name']),
-    //                 Text("Caterer Owner : " + caterer['OwnerName']),
-    //                 Text("Caterer Email : " + caterer['Email']),
-    //                 Text("Caterer Contact : " + caterer['Contact']),
-    //                 Text("Caterer Address : " +
-    //                     caddress['Line1'] +
-    //                     " , " +
-    //                     caddress['Line2'] +
-    //                     " , " +
-    //                     caddress['Landmark']),
-    //               ],
-    //             )
-    //           : Container(),
-    //         Container(
-    //         height: 250,
-    //         alignment: Alignment.topCenter,
-    //         child: Timeline.tileBuilder(
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.zero,
-    //           theme: TimelineThemeData(
-    //             direction: Axis.horizontal,
-    //             connectorTheme: ConnectorThemeData(space: 8.0, thickness: 2.0),
-    //           ),
-    //           builder: TimelineTileBuilder.connected(
-    //             connectionDirection: ConnectionDirection.before,
-    //             itemCount: 6,
-    //             itemExtentBuilder: (_, __) {
-    //               return (MediaQuery.of(context).size.width - 120) / 4.0;
-    //             },
-    //             oppositeContentsBuilder: (context, index) {
-    //               return Container();
-    //             },
-    //             contentsBuilder: (context, index) {
-    //               return Padding(
-    //                 padding: const EdgeInsets.only(top: 15.0),
-    //                 child: Text(msg[index]),
-    //               );
-    //             },
-    //             indicatorBuilder: (_, index) {
-    //                 if(status[index]=="1") {
-    //                   return DotIndicator(
-    //                     size: 20.0,
-    //                     color: Colors.green,
-    //                   );
-    //                 }
-    //                 else if(status[index]=="-1"){
-    //                   return DotIndicator(
-    //                     size: 20.0,
-    //                     color: Colors.red,
-    //                   );
-    //                 }
-    //                 else {
-    //                   return OutlinedDotIndicator(
-    //                     borderWidth: 4.0,
-    //                     color: Colors.green,
-    //                   );
-    //                 }
-    //             },
-    //             connectorBuilder: (_, index, type) {
-    //               if (index > 0) {
-    //                 return SolidLineConnector(
-    //                   color: Colors.green,
-    //                 );
-    //               } else {
-    //                 return null;
-    //               }
-    //             },
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
-
     bool isLoading = false;
     bool isClicked = false;
-    bool isCorrect = false;
-
     AlertDialog deleteEventAlert = AlertDialog(
       title: const Text(
         "Are you sure you want to delete this event?",
@@ -242,7 +140,7 @@ class _SingleEventState extends State<SingleEvent> {
       ),
       content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
-        return Container(
+        return SizedBox(
           height: 50,
           child: Column(
             children: [
@@ -280,7 +178,6 @@ class _SingleEventState extends State<SingleEvent> {
                                       setModalState(() {
                                         isLoading = false;
                                         isClicked = true;
-                                        isCorrect = true;
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
@@ -320,13 +217,12 @@ class _SingleEventState extends State<SingleEvent> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Colors.white,
-                    ) //TextStyle
-                    ), //Text
+                    )),
                 background: Stack(children: [
                   Center(
                     child: venue["image"] != ""
                         ? Image.network(
-                            "https://eventrra.000webhostapp.com/images/venue/${venue["image"]}",
+                            "https://eventrra.000webhostapp.com/gallery/venue/${venue["image"]}",
                             fit: BoxFit.cover,
                           )
                         : Image.asset("assets/images/noimageavailableicon.jpg"),
@@ -346,9 +242,9 @@ class _SingleEventState extends State<SingleEvent> {
                         ),
                       ),
                     ),
-                  ), //Images.network
+                  ),
                 ]),
-              ), //FlexibleSpaceBar
+              ),
               expandedHeight: 262,
               backgroundColor: Colors.blueAccent,
               leading: IconButton(
@@ -356,7 +252,7 @@ class _SingleEventState extends State<SingleEvent> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-              ), //<Widget>[]
+              ),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -381,10 +277,7 @@ class _SingleEventState extends State<SingleEvent> {
                       ),
                       event['CaId'] != "0"
                           ? catererDetails(caterer, caddress)
-                          : SizedBox(),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
+                          : const SizedBox(),
                       Container(
                         height: 200,
                         alignment: Alignment.topCenter,
@@ -393,8 +286,8 @@ class _SingleEventState extends State<SingleEvent> {
                           padding: EdgeInsets.zero,
                           theme: TimelineThemeData(
                             direction: Axis.horizontal,
-                            connectorTheme:
-                                ConnectorThemeData(space: 8.0, thickness: 2.0),
+                            connectorTheme: const ConnectorThemeData(
+                                space: 8.0, thickness: 2.0),
                           ),
                           builder: TimelineTileBuilder.connected(
                             connectionDirection: ConnectionDirection.before,
@@ -414,17 +307,17 @@ class _SingleEventState extends State<SingleEvent> {
                             },
                             indicatorBuilder: (_, index) {
                               if (status[index] == "1") {
-                                return DotIndicator(
+                                return const DotIndicator(
                                   size: 20.0,
                                   color: Colors.green,
                                 );
                               } else if (status[index] == "-1") {
-                                return DotIndicator(
+                                return const DotIndicator(
                                   size: 20.0,
                                   color: Colors.red,
                                 );
                               } else {
-                                return OutlinedDotIndicator(
+                                return const OutlinedDotIndicator(
                                   borderWidth: 4.0,
                                   color: Colors.green,
                                 );
@@ -432,7 +325,7 @@ class _SingleEventState extends State<SingleEvent> {
                             },
                             connectorBuilder: (_, index, type) {
                               if (index > 0) {
-                                return SolidLineConnector(
+                                return const SolidLineConnector(
                                   color: Colors.green,
                                 );
                               } else {
@@ -465,12 +358,12 @@ class _SingleEventState extends State<SingleEvent> {
                                 ),
                               ),
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                     ],
                   ),
                 ),
               ),
-            ), //SliverAppBar
+            ),
           ],
         ),
       ),
@@ -480,8 +373,6 @@ class _SingleEventState extends State<SingleEvent> {
 
 Widget eventDetails(
     var event, String eventtype, String city, String fdate, String tdate) {
-  print("Here Event[caid]=");
-  print(event["CaId"]);
   return SizedBox(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -649,7 +540,7 @@ Widget venueDetails(var venue, var address) {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(venue['OwnerName']), // owner name
+                    Text(venue['OwnerName']),
                   ],
                 ),
                 const SizedBox(
@@ -769,7 +660,7 @@ Widget catererDetails(var caterer, var address) {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(caterer["OwnerName"]), // owner name
+                    Text(caterer["OwnerName"]),
                   ],
                 ),
                 const SizedBox(

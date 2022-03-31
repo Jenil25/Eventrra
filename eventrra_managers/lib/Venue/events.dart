@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_for_elements_to_map_fromiterable
+
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:collection';
-import 'package:eventrra_managers/main.dart';
 
 class Events extends StatefulWidget {
   const Events({Key? key}) : super(key: key);
@@ -36,12 +37,10 @@ class _EventsState extends State<Events> {
   }
 
   List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
     return kEvents[day] ?? [];
   }
 
   List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
     test obj1 = new test();
     final days = obj1.daysInRange(start, end);
 
@@ -55,7 +54,7 @@ class _EventsState extends State<Events> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
@@ -90,7 +89,7 @@ class _EventsState extends State<Events> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Calendar"),
+          title: const Text("Calendar"),
         ),
         body: Column(
           children: [
@@ -104,15 +103,13 @@ class _EventsState extends State<Events> {
               calendarFormat: _calendarFormat,
               rangeSelectionMode: _rangeSelectionMode,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: CalendarStyle(
-                // Use `CalendarStyle` to customize the UI
+              calendarStyle: const CalendarStyle(
                 outsideDaysVisible: false,
               ),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, date, events) {
                   var c = _getEventsForDay(date);
                   if (c.length != 0) {
-                    // final event = events as Event;
                     if (date.day < DateTime.now().day)
                       colour = Colors.green[500];
                     else
@@ -201,7 +198,6 @@ class _EventsState extends State<Events> {
   }
 }
 
-/// Example event class.
 class Event {
   final String title;
 
@@ -210,44 +206,6 @@ class Event {
   @override
   String toString() => title;
 }
-
-/// Example events.
-///
-/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
-///
-//
-// final kToday = DateTime.now();
-// final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-// final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
-//
-//
-// final kEvents = LinkedHashMap<DateTime, List<Event>>(
-//   equals: isSameDay,
-//   hashCode: getHashCode,
-// )..addAll(_kEventSource1)..addAll(_kEventSource2);
-//
-// final _kEventSource1 = Map.fromIterable(occupiedDates,
-//     key: (item) => DateTime.utc(item['FDate'].year, item['FDate'].month, item['FDate'].day),
-//     value: (item) => List.generate(1, (index) =>Event('Busy from date ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} due to ${item['Reason']} .'))
-// );
-//
-// final _kEventSource2 = Map.fromIterable(calenderDates,
-//     key: (item) => DateTime.utc(item['FDate'].year, item['FDate'].month, item['FDate'].day),
-//     value: (item) => List.generate(1, (index) =>Event('${item['EventType']} Event scheduled by ${item['Name']} from ${item['FDate'].day}/${item['FDate'].month}/${item['FDate'].year} - ${item['TDate'].day}/${item['TDate'].month}/${item['TDate'].year} .'))
-// );
-//
-// int getHashCode(DateTime key) {
-//   return key.day * 1000000 + key.month * 10000 + key.year;
-// }
-//
-// /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
-// List<DateTime> daysInRange(DateTime first, DateTime last) {
-//   final dayCount = last.difference(first).inDays + 1;
-//   return List.generate(
-//     dayCount,
-//         (index) => DateTime.utc(first.year, first.month, first.day + index),
-//   );
-// }
 
 var kEvents;
 var _kEventSource1, _kEventSource2;
@@ -283,8 +241,6 @@ class test {
     )
       ..addAll(_kEventSource1)
       ..addAll(_kEventSource2);
-
-    /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
   }
 
   List<DateTime> daysInRange(DateTime first, DateTime last) {

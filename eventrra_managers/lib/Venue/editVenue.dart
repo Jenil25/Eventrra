@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state
+
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/data.dart';
 import 'package:eventrra_managers/main.dart';
@@ -29,12 +31,9 @@ class _EditVenueState extends State<EditVenue> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    Color color = const Color(0xFF1B0250);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile "),
+        title: const Text("Edit Profile "),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -181,14 +180,7 @@ class VenueEdit extends StatefulWidget {
 
   @override
   _VenueEditState createState() => _VenueEditState(
-      this.line1,
-      this.line2,
-      this.landmark,
-      this.venuename,
-      this.email,
-      this.contact,
-      this.capacity,
-      this.ownername);
+      line1, line2, landmark, venuename, email, contact, capacity, ownername);
 }
 
 class _VenueEditState extends State<VenueEdit> {
@@ -222,7 +214,7 @@ class _VenueEditState extends State<VenueEdit> {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          return EditVenue();
+          return const EditVenue();
         }
 
         return Scaffold(

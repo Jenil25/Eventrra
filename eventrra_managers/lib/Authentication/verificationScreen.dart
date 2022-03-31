@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state
+
 import 'package:eventrra_managers/Caterers/registerCaterers.dart';
 import 'package:eventrra_managers/Venue/registerVenue.dart';
 import 'package:firebase_auth/firebase_auth.dart';

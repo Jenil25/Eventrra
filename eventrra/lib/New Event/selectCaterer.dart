@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state
+
 import 'package:eventrra/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/main.dart';
@@ -38,6 +40,24 @@ class _SelectCatererState extends State<SelectCaterer> {
     TextEditingController namecontroller = TextEditingController();
     TextEditingController contactcontroller = TextEditingController();
 
+    String error = "Please Enter Valid Details!";
+    AlertDialog invalidValuesAlert = AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const <Widget>[
+          Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+          Text(
+            " Error",
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      content: Text(error),
+    );
+
     AlertDialog alert = AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -48,44 +68,56 @@ class _SelectCatererState extends State<SelectCaterer> {
           ),
         ],
       ),
-      content: Container(
+      content: SizedBox(
         height: 200,
         child: Column(
           children: [
             TextFormField(
                 controller: namecontroller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   prefixIcon: Icon(
                     Icons.person,
                   ),
                   labelText: "Name",
                 )),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
                 controller: contactcontroller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   prefixIcon: Icon(
                     Icons.call,
                   ),
                   labelText: "Contact",
                 )),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextButton(
                 onPressed: () {
                   inputUserName = namecontroller.text;
                   inputContact = contactcontroller.text;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FinalPage(),
-                    ),
-                  );
+                  if (namecontroller.text == "" ||
+                      contactcontroller.text == "" ||
+                      contactcontroller.text.length != 10 ||
+                      namecontroller.text.length < 2) {
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return invalidValuesAlert;
+                        });
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FinalPage(),
+                      ),
+                    );
+                  }
                 },
-                child: Text("Continue")),
+                child: const Text("Continue")),
           ],
         ),
       ),
@@ -98,15 +130,11 @@ class _SelectCatererState extends State<SelectCaterer> {
       body: Column(
         children: [
           FutureBuilder(
-            // Initialize FlutterFire
             future: getCatererForEvent(city['CId']),
             builder: (context, snapshot) {
-              // Check for errors
               if (snapshot.hasError) {
                 return Error(title: 'Error From Select Caterer');
               }
-
-              // Once complete, show your application
               if (snapshot.connectionState == ConnectionState.done) {
                 return Expanded(
                   child: ListView.builder(
@@ -117,25 +145,22 @@ class _SelectCatererState extends State<SelectCaterer> {
                 );
               }
 
-              // Otherwise, show something whilst waiting for initialization to complete
               return const Center(child: CircularProgressIndicator());
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
-            child: ElevatedButton(
-              onPressed: () {
-                inputCaterer = null;
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alert;
-                    });
-              },
-              child: const Text("Continue Without Caterer"),
-            ),
+          ElevatedButton(
+            onPressed: () {
+              inputCaterer = null;
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  });
+            },
+            child: const Text("Continue Without Caterer"),
           )
         ],
       ),
@@ -148,11 +173,10 @@ Widget catererCard(BuildContext context, var caterer, var city, var fdate,
   return ExpansionTile(
     title: Text(
       caterer["Name"],
-      style: TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20),
     ),
     children: [
       SizedBox(
-        // height: 300,
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -295,7 +319,7 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.location_on,
                           color: Colors.grey,
                           size: 20,
@@ -305,7 +329,8 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           caterer["Landmark"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -314,7 +339,7 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.mail,
                           color: Colors.grey,
                           size: 20,
@@ -324,7 +349,8 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           caterer["Email"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -333,7 +359,7 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.phone,
                           color: Colors.grey,
                           size: 20,
@@ -343,7 +369,8 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           caterer["Contact"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -372,7 +399,7 @@ Widget catererCard1(var caterer, var city, var fdate, var tdate, var eventType,
                     height: 40,
                     width: 130,
                     color: Colors.blue,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "BOOK CATERER",
                         style: TextStyle(

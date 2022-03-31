@@ -3,11 +3,7 @@ import 'package:eventrra/Authentication/login.dart';
 import 'package:eventrra/data.dart';
 import 'package:eventrra/homePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:eventrra/Venue/venueHomePage.dart';
-import 'package:provider/src/provider.dart';
-import 'package:eventrra/main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -77,20 +73,22 @@ class CheckUser extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        userEmail = "";
+        currentUserEmail = "";
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginPage()));
+            MaterialPageRoute(builder: (context) => const LoginPage()));
       } else {
-        userEmail = user.email.toString();
+        currentUserEmail = user.email.toString();
         for (int i = 0; i < users.length; ++i) {
           if (users[i]['Email'].toString().toLowerCase() ==
               user.email.toString().toLowerCase()) {
             uid = users[i]['UId'];
+            currentUserName = users[i]["Name"];
+            currentUserUId = users[i]['UId'];
             break;
           }
         }
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomePage()));
+            MaterialPageRoute(builder: (context) => const HomePage()));
       }
     });
 

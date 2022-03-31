@@ -17,7 +17,7 @@ class _MyEventState extends State<MyEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text("My Events")),
       body: Center(
         child: FutureBuilder(
           future: getUserEvents(uid),
@@ -40,6 +40,7 @@ class _MyEventState extends State<MyEvent> {
 }
 
 Widget eventCard(BuildContext context, var event) {
+  // ignore: avoid_init_to_null
   var eventtype = null;
   for (int k = 0; k < eventTypes.length; ++k) {
     if (eventTypes[k]["EtId"] == event["EtId"]) {
@@ -50,7 +51,6 @@ Widget eventCard(BuildContext context, var event) {
 
   DateTime current = DateTime.now();
   DateTime tDate = DateFormat("dd-MM-yyyy").parse(event['TDate']);
-  DateTime fDate = DateFormat("dd-MM-yyyy").parse(event['FDate']);
   bool eventCompleted = false;
   if (current.isAfter(tDate)) {
     if (event["VerifiedV"] == "0") {
@@ -59,28 +59,10 @@ Widget eventCard(BuildContext context, var event) {
     eventCompleted = true;
   }
 
-  // DateTime todaysDate = DateTime.now();
-  // print(event['']);
-  // DateTime toDate = DateFormat("dd-MM-yyyy").format(event['ToDate']);
-  // DateFormat format = DateFormat("")
   return Padding(
     padding: const EdgeInsets.all(10.0),
     child: Column(
       children: [
-        // Container(
-        //   child: TextButton(
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         //final city, fdate, tdate, eventType;
-        //         MaterialPageRoute(
-        //           builder: (context) => SingleEvent(event: event),
-        //         ),
-        //       );
-        //     },
-        //     child: Text(eventtype['EventType']),
-        //   ),
-        // ),
         const SizedBox(
           height: 5,
         ),
@@ -88,7 +70,6 @@ Widget eventCard(BuildContext context, var event) {
           onTap: () {
             Navigator.push(
               context,
-              //final city, fdate, tdate, eventType;
               MaterialPageRoute(
                 builder: (context) => SingleEvent(event: event),
               ),

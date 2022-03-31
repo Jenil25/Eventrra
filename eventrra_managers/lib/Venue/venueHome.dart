@@ -192,9 +192,9 @@ class _VenueHomeState extends State<VenueHome> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  //final city, fdate, tdate, eventType;
                                   MaterialPageRoute(
-                                    builder: (context) => RequestedEvents(),
+                                    builder: (context) =>
+                                        const RequestedEvents(),
                                   ),
                                 );
                               },
@@ -260,7 +260,7 @@ class _VenueHomeState extends State<VenueHome> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            CheckAvailability()));
+                                            const CheckAvailability()));
                               },
                             ),
                             const SizedBox(
@@ -297,17 +297,15 @@ class _VenueHomeState extends State<VenueHome> {
                                     ),
                                     Expanded(
                                         flex: 2,
-                                        child: Container(
-                                          child: Center(
-                                              child: Text(
-                                            "Events",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: color,
-                                            ),
-                                          )),
-                                        )),
+                                        child: Center(
+                                            child: Text(
+                                          "Events",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: color,
+                                          ),
+                                        ))),
                                     const SizedBox(
                                       height: 10,
                                     )
@@ -319,7 +317,7 @@ class _VenueHomeState extends State<VenueHome> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            LoadingCalendar()));
+                                            const LoadingCalendar()));
                               },
                             ),
                           ],
@@ -372,17 +370,15 @@ class _VenueHomeState extends State<VenueHome> {
                                     ),
                                     Expanded(
                                         flex: 2,
-                                        child: Container(
-                                          child: Center(
-                                              child: Text(
-                                            "My Venue",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: color,
-                                            ),
-                                          )),
-                                        )),
+                                        child: Center(
+                                            child: Text(
+                                          "My Venue",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: color,
+                                          ),
+                                        ))),
                                     const SizedBox(
                                       height: 10,
                                     )

@@ -1,45 +1,20 @@
-import 'dart:convert';
-
 import 'package:eventrra/My%20Events/myevent.dart';
-import 'package:eventrra/profile.dart';
+import 'package:eventrra/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'Authentication/login.dart';
 import 'New Event/newevent.dart';
-import 'drawer.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // var carousal_images;
   List cardList = [];
-  // void func(){
-  //   // for(int i=0;i < 4;++i){
-  //   //   cardList.add(const Image(
-  //   //     image: AssetImage("assets/images/event.jpg"),
-  //   //     fit: BoxFit.fitWidth,
-  //   //   ),);
-  //   // }
-  // }
-
-  // void CarousalImages() async {
-  //   final response = await http.post(
-  //     "https://shoperaweb.com/offer_images/carousal/getImages.php",
-  //   );
-  //   carousal_images = jsonDecode(response.body);
-  //   cardList.clear();
-  //   for (int i = 0; i < carousal_images.length; ++i) {
-  //     cardList.add(Image.network(
-  //         "https://shoperaweb.com/offer_images/carousal/${carousal_images[i]["ci_name"]}",
-  //         fit: BoxFit.cover));
-  //   }
-  //   print(cardList);
-  // }
-
   @override
   Widget build(BuildContext context) {
     cardList.clear();
@@ -71,35 +46,28 @@ class _HomePageState extends State<HomePage> {
     var width = MediaQuery.of(context).size.width;
     final auth = FirebaseAuth.instance;
     return Scaffold(
-      // drawer: NavDrawer(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Profile()));
-              },
-              icon: const Icon(Icons.person)),
-          IconButton(
-              onPressed: () {
                 auth.signOut();
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
               icon: const Icon(Icons.logout)),
         ],
-        title: Text("Eventrra"),
-        // automaticallyImplyLeading: false,
+        title: const Text("Eventrra"),
         backgroundColor: Colors.purple,
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Container(
-            //   child: Text("Home Page"),
-            // ),
+            const SizedBox(
+              height: 20,
+            ),
+            profile(currentUserName, currentUserEmail),
             const SizedBox(
               height: 20,
             ),
@@ -131,21 +99,14 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 40,
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //
-            //   ],
-            // ),
             _makeButton(
               s1: "MY",
               s2: "EVENTS",
               onPressed: () {
                 Navigator.push(
                   context,
-                  //final city, fdate, tdate, eventType;
                   MaterialPageRoute(
-                    builder: (context) => MyEvent(),
+                    builder: (context) => const MyEvent(),
                   ),
                 );
               },
@@ -154,7 +115,6 @@ class _HomePageState extends State<HomePage> {
                 "assets/images/MyEvents.png",
                 fit: BoxFit.fitWidth,
               ),
-              // image: Image.asset("assets"),
             ),
             const SizedBox(
               height: 20,
@@ -165,9 +125,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  //final city, fdate, tdate, eventType;
                   MaterialPageRoute(
-                    builder: (context) => NewEvent(),
+                    builder: (context) => const NewEvent(),
                   ),
                 );
               },
@@ -177,69 +136,6 @@ class _HomePageState extends State<HomePage> {
                 fit: BoxFit.fitHeight,
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.all(15),
-            //   // width: width / 2.5,
-            //   height: height / 7,
-            //   decoration: const BoxDecoration(
-            //       color: Colors.purple,
-            //       borderRadius: BorderRadius.all(Radius.circular(20))),
-            //   // color: Colors.purple,
-            //   child: Center(
-            //     child: ElevatedButton(
-            //       style: ElevatedButton.styleFrom(
-            //         // fixedSize: ,
-            //         primary: Colors.purple,
-            //         shadowColor: Colors.purple,
-            //       ),
-            //       child: const Text(
-            //         "My Events",
-            //         style: TextStyle(color: Colors.yellow, fontSize: 40),
-            //       ),
-            //       onPressed: () {
-            //         Navigator.push(
-            //           context,
-            //           //final city, fdate, tdate, eventType;
-            //           MaterialPageRoute(
-            //             builder: (context) => MyEvent(),
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
-            // // const SizedBox(
-            // //   height: 19,
-            // // ),
-            // Container(
-            //   margin: EdgeInsets.all(15),
-            //   // width: width / 2.5,
-            //   height: height / 7,
-            //   decoration: const BoxDecoration(
-            //       color: Colors.purple,
-            //       borderRadius: BorderRadius.all(Radius.circular(20))),
-            //   // color: Colors.purple,
-            //   child: Center(
-            //     child: ElevatedButton(
-            //       style: ElevatedButton.styleFrom(
-            //         // fixedSize: ,
-            //         primary: Colors.purple,
-            //         shadowColor: Colors.purple,
-            //       ),
-            //       onPressed: () {
-            //         Navigator.push(context,
-            //             MaterialPageRoute(builder: (context) => NewEvent()));
-            //       },
-            //       child: Text(
-            //         "New Event",
-            //         style: TextStyle(color: Colors.yellow, fontSize: 40),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 19,
-            // ),
           ],
         ),
       ),
@@ -301,18 +197,18 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     s1,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
                     s2,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 22,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -322,6 +218,67 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget profile(String username, String useremail) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: 120,
+      child: Card(
+        color: Colors.white60,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              Container(
+                height: 70,
+                width: 70,
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade300,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    username[0],
+                    style: const TextStyle(fontSize: 50, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    username,
+                    style: const TextStyle(
+                        fontSize: 28, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(Icons.email),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          useremail,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

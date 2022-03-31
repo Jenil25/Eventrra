@@ -59,7 +59,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
               try {
                 await auth.sendPasswordResetEmail(email: email);
                 setState(() {
-                  message = "Password reset mail has been sent to ${email}.";
+                  message = "Password reset mail has been sent to $email.";
                   AlertDialog alert = AlertDialog(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

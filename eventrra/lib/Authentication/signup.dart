@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eventrra/Authentication/authServices.dart';
@@ -6,6 +7,8 @@ import 'verificationScreen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -28,10 +31,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  @override
   Widget _buildName() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         cursorColor: Colors.black,
         controller: textController,
@@ -58,13 +60,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildEmail() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         cursorColor: Colors.black,
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
-//        onSaved: (value) => email=value,
-//        validator: EmailValidator.validate,
         onChanged: (value) {
           setState(() {
             email = value.trim();
@@ -87,14 +87,12 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildPassword() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         cursorColor: Colors.black,
         controller: passwordController,
         keyboardType: TextInputType.text,
         obscureText: showPassword,
-//        onSaved: (value) => password = value,
-//        validator: PasswordValidator.validate,
         onChanged: (value) {
           setState(() {
             password = value.trim();
@@ -123,11 +121,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                 )
               : IconButton(
-                  icon: Container(
-                    child: const Icon(
-                      Icons.visibility,
-                      color: Color(0xFF1B0250),
-                    ),
+                  icon: const Icon(
+                    Icons.visibility,
+                    color: Color(0xFF1B0250),
                   ),
                   onPressed: () {
                     setState(() {
@@ -142,13 +138,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildConfirmPassword() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         controller: confirmPasswordController,
         keyboardType: TextInputType.text,
         obscureText: showConfirmPassword,
-//        onSaved: (value) => password = value,
-//        validator: PasswordValidator.validate,
         onChanged: (value) {
           setState(() {
             confirmPassword = value;
@@ -177,11 +171,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                 )
               : IconButton(
-                  icon: Container(
-                    child: const Icon(
-                      Icons.visibility,
-                      color: Color(0xFF1B0250),
-                    ),
+                  icon: const Icon(
+                    Icons.visibility,
+                    color: Color(0xFF1B0250),
                   ),
                   onPressed: () {
                     setState(() {
@@ -195,32 +187,27 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildSignUpBtn() {
-    return Container(
+    return SizedBox(
       height: 1.4 * (MediaQuery.of(context).size.height / 25),
       width: 6 * (MediaQuery.of(context).size.width / 15),
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () async {
           try {
-            // setState(() {
-            //   //isProgressTrue = true;
-            // });
-            print("${email},${password}");
             passwordValidate = PasswordValidator.validate(password);
             nameValidate = NameValidator.validate(name);
-            print("GOT HERE");
             if ((passwordValidate == "" || passwordValidate == null) &&
                 (nameValidate == "" || nameValidate == null)) {
               setState(() {
                 isProgressTrue = true;
               });
-              print("In if");
               if (password == confirmPassword) {
                 final newUser = await auth.createUserWithEmailAndPassword(
                     email: email, password: password);
                 if (newUser != null) {
-//              FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => VerifyScreen()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const VerifyScreen()));
                   setState(() {
                     isProgressTrue = false;
                   });
@@ -243,17 +230,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     ],
                   ),
                   content: Text(error),
-//                  actions: [
-//                    FlatButton(
-//                      child: Text("OK"),
-//                      onPressed: () {
-//                        setState(() {
-//                          Navigator.of(context).push(MaterialPageRoute(
-//                              builder: (context) => SignUpPage()));
-//                        });
-//                      },
-//                    )
-//                  ],
                 );
                 showDialog(
                   context: context,
@@ -286,17 +262,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 content: Text(error),
-//                actions: [
-//                  FlatButton(
-//                    child: Text("OK"),
-//                    onPressed: () {
-//                      setState(() {
-//                        Navigator.of(context).push(MaterialPageRoute(
-//                            builder: (context) => SignUpPage()));
-//                      });
-//                    },
-//                  )
-//                ],
               );
               showDialog(
                 context: context,
@@ -328,17 +293,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 content: Text(error),
-//                actions: [
-//                  FlatButton(
-//                    child: Text("OK"),
-//                    onPressed: () {
-//                      setState(() {
-//                        Navigator.of(context).push(MaterialPageRoute(
-//                            builder: (context) => SignUpPage()));
-//                      });
-//                    },
-//                  )
-//                ],
               );
               showDialog(
                 context: context,
@@ -353,7 +307,6 @@ class _SignUpPageState extends State<SignUpPage> {
               setState(() {
                 isProgressTrue = true;
               });
-              print("In else");
               AlertDialog alert = AlertDialog(
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -369,7 +322,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ],
                 ),
-                content: Text("Enter Values"),
+                content: const Text("Enter Values"),
               );
               showDialog(
                 context: context,
@@ -382,9 +335,7 @@ class _SignUpPageState extends State<SignUpPage> {
               });
             }
           } catch (e) {
-            print(e);
             error = e.toString();
-            // error = e.message;
             setState(() {
               AlertDialog alert = AlertDialog(
                 title: Row(
@@ -402,16 +353,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 content: Text(error),
-//                actions: [
-//                  FlatButton(
-//                    child: Text("OK"),
-//                    onPressed: () {
-//                      setState(() {
-//                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUpPage()));
-//                      });
-//                    },
-//                  )
-//                ],
               );
               showDialog(
                 context: context,
@@ -423,9 +364,6 @@ class _SignUpPageState extends State<SignUpPage> {
             });
           }
         },
-        elevation: 5.0,
-        color: Color(0xFF1B0250),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         child: Text(
           "Register",
           style: TextStyle(
@@ -441,60 +379,46 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildSignUp() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Container(
-        // height: MediaQuery.of(context).size.height/2.5,
-        // width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 0.65 * MediaQuery.of(context).size.width,
-                  child: const Image(
-                    image: AssetImage("assets/images/auth_header.jpeg"),
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildName(),
-                    _buildEmail(),
-                    _buildPassword(),
-                    _buildConfirmPassword(),
-                    // _buildName(),
-                    // _buildEmail(),
-                    // _buildPassword(),
-                    // _buildConfirmPassword(),
-                  ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: 0.65 * MediaQuery.of(context).size.width,
+                child: const Image(
+                  image: AssetImage("assets/images/auth_header.jpeg"),
+                  fit: BoxFit.fitWidth,
                 ),
               ),
+            ],
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildName(),
+                _buildEmail(),
+                _buildPassword(),
+                _buildConfirmPassword(),
+              ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            _buildSignUpBtn(),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          _buildSignUpBtn(),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double contWidth = size.width * 0.90;
-    double contHeight = size.height * 0.90;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFF1B0250),
-        // resizeToAvoidBottomPadding: false,
+        backgroundColor: const Color(0xFF1B0250),
         body: ModalProgressHUD(
           inAsyncCall: isProgressTrue,
           child: Container(
@@ -510,7 +434,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,

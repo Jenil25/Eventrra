@@ -1,4 +1,5 @@
-import 'package:dropdown_below/dropdown_below.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state
+
 import 'package:eventrra_managers/data.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra_managers/Venue/venueHome.dart';
@@ -335,7 +336,6 @@ class _RegisterVenueState extends State<RegisterVenue> {
                     venueNameController.text,
                     venueCapacityController.text);
                 if (input == "valid") {
-                  print('Valid Input');
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -421,18 +421,18 @@ class RequestSubmitted extends StatefulWidget {
 
   @override
   _RequestSubmittedState createState() => _RequestSubmittedState(
-      this.line1,
-      this.line2,
-      this.landmark,
-      this.pincode,
-      this.cityName,
-      this.stateName,
-      this.name,
-      this.capacity,
-      this.email,
-      this.contact,
-      this.ownername,
-      this.venueEventTypes);
+      line1,
+      line2,
+      landmark,
+      pincode,
+      cityName,
+      stateName,
+      name,
+      capacity,
+      email,
+      contact,
+      ownername,
+      venueEventTypes);
 }
 
 class _RequestSubmittedState extends State<RequestSubmitted> {
@@ -472,13 +472,11 @@ class _RequestSubmittedState extends State<RequestSubmitted> {
           venueEventTypes),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print("Snapshot errors:");
-          print(snapshot.error);
           return MaterialApp(
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: Error(title: 'Error From Request Submitted'),
+            home: const Error(title: 'Error From Request Submitted'),
           );
         }
 

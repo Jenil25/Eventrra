@@ -1,11 +1,11 @@
 import 'package:eventrra/My%20Events/myevent.dart';
 import 'package:eventrra/data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:eventrra/main.dart';
 import 'package:intl/intl.dart';
 
 class FinalPage extends StatefulWidget {
+  const FinalPage({Key? key}) : super(key: key);
+
   @override
   _FinalPageState createState() => _FinalPageState();
 }
@@ -13,11 +13,6 @@ class FinalPage extends StatefulWidget {
 class _FinalPageState extends State<FinalPage> {
   @override
   Widget build(BuildContext context) {
-    @override
-    void initState() {
-      super.initState();
-    }
-
     bool isLoading = false;
     bool isClicked = false;
     bool isCorrect = false;
@@ -145,7 +140,6 @@ class _FinalPageState extends State<FinalPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        //final city, fdate, tdate, eventType;
                         MaterialPageRoute(
                           builder: (context) => const MyEvent(),
                         ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:eventrra_managers/main.dart';
 
 class LoadingCalendar extends StatefulWidget {
+  const LoadingCalendar({Key? key}) : super(key: key);
+
   @override
   _LoadingCalendarState createState() => _LoadingCalendarState();
 }
@@ -19,14 +21,16 @@ class _LoadingCalendarState extends State<LoadingCalendar> {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          test obj = new test();
+          test obj = test();
           obj.testfunction();
-
-          return Events();
+          return const Events();
         }
 
         return Scaffold(
-          body: Center(
+          appBar: AppBar(
+            title: const Text("Calendar"),
+          ),
+          body: const Center(
             child: CircularProgressIndicator(),
           ),
         );

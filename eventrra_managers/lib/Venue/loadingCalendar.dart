@@ -21,14 +21,17 @@ class _LoadingCalendarState extends State<LoadingCalendar> {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          test obj = new test();
+          test obj = test();
           obj.testfunction();
 
-          return Events();
+          return const Events();
         }
 
         return Scaffold(
-          body: Center(
+          appBar: AppBar(
+            title: const Text("Calendar"),
+          ),
+          body: const Center(
             child: CircularProgressIndicator(),
           ),
         );

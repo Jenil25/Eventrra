@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-// import 'frostedglass.dart';
 
 class ResetPassPage extends StatefulWidget {
+  const ResetPassPage({Key? key}) : super(key: key);
+
   @override
   _ResetPassPageState createState() => _ResetPassPageState();
 }
@@ -22,15 +21,13 @@ class _ResetPassPageState extends State<ResetPassPage> {
       child: TextFormField(
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
-//        onSaved: (value) => email = value,
-//        validator: EmailValidator.validate,
         onChanged: (value) {
           setState(() {
             email = value.trim();
           });
         },
         decoration: const InputDecoration(
-            prefixIcon: const Icon(
+            prefixIcon: Icon(
               Icons.email,
               color: Color(0xFF1B0250),
             ),
@@ -43,10 +40,16 @@ class _ResetPassPageState extends State<ResetPassPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(
+        SizedBox(
           height: 1.4 * (MediaQuery.of(context).size.height / 25),
           width: 8 * (MediaQuery.of(context).size.width / 15),
-          child: RaisedButton(
+          child: TextButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(5.0),
+                backgroundColor:
+                    MaterialStateProperty.all(const Color(0xFF1B0250)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)))),
             onPressed: () async {
               setState(() {
                 isProgressTrue = true;
@@ -54,12 +57,12 @@ class _ResetPassPageState extends State<ResetPassPage> {
               try {
                 await auth.sendPasswordResetEmail(email: email);
                 setState(() {
-                  error = "Password reset mail has been sent to ${email}.";
+                  error = "Password reset mail has been sent to $email.";
                   AlertDialog alert = AlertDialog(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
+                      children: const <Widget>[
+                        Text(
                           " Sent",
                           style: TextStyle(
                               color: Colors.green, fontWeight: FontWeight.bold),
@@ -76,21 +79,19 @@ class _ResetPassPageState extends State<ResetPassPage> {
                   );
                   isProgressTrue = false;
                 });
-//              context.read<AuthenticationService>().sendPasswordResetEmail(emailController.text);
                 Navigator.of(context).pop();
               } catch (e) {
-                print(e);
                 error = e.toString();
                 setState(() {
                   AlertDialog alert = AlertDialog(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        const Icon(
+                      children: const <Widget>[
+                        Icon(
                           Icons.error,
                           color: Colors.red,
                         ),
-                        const Text(
+                        Text(
                           " Error",
                           style: TextStyle(
                               color: Colors.red, fontWeight: FontWeight.bold),
@@ -98,16 +99,6 @@ class _ResetPassPageState extends State<ResetPassPage> {
                       ],
                     ),
                     content: Text(error),
-//                    actions: [
-//                      FlatButton(
-//                        child: Text("OK"),
-//                        onPressed: () {
-//                          setState(() {
-//                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
-//                          });
-//                        },
-//                      )
-//                    ],
                   );
                   showDialog(
                     context: context,
@@ -121,10 +112,6 @@ class _ResetPassPageState extends State<ResetPassPage> {
                 });
               }
             },
-            elevation: 5.0,
-            color: const Color(0xFF1B0250),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             child: Text(
               "Send Request",
               style: TextStyle(
@@ -174,12 +161,9 @@ class _ResetPassPageState extends State<ResetPassPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double contWidth = size.width * 0.90;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFF1B0250),
-        // resizeToAvoidBottomPadding: false,
         body: ModalProgressHUD(
           inAsyncCall: isProgressTrue,
           child: Container(
@@ -205,22 +189,6 @@ class _ResetPassPageState extends State<ResetPassPage> {
                       ),
                     ),
                   ),
-                  // FrostedGlassBox(
-                  //   width: contWidth,
-                  //   height: contWidth,
-                  //   child: Center(
-                  //     child: Padding(
-                  //       padding: EdgeInsets.all(10.0),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.center,
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: <Widget>[
-                  //           _buildResetPass(),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

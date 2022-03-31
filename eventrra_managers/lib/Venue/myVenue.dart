@@ -21,7 +21,6 @@ class _MyVenueState extends State<MyVenue> {
 
   @override
   Widget build(BuildContext context) {
-    // DefaultCacheManager().removeFile("https://eventrra.000webhostapp.com/images/venue/${currentVenue['image']}");
     return Scaffold(
         appBar: AppBar(
           title: const Text("Your Profile"),
@@ -48,16 +47,31 @@ class _MyVenueState extends State<MyVenue> {
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.deepOrange.shade300),
                         child: Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://eventrra.000webhostapp.com/images/venue/${currentVenue['image']}"),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
+                          child: currentVenue['image'] == ""
+                              ? Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      currentVenue["OwnerName"][0],
+                                      style: const TextStyle(
+                                          fontSize: 50, color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          "https://eventrra.000webhostapp.com/gallery/venue/${currentVenue['image']}"),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                       const SizedBox(
@@ -162,19 +176,17 @@ class _MyVenueState extends State<MyVenue> {
                               ConnectionState.done) {
                             return Expanded(
                               child: ListView.builder(
-                                  // physics: NeverScrollableScrollPhysics(),
-                                  // shrinkWrap: true,
-                                  itemCount: venueeventtypes.length,
-                                  itemBuilder: (BuildContext context, int i) =>
-                                      Padding(
-                                        padding: const EdgeInsets.all(1.0),
-                                        child: Container(
-                                          // color: Colors.blue.shade300,
-                                          height: 50,
-                                          child: Text(
-                                              venueeventtypes[i]["EventType"]),
-                                        ),
-                                      )),
+                                itemCount: venueeventtypes.length,
+                                itemBuilder: (BuildContext context, int i) =>
+                                    Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: Container(
+                                    height: 50,
+                                    child:
+                                        Text(venueeventtypes[i]["EventType"]),
+                                  ),
+                                ),
+                              ),
                             );
                           }
                           return CircularProgressIndicator();
@@ -287,7 +299,6 @@ class _MyVenueState extends State<MyVenue> {
                                     ),
                                     Container(
                                       width: 100,
-                                      // color: Colors.blue.shade300,
                                       decoration: BoxDecoration(
                                         color: Colors.blue.shade300,
                                         borderRadius: BorderRadius.circular(10),

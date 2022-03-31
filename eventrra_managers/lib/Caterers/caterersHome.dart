@@ -25,7 +25,7 @@ class _CaterersHomeState extends State<CaterersHome> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Eventrra"),
+        title: const Text("Eventrra"),
         actions: [
           TextButton(
             onPressed: () {
@@ -194,7 +194,8 @@ class _CaterersHomeState extends State<CaterersHome> {
                                   context,
                                   //final city, fdate, tdate, eventType;
                                   MaterialPageRoute(
-                                    builder: (context) => RequestedEvents(),
+                                    builder: (context) =>
+                                        const RequestedEvents(),
                                   ),
                                 );
                               },
@@ -260,7 +261,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            CheckAvailability()));
+                                            const CheckAvailability()));
                               },
                             ),
                             const SizedBox(
@@ -297,17 +298,15 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     ),
                                     Expanded(
                                         flex: 2,
-                                        child: Container(
-                                          child: Center(
-                                              child: Text(
-                                            "Events",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: color,
-                                            ),
-                                          )),
-                                        )),
+                                        child: Center(
+                                            child: Text(
+                                          "Events",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: color,
+                                          ),
+                                        ))),
                                     const SizedBox(
                                       height: 10,
                                     )
@@ -319,7 +318,7 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            LoadingCalendar()));
+                                            const LoadingCalendar()));
                               },
                             ),
                           ],
@@ -372,17 +371,15 @@ class _CaterersHomeState extends State<CaterersHome> {
                                     ),
                                     Expanded(
                                         flex: 2,
-                                        child: Container(
-                                          child: Center(
-                                              child: Text(
-                                            "My Caterer",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: color,
-                                            ),
-                                          )),
-                                        )),
+                                        child: Center(
+                                            child: Text(
+                                          "My Caterer",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: color,
+                                          ),
+                                        ))),
                                     const SizedBox(
                                       height: 10,
                                     )

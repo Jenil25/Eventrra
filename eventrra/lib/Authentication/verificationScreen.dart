@@ -24,6 +24,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
           "email": email,
           "name": name,
         });
+    var uid = response.body;
+    if (uid != "0") {
+      currentUserUId = uid;
+    } else {
+      currentUserUId = "-1";
+    }
     return null;
   }
 
@@ -100,23 +106,15 @@ class _VerifyScreenState extends State<VerifyScreen> {
     );
   }
 
-  bool venueUser(String email) {
-    for (int i = 0; i < venues.length; ++i) {
-      if (venues[i]["Email"].toString().toLowerCase() == email.toLowerCase()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   Future<void> checkEmailVerified() async {
     user = auth.currentUser!;
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
       sendUserData('${user.email}', name);
+
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 }

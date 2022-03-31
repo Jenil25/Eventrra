@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state, prefer_is_empty
+
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
 import 'package:eventrra/main.dart';
@@ -7,7 +9,7 @@ class ViewVImages extends StatefulWidget {
   const ViewVImages({Key? key, required this.venue}) : super(key: key);
 
   @override
-  State<ViewVImages> createState() => _ViewVImagesState(this.venue);
+  State<ViewVImages> createState() => _ViewVImagesState(venue);
 }
 
 class _ViewVImagesState extends State<ViewVImages> {
@@ -17,7 +19,7 @@ class _ViewVImagesState extends State<ViewVImages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Images"),
+        title: const Text("Images"),
       ),
       body: FutureBuilder(
         future: getVPhotos(venue['VId']),
@@ -37,7 +39,7 @@ class _ViewVImagesState extends State<ViewVImages> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(
-                                    "https://eventrra.000webhostapp.com/images/venue/gallery/${vphotos[i]['image']}"),
+                                    "https://eventrra.000webhostapp.com/gallery/venue/gallery/${vphotos[i]['image']}"),
                                 fit: BoxFit.fill,
                               ),
                             ),

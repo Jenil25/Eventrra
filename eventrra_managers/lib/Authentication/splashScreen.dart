@@ -82,20 +82,18 @@ class CheckUser extends StatelessWidget {
         if (user.emailVerified) {
           userEmail = user.email.toString();
           if (venueUser(userEmail)) {
-
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const VenueHome()));
           } else if (catererUser(userEmail)) {
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => CaterersHome()));
+                MaterialPageRoute(builder: (context) => const CaterersHome()));
           } else {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()));
           }
         } else {
-          //(For Jenil) => Try to delete User
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginPage()));
+              MaterialPageRoute(builder: (context) => const LoginPage()));
         }
       }
     });

@@ -1,9 +1,6 @@
-import 'package:eventrra_managers/Venue/myVenue.dart';
-import 'package:eventrra_managers/Venue/registerVenue.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Caterers/registerCaterers.dart';
 import 'data.dart';
 import 'package:eventrra_managers/Authentication/splashScreen.dart';
 
@@ -23,7 +20,6 @@ class MyApp extends StatelessWidget {
     getDecoraters();
     getCaterers();
     getEventTypes();
-    print("From Main");
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -55,38 +51,6 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
-    // return FutureBuilder(
-    //   future: Firebase.initializeApp(),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasError) {
-    //       return MaterialApp(
-    //         theme: ThemeData(
-    //           primarySwatch: Colors.blue,
-    //         ),
-    //         home: const Error(title: 'Error From Main'),
-    //       );
-    //     }
-    //
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       return const MaterialApp(
-    //         debugShowCheckedModeBanner: false,
-    //         // home: RegisterCaterers(
-    //         //     name: "testing", email: "Testing", contactNo: "0000000000"),
-    //         home: SplashScreen(),
-    //         // home: MyVenue(),
-    //       );
-    //     }
-    //
-    //     return Scaffold(
-    //       appBar: AppBar(
-    //         title: const Text("Waiting"),
-    //       ),
-    //       body: const Center(
-    //         child: CircularProgressIndicator(),
-    //       ),
-    //     );
-    //   },
-    // );
   }
 }
 

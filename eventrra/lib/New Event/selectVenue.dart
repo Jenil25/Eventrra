@@ -1,11 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, no_logic_in_create_state
+
 import 'package:eventrra/New%20Event/selectCaterer.dart';
 import 'package:eventrra/New%20Event/viewVImages.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eventrra/data.dart';
 import 'package:eventrra/main.dart';
 
-//city,date,event-type
 class SelectVenue extends StatefulWidget {
   final city, fdate, tdate, eventType;
   const SelectVenue(
@@ -30,38 +30,24 @@ class _SelectVenueState extends State<SelectVenue> {
   _SelectVenueState({this.city, this.fdate, this.tdate, this.eventType});
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    Color colour = const Color(0xffB7CEEC);
-    print("Values Received:");
-    print(city);
-    print(fdate);
-    print(tdate);
-    print(eventType);
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text("Select Venue"),
+        title: const Text("Select Venue"),
       ),
       body: FutureBuilder(
-        // Initialize FlutterFire
         future: getVenueForEvent(city['CId'], eventType['EtId']),
         builder: (context, snapshot) {
-          // Check for errors
           if (snapshot.hasError) {
             return Error(title: 'Error From Main');
           }
-
-          // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
                 itemCount: length,
                 itemBuilder: (BuildContext context, int i) => venueCard(
                     selectVenue[i], city, fdate, tdate, eventType, context));
           }
-
-          // Otherwise, show something whilst waiting for initialization to complete
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -73,11 +59,10 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
   return ExpansionTile(
     title: Text(
       venue["Name"],
-      style: TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20),
     ),
     children: [
       SizedBox(
-        // height: 300,
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -94,7 +79,7 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
                       child: venue['image'] == ""
                           ? Image.asset("assets/images/venue/MyVenue.png")
                           : Image.network(
-                              "https://eventrra.000webhostapp.com/images/venue/${venue['image']}")),
+                              "https://eventrra.000webhostapp.com/gallery/venue/${venue['image']}")),
                 ),
                 const SizedBox(
                   height: 20,
@@ -108,7 +93,7 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
                                 builder: (context) =>
                                     ViewVImages(venue: venue)));
                       },
-                      child: Text("View more Images")),
+                      child: const Text("View more Images")),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -184,7 +169,6 @@ Widget venueCard1(BuildContext context, var venue, var city, var fdate,
             inputVenue = venue;
             Navigator.push(
                 context,
-                //final city, fdate, tdate, eventType;
                 MaterialPageRoute(
                     builder: (context) => SelectCaterer(
                           city: city,
@@ -224,7 +208,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     color: Colors.grey,
                     child: venue["image"] != ""
                         ? Image.network(
-                            "https://eventrra.000webhostapp.com/images/venue/${venue["image"]}",
+                            "https://eventrra.000webhostapp.com/gallery/venue/${venue["image"]}",
                             fit: BoxFit.cover,
                           )
                         : Image.asset(
@@ -252,7 +236,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.location_on,
                           color: Colors.grey,
                           size: 20,
@@ -262,7 +246,8 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           venue["Landmark"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -271,7 +256,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.people,
                           color: Colors.grey,
                           size: 20,
@@ -281,7 +266,8 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           venue["Capacity"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -290,7 +276,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.mail,
                           color: Colors.grey,
                           size: 20,
@@ -300,7 +286,8 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           venue["Email"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -309,7 +296,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.phone,
                           color: Colors.grey,
                           size: 20,
@@ -319,7 +306,8 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                         ),
                         Text(
                           venue["Contact"],
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),
@@ -347,7 +335,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.blue),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "VIEW MORE IMAGES",
                         style: TextStyle(
@@ -362,7 +350,6 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     inputVenue = venue;
                     Navigator.push(
                         ctx,
-                        //final city, fdate, tdate, eventType;
                         MaterialPageRoute(
                             builder: (context) => SelectCaterer(
                                   city: city,
@@ -376,7 +363,7 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
                     height: 40,
                     width: 130,
                     color: Colors.blue,
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "BOOK VENUE",
                         style: TextStyle(
@@ -394,40 +381,3 @@ Widget venueCard(var venue, var city, var fdate, var tdate, var eventType,
     ),
   );
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:eventrra/data.dart';
-//
-// //city,date,event-type
-// class SelectVenue extends StatefulWidget {
-//   final city, date, eventType;
-//   const SelectVenue({Key? key, this.city, this.date, this.eventType})
-//       : super(key: key);
-//
-//   @override
-//   _SelectVenueState createState() => _SelectVenueState(
-//         city: city,
-//         date: date,
-//         eventType: eventType,
-//       );
-// }
-//
-// class _SelectVenueState extends State<SelectVenue> {
-//   final city, date, eventType;
-//   _SelectVenueState({this.city, this.date, this.eventType});
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Select Venue"),
-//       ),
-//       body: Column(
-//         children: [
-//           Text(city.toString()),
-//           Text(date.toString()),
-//           Text(eventType.toString()),
-//         ],
-//       ),
-//     );
-//   }
-// }

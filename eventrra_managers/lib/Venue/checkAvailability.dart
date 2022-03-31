@@ -4,6 +4,8 @@ import 'package:eventrra_managers/main.dart';
 import 'package:intl/intl.dart';
 
 class CheckAvailability extends StatefulWidget {
+  const CheckAvailability({Key? key}) : super(key: key);
+
   @override
   _CheckAvailabilityState createState() => _CheckAvailabilityState();
 }
@@ -38,7 +40,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
               children: const <Widget>[
                 Icon(
                   Icons.error,
-                  // color: Colors.red,
                 ),
                 Text(
                   " Error",
@@ -56,12 +57,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
           );
         } else {
           setModalState(() {
-            // if(from) {
             fromDate = pickedDate;
-            // }
-            // else{
-            //   toDate = pickedDate;
-            // }
           });
         }
       } else {
@@ -74,7 +70,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
               children: const <Widget>[
                 Icon(
                   Icons.error,
-                  // color: Colors.red,
                 ),
                 Text(
                   " Error",
@@ -93,12 +88,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
           });
         } else {
           setModalState(() {
-            // if(from) {
-            //   fromDate = pickedDate;
-            // }
-            // else{
             toDate = pickedDate;
-            // }
           });
         }
       }
@@ -155,16 +145,13 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                 deleteOccupiedVenue(
                                         venueOccupiedDates[index]['OVId'])
                                     .then((value) {
-                                  print(value);
                                   if (value != "success") {
-                                    print("If");
                                     setModalState1(() {
                                       disLoading = false;
                                       disClicked = true;
                                       disDone = true;
                                     });
                                   } else {
-                                    print(value);
                                     setModalState1(() {
                                       disLoading = false;
                                       disClicked = true;
@@ -198,10 +185,8 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                 });
                               },
                               child: disLoading
-                                  ? CircularProgressIndicator()
-                                  : Icon(Icons.delete),
-                              // : isClicked ? isDone ? :
-                              //             :
+                                  ? const CircularProgressIndicator()
+                                  : const Icon(Icons.delete),
                             );
                           }),
                         );
@@ -270,7 +255,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                       fromDate.month.toString() +
                                       "-" +
                                       fromDate.year.toString(),
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ],
                             ),
@@ -297,7 +282,7 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                       toDate.month.toString() +
                                       "-" +
                                       toDate.year.toString(),
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ],
                             ),
@@ -321,12 +306,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                 ),
                               ),
                             ),
-                            //     TextFormField(
-                            //       controller: reasoncontroller,
-                            //       keyboardType: TextInputType.text,
-                            //
-                            //       onChanged: (value) {},
-                            //     ),
                             const SizedBox(
                               height: 30,
                             ),
@@ -355,10 +334,8 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                               currentVenue["VId"],
                                               reasoncontroller.text)
                                           .then((value) {
-                                        print(value);
                                         if (value == "success") {
                                           setState(() {});
-                                          print("If");
                                           setModalState(() {
                                             fromDateController.text = "";
                                             toDateController.text = "";
@@ -367,7 +344,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                             isDone = true;
                                           });
                                         } else {
-                                          print(value);
                                           AlertDialog alert = AlertDialog(
                                             title: Row(
                                               mainAxisAlignment:
@@ -412,7 +388,6 @@ class _CheckAvailabilityState extends State<CheckAvailability> {
                                 ),
                                 Container(
                                   width: 100,
-                                  // color: Colors.blue.shade300,
                                   decoration: BoxDecoration(
                                     color: Colors.blue.shade300,
                                     borderRadius: BorderRadius.circular(10),
